@@ -29,6 +29,11 @@ export default {
     padding: 0 2rem;  */
   }
 
+  button {
+    border: 0;
+    outline: 0;
+  }
+
   *,
   *::before,
   *::after {
