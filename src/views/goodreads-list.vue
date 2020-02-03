@@ -4,9 +4,9 @@
         <div class="text-logo">
           GoodReads
         </div>
-        <button type="submit" class="login-button" @click="userLogin">
-            <i class="fas fa-user"></i>
-        </button>
+        <b-button type="is-primary" class="login-button" @click="isLoginModalActive = true">
+          <i class="fas fa-user"></i>
+        </b-button>
         <div class="search-input">
             <div class="main-title">
                 책을 읽읍시다... 일주일에 한권씩
@@ -60,24 +60,25 @@
         </div>
         <!-- End of container -->
     </main>
-     <!-- use the modal component, pass in the prop -->
-    <modal v-if="showModal" @close="showModal = false">
-      <div slot="body">
-        <div class="content">
-          <!-- <div class="trip-idea">{{ trip.idea }}</div>
-          <div class="trip-user-name">{{ trip.username }}</div> -->
-        </div>
-      </div>
-    </modal>
+     <b-modal :active.sync="isLoginModalActive"
+              has-modal-card
+              trap-focus
+              aria-role="dialog"
+              aria-modal>
+        <login-modal 
+          v-bind="formProps"
+        >
+        </login-modal>
+      </b-modal>
   </article>
 </template>
 
 <script>
-import modal from '@/components/Modal.vue';
+import LoginModal from '@/components/login-modal.vue';
 
 export default {
   components: {
-    modal
+    LoginModal
   },
   methods: {
     userLogin() {
@@ -87,7 +88,11 @@ export default {
   data() {
     return {
       index: 0,
-      showModal: false
+      isLoginModalActive: false,
+       formProps: {
+          email: 'evan@you.com',
+          password: 'testing'
+        }
     }
   }
 }
@@ -115,6 +120,7 @@ export default {
       margin: 10px;
       top: 0;
       right: 0;
+      cursor: pointer;
 
       & > i {
         font-size: 2.2rem;
@@ -162,6 +168,7 @@ export default {
         border-radius: 50px;
         box-shadow: 0px 0px 10px orange;
         outline: none;
+        cursor: pointer;
       }
     }
   }
