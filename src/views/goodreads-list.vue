@@ -4,15 +4,18 @@
         <div class="text-logo">
           GoodReads
         </div>
-        <b-button type="is-primary" class="login-button" @click="isLoginModalActive = true">
-          <i class="fas fa-user"></i>
+        <b-button v-if="Object.keys(userInfo).length !== 0" type="is-danger" class="logout-button" @click="userLogout">
+          <i class="fas fa-sign-out-alt"></i>
+        </b-button>
+        <b-button v-if="Object.keys(userInfo).length === 0" type="is-primary" class="login-button" @click="isLoginModalActive = true">
+          <i class="fas fa-sign-in-alt"></i>
         </b-button>
         <div class="search-input">
             <div class="main-title">
                 책을 읽읍시다... 일주일에 한권씩
             </div>
             <input type="text" placeholder=" search..." class="search-text" required>
-            <button type="submit" class="submit">
+            <button type="button" class="submit">
                 <i class="fas fa-search"></i>
             </button>
         </div>
@@ -67,6 +70,7 @@
               aria-modal>
         <login-modal 
           v-bind="formProps"
+          :userInfo="userInfo"
         >
         </login-modal>
       </b-modal>
@@ -74,20 +78,40 @@
 </template>
 
 <script>
+import API from '@/api/index.js';
 import LoginModal from '@/components/login-modal.vue';
 
 export default {
   components: {
     LoginModal
   },
+  mounted() {
+    this.checkUser();
+  },
   methods: {
     userLogin() {
       this.showModal = true;
+    },
+    async userLogout() {
+      let response = await API.userLogout();
+      console.log(response.data)
+    },
+    async checkUser() {
+      try {
+        let response = await API.checkUser();
+        if(response !== null) {
+          console.log(response.data)
+          this.userInfo = {...response.data}
+        }
+      } catch(err) {
+        console.log(err)
+      }
     }
   },
   data() {
     return {
       index: 0,
+      userInfo: {},
       isLoginModalActive: false,
        formProps: {
           email: 'evan@you.com',
@@ -117,7 +141,7 @@ export default {
 
     & > .login-button {
       position: absolute;
-      margin: 10px;
+      margin: 14px;
       top: 0;
       right: 0;
       cursor: pointer;
@@ -126,6 +150,14 @@ export default {
         font-size: 2.2rem;
         color: #EEE;
       }
+    }
+
+    & > .logout-button {
+      position: absolute;
+      margin: 14px;
+      top: 0;
+      right: 0;
+      cursor: pointer;
     }
 
     & > .search-input{

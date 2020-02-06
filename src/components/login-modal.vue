@@ -7,56 +7,55 @@
         <div class="modal-intro">
             당신이 읽은 책을 공유해주세요.
         </div>
-          <!-- <b-field label="Email">
-              <b-input
-                  type="email"
-                  :value="email"
-                  placeholder="Your email"
-                  required>
-              </b-input>
-          </b-field>
-
-          <b-field label="Password">
-              <b-input
-                  type="password"
-                  :value="password"
-                  password-reveal
-                  placeholder="Your password"
-                  required>
-              </b-input>
-          </b-field>
-
-          <b-checkbox>Remember me</b-checkbox> -->
         <div class="social-login">
            <button class="loginBtn loginBtn--facebook">
             Login with Facebook
           </button>
 
-          <button class="loginBtn loginBtn--google">
+          <button class="loginBtn loginBtn--google" @click="googleLogin">
             Login with Google
           </button>
         </div>
-       
-      <!-- <footer class="modal-card-foot">
-          <button class="button" type="button" @click="$parent.close()">Close</button>
-          <button class="button is-primary">Login</button>
-      </footer> -->
       </section>
+      <b-loading :is-full-page="isFullPage" :active.sync="isLoading" :can-cancel="true"></b-loading>
   </div>
 </template>
 
 <script>
+import API from '@/api/index.js';
+
 export default {
   props: {
+    userInfo: Object,
     email: String,
     password: String
-  } 
+  },
+  methods: {
+    async googleLogin() {
+      this.isLoading = true;
+      window.location.href = 'http://localhost:3000/auth/google';
+      // try {
+      //   let response = await API.googleLogin()
+      //   this.isLoading = false;
+      //   console.log(response);
+      // } catch (error) {
+      //   console.log(error)
+      // }
+    }
+  },
+   data() {
+    return {
+      isFullPage: true,
+      isLoading: false
+    }
+  }
 }
 </script>
 
 <style scoped lang="scss">
   .modal-card {
     width: 280px;
+    margin: 0 auto;
     & .modal-card-title {
       font-size: 2.1rem;
       font-weight: bold;
@@ -134,4 +133,11 @@ export default {
   .loginBtn--google:focus {
     background: #E74B37;
   }
+
+  @media screen and (max-width: 768px) {
+    // .modal-card {
+    //   width: 100%;
+    // }
+  }
+
 </style>
