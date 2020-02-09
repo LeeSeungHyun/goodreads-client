@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import GoodreadsLogin from '@/views/goodreads-login.vue';
 import GoodreadsDetail from '@/views/goodreads-detail.vue';
 import GoodreadsList from '@/views/goodreads-list.vue';
+import GoodreadsWrite from '@/views/goodreads-write.vue';
 
 Vue.use(VueRouter);
 
@@ -24,6 +25,10 @@ export default new VueRouter({
     {
       path: '/list/:id',
       component: GoodreadsDetail
-    }
+    },
+    {
+      path: '/write',
+      component: GoodreadsWrite
+    },
   ]
 });

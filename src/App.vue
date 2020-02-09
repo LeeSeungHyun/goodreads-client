@@ -21,6 +21,7 @@ export default {
     background-color: #fafafa;
     margin: 0;
     padding: 0;
+    height: calc(100vh);
     /* color: #262626;
     padding-bottom: 3rem;
     margin: 0 auto;

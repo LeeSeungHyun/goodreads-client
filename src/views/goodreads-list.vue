@@ -1,25 +1,25 @@
 <template>
   <article>
     <header class="main-header">
-        <div class="text-logo">
-          GoodReads
-        </div>
-        <b-button v-if="Object.keys(user).length !== 0" type="is-danger" class="logout-button" @click="logoutUser">
-          <i class="fas fa-sign-out-alt"></i>
-        </b-button>
-        <b-button v-if="Object.keys(user).length === 0" type="is-primary" class="login-button" @click="isLoginModalActive = true">
-          <i class="fas fa-sign-in-alt"></i>
-        </b-button>
-        <div class="search-input">
-            <div class="main-title">
-                책을 읽읍시다... 일주일에 한권씩
-                {{ user }}
-            </div>
-            <input type="text" placeholder=" search..." class="search-text" required>
-            <button type="button" class="submit">
-                <i class="fas fa-search"></i>
-            </button>
-        </div>
+      <div class="text-logo">
+        GoodReads
+      </div>
+      <b-button v-if="Object.keys(user).length !== 0" type="is-danger" class="logout-button" @click="logoutUser">
+        <i class="fas fa-sign-out-alt"></i>
+      </b-button>
+      <b-button v-if="Object.keys(user).length === 0" type="is-primary" class="login-button" @click="isLoginModalActive = true">
+        <i class="fas fa-sign-in-alt"></i>
+      </b-button>
+      <div class="search-input">
+          <div class="main-title">
+              책을 읽읍시다... 일주일에 한권씩
+              {{ user }}
+          </div>
+          <input type="text" placeholder=" search..." class="search-text" required>
+          <button type="button" class="submit">
+              <i class="fas fa-search"></i>
+          </button>
+      </div>
     </header>
     <main>
       <div class="books-container">
@@ -119,143 +119,143 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .main-header {
-    background-image: url('../assets/img/books-background.jpg');
-    height: 36rem;
-    background-position: center;
-    background-size: cover;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.main-header {
+  background-image: url('../assets/img/books-background.jpg');
+  height: 36rem;
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    & > .text-logo {
-      position: absolute;
-      margin: 10px;
-      top: 0;
-      left: 0;
-    }
-
-    & > .login-button {
-      position: absolute;
-      margin: 14px;
-      top: 0;
-      right: 0;
-      cursor: pointer;
-
-      & > i {
-        font-size: 2.2rem;
-        color: #EEE;
-      }
-    }
-
-    & > .logout-button {
-      position: absolute;
-      margin: 14px;
-      top: 0;
-      right: 0;
-      cursor: pointer;
-    }
-
-    & > .search-input{
-      line-height: 100%;
-      display: table;
-      margin: 0;
-      width: 100%; 
-      text-align: center;
-
-      & > .main-title {
-        color: #FFF;
-        font-size: 2.4rem;
-      }
-
-      & > .search-text{
-        height: 30px;
-        padding: 8px;
-        width: 30%;
-        min-width: 320px;
-        color: #DDD;
-        margin-top: 30px;
-        border: 1px solid orange;
-        box-shadow: 1px 0px 3px orange;
-        border-radius: 50px;
-        font-size: 15px;
-        text-transform: capitalize;
-        outline: none;
-        background-color: #FFF;
-      }
-
-      & > .submit{
-        padding: 10px;
-        height: 40px;
-        width: 80px;
-        font-size: 1.3rem;
-        color: white;
-        background: orange;
-        border: none;
-        margin: 10px;
-        border-radius: 50px;
-        box-shadow: 0px 0px 10px orange;
-        outline: none;
-        cursor: pointer;
-      }
-    }
+  & > .text-logo {
+    position: absolute;
+    margin: 10px;
+    top: 0;
+    left: 0;
   }
 
-  .books-container {
-    max-width: 90%;
-    margin: 0 auto;
-    padding: 0;
-    margin-top: 70px;
-  }
-
-  ::-webkit-input-placeholder{
-    color: #DDD;
-  }
-
-  ::-moz-input-placeholder{
-    color: #DDD;
-  }
-
-  ::-ms-input-placeholder{
-    color: #DDD;
-  }
-
-  .text:focus{
-    box-shadow: 1px 1px 8px orange;
-  }
-
-  .submit:active{
-    box-shadow: 0px 0px 7px orange;
-  }
-
-  /* Gallery Section */
-
-  /* .gallery {
-    display: flex;
-    flex-wrap: wrap;
-    margin: -1rem -1rem;
-    padding-bottom: 3rem;
-  }
-
-  .gallery-item {
-    position: relative;
-    flex: 1 0 32rem;
-    margin: 1rem;
-    color: #fff;
+  & > .login-button {
+    position: absolute;
+    margin: 14px;
+    top: 0;
+    right: 0;
     cursor: pointer;
-  } */
 
-   .gallery {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        grid-gap: 3rem;
+    & > i {
+      font-size: 2.2rem;
+      color: #EEE;
     }
-    
-    .gallery-item,
-    .gallery {
-        width: auto; 
-        margin: 0;
+  }
+
+  & > .logout-button {
+    position: absolute;
+    margin: 14px;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+  }
+
+  & > .search-input{
+    line-height: 100%;
+    display: table;
+    margin: 0;
+    width: 100%; 
+    text-align: center;
+
+    & > .main-title {
+      color: #FFF;
+      font-size: 2.4rem;
     }
+
+    & > .search-text{
+      height: 30px;
+      padding: 8px;
+      width: 30%;
+      min-width: 320px;
+      color: #DDD;
+      margin-top: 30px;
+      border: 1px solid orange;
+      box-shadow: 1px 0px 3px orange;
+      border-radius: 50px;
+      font-size: 15px;
+      text-transform: capitalize;
+      outline: none;
+      background-color: #FFF;
+    }
+
+    & > .submit{
+      padding: 10px;
+      height: 40px;
+      width: 80px;
+      font-size: 1.3rem;
+      color: white;
+      background: orange;
+      border: none;
+      margin: 10px;
+      border-radius: 50px;
+      box-shadow: 0px 0px 10px orange;
+      outline: none;
+      cursor: pointer;
+    }
+  }
+}
+
+.books-container {
+  max-width: 90%;
+  margin: 0 auto;
+  padding: 0;
+  margin-top: 70px;
+}
+
+::-webkit-input-placeholder{
+  color: #DDD;
+}
+
+::-moz-input-placeholder{
+  color: #DDD;
+}
+
+::-ms-input-placeholder{
+  color: #DDD;
+}
+
+.text:focus{
+  box-shadow: 1px 1px 8px orange;
+}
+
+.submit:active{
+  box-shadow: 0px 0px 7px orange;
+}
+
+/* Gallery Section */
+
+/* .gallery {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -1rem -1rem;
+  padding-bottom: 3rem;
+}
+
+.gallery-item {
+  position: relative;
+  flex: 1 0 32rem;
+  margin: 1rem;
+  color: #fff;
+  cursor: pointer;
+} */
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-gap: 3rem;
+}
+
+.gallery-item,
+.gallery {
+    width: auto; 
+    margin: 0;
+}
 
 /* .gallery-item:hover .gallery-item-info,
 .gallery-item:focus .gallery-item-info {
