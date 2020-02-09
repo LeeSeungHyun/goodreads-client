@@ -8,7 +8,7 @@
             당신이 읽은 책을 공유해주세요.
         </div>
         <div class="social-login">
-           <button class="loginBtn loginBtn--facebook">
+           <button class="loginBtn loginBtn--facebook" @click="facebookLogin">
             Login with Facebook
           </button>
 
@@ -41,9 +41,13 @@ export default {
       // } catch (error) {
       //   console.log(error)
       // }
-    }
+    },
+    async facebookLogin() {
+      this.isLoading = true;
+      window.location.href = 'http://localhost:3000/auth/facebook';
+    },
   },
-   data() {
+  data() {
     return {
       isFullPage: true,
       isLoading: false

@@ -33,7 +33,7 @@ export default{
 
     }
   },
-  userLogout: async () => {
+  logoutUser: async () => {
     try {
       let response = await axios.get(api.logout, {
         headers: { 'Content-Type': 'application/json' },

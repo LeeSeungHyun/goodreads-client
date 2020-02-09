@@ -4,15 +4,16 @@
         <div class="text-logo">
           GoodReads
         </div>
-        <b-button v-if="Object.keys(userInfo).length !== 0" type="is-danger" class="logout-button" @click="userLogout">
+        <b-button v-if="Object.keys(user).length !== 0" type="is-danger" class="logout-button" @click="logoutUser">
           <i class="fas fa-sign-out-alt"></i>
         </b-button>
-        <b-button v-if="Object.keys(userInfo).length === 0" type="is-primary" class="login-button" @click="isLoginModalActive = true">
+        <b-button v-if="Object.keys(user).length === 0" type="is-primary" class="login-button" @click="isLoginModalActive = true">
           <i class="fas fa-sign-in-alt"></i>
         </b-button>
         <div class="search-input">
             <div class="main-title">
                 책을 읽읍시다... 일주일에 한권씩
+                {{ user }}
             </div>
             <input type="text" placeholder=" search..." class="search-text" required>
             <button type="button" class="submit">
@@ -68,11 +69,7 @@
               trap-focus
               aria-role="dialog"
               aria-modal>
-        <login-modal 
-          v-bind="formProps"
-          :userInfo="userInfo"
-        >
-        </login-modal>
+        <login-modal />
       </b-modal>
   </article>
 </template>
@@ -80,28 +77,32 @@
 <script>
 import API from '@/api/index.js';
 import LoginModal from '@/components/login-modal.vue';
+import { mapState } from 'vuex';
 
 export default {
   components: {
     LoginModal
   },
   mounted() {
-    this.checkUser();
+    this.$store.dispatch('checkUserInfo');
+  },
+  computed: {
+    ...mapState([
+      'user'
+    ]),
   },
   methods: {
     userLogin() {
       this.showModal = true;
     },
-    async userLogout() {
-      let response = await API.userLogout();
-      console.log(response.data)
+    logoutUser() {
+      this.$store.dispatch('logoutUserInfo');
     },
     async checkUser() {
       try {
         let response = await API.checkUser();
         if(response !== null) {
           console.log(response.data)
-          this.userInfo = {...response.data}
         }
       } catch(err) {
         console.log(err)
@@ -111,12 +112,7 @@ export default {
   data() {
     return {
       index: 0,
-      userInfo: {},
-      isLoginModalActive: false,
-       formProps: {
-          email: 'evan@you.com',
-          password: 'testing'
-        }
+      isLoginModalActive: false
     }
   }
 }

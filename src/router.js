@@ -6,7 +6,7 @@ import GoodreadsList from '@/views/goodreads-list.vue';
 
 Vue.use(VueRouter);
 
-export const router = new VueRouter({
+export default new VueRouter({
   mode: 'history',
   routes: [
     {
