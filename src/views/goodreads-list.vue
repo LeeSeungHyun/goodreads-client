@@ -1,24 +1,41 @@
 <template>
-  <article>
+  <article class="width:100%; height: 100%">
     <header class="main-header">
       <div class="text-logo">
         GoodReads
       </div>
-      <b-button v-if="Object.keys(user).length !== 0" type="is-danger" class="logout-button" @click="logoutUser">
-        <i class="fas fa-sign-out-alt"></i>
-      </b-button>
-      <b-button v-if="Object.keys(user).length === 0" type="is-primary" class="login-button" @click="isLoginModalActive = true">
+      <div class="dropdown-custom">
+        <b-button 
+          size="is-small" 
+          v-if="Object.keys(user).length !== 0" 
+          type="is-danger" 
+          class="logout-button" 
+          @click="toggleUserProfile"
+        >
+          <i class="fas fa-sign-out-alt"></i>
+        </b-button>
+      </div>
+      <div class="dropdown-content" v-if="isUserProfileOpen === true">
+        <router-link to="/register" tag="button">글쓰기</router-link>
+        <b-button size="is-small" @click="logoutUser">Logout</b-button>
+      </div>
+      <b-button 
+        size="is-small" 
+        v-if="Object.keys(user).length === 0" 
+        type="is-primary" 
+        class="login-button" 
+        @click="isLoginModalActive = true"
+      >
         <i class="fas fa-sign-in-alt"></i>
       </b-button>
       <div class="search-input">
-          <div class="main-title">
-              책을 읽읍시다... 일주일에 한권씩
-              {{ user }}
-          </div>
-          <input type="text" placeholder=" search..." class="search-text" required>
-          <button type="button" class="submit">
-              <i class="fas fa-search"></i>
-          </button>
+        <div class="main-title">
+          책을 읽읍시다... 일주일에 한권씩
+        </div>
+        <input type="text" placeholder=" search..." class="search-text" required>
+        <button type="button" class="submit">
+            <i class="fas fa-search"></i>
+        </button>
       </div>
     </header>
     <main>
@@ -97,6 +114,10 @@ export default {
     },
     logoutUser() {
       this.$store.dispatch('logoutUserInfo');
+      this.isUserProfileOpen = false;
+    },
+    toggleUserProfile() {
+      this.isUserProfileOpen = this.isUserProfileOpen ? false : true;
     },
     async checkUser() {
       try {
@@ -112,7 +133,8 @@ export default {
   data() {
     return {
       index: 0,
-      isLoginModalActive: false
+      isLoginModalActive: false,
+      isUserProfileOpen: false
     }
   }
 }
@@ -121,7 +143,7 @@ export default {
 <style scoped lang="scss">
 .main-header {
   background-image: url('../assets/img/books-background.jpg');
-  height: 36rem;
+  height: 360px;
   background-position: center;
   background-size: cover;
   display: flex;
@@ -133,6 +155,31 @@ export default {
     margin: 10px;
     top: 0;
     left: 0;
+  }
+
+  & > .dropdown-custom {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  & .dropdown-content::before {
+    border-top: 0px solid transparent;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #fff;
+    content: "";
+    position: absolute;
+    top: -8px;
+    right: 8px;
+  }
+
+  & .dropdown-content {
+    position: absolute;
+    top: 50px;
+    right: 14px;
+    width: 300px;
+    height: 320px;
   }
 
   & > .login-button {
@@ -148,8 +195,8 @@ export default {
     }
   }
 
-  & > .logout-button {
-    position: absolute;
+  & .logout-button {
+    position: relative;
     margin: 14px;
     top: 0;
     right: 0;
@@ -165,7 +212,7 @@ export default {
 
     & > .main-title {
       color: #FFF;
-      font-size: 2.4rem;
+      font-size: 1.6rem;
     }
 
     & > .search-text{
@@ -188,7 +235,7 @@ export default {
       padding: 10px;
       height: 40px;
       width: 80px;
-      font-size: 1.3rem;
+      font-size: 1rem;
       color: white;
       background: orange;
       border: none;

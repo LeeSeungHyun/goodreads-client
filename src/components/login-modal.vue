@@ -5,7 +5,8 @@
       </header>
       <section class="modal-card-body">
         <div class="modal-intro">
-            당신이 읽은 책을 공유해주세요.
+            읽은 책을 공유해주세요. <br />
+            함께 나누면 즐거움이 두 배로 :)
         </div>
         <div class="social-login">
            <button class="loginBtn loginBtn--facebook" @click="facebookLogin">
@@ -34,13 +35,6 @@ export default {
     async googleLogin() {
       this.isLoading = true;
       window.location.href = 'http://localhost:3000/auth/google';
-      // try {
-      //   let response = await API.googleLogin()
-      //   this.isLoading = false;
-      //   console.log(response);
-      // } catch (error) {
-      //   console.log(error)
-      // }
     },
     async facebookLogin() {
       this.isLoading = true;
@@ -61,13 +55,13 @@ export default {
     width: 280px;
     margin: 0 auto;
     & .modal-card-title {
-      font-size: 2.1rem;
+      font-size: 1.3rem;
       font-weight: bold;
     }
     & > .modal-card-body {
       text-align: center;
       & > .modal-intro {
-        font-size: 1.8rem;
+        font-size: 1.2rem;
       } 
       & > .social-login {
         margin-top: 20px;
@@ -87,7 +81,7 @@ export default {
     line-height: 34px;
     white-space: nowrap;
     border-radius: 0.2em;
-    font-size: 1.6rem;
+    font-size: 1rem;
     color: #FFF;
   }
   .loginBtn:before {
