@@ -46,7 +46,7 @@
         </b-rate>
       </div>
       <div class="book-buttons">
-        <b-button type="is-primary" @click="registerWriting">등록하기</b-button>
+        <b-button type="is-primary" @click="registerBook">등록하기</b-button>
         <b-button @click="backToBookList">뒤로가기</b-button>
       </div>
     </div>
@@ -90,7 +90,7 @@ export default {
       this.message = '';
       this.rate = null;
     },
-    async registerWriting() {
+    async registerBook() {
       const formData = new FormData();
       
       formData.append('userid', this.user.user.uniqueid);
@@ -101,7 +101,7 @@ export default {
       formData.append('rate', this.rate);
       formData.append('bookfile', this.file);
 
-      let response = await API.registerWriting(formData)
+      let response = await API.registerBook(formData)
       if(response.message === 'success') {
         this.resetForm();
         this.$buefy.toast.open({

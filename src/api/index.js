@@ -3,8 +3,8 @@ import axios from 'axios';
 let config = process.env.NODE_ENV === 'production'
 
 const api = {
-  books: config ? '' : 'http://localhost:3000/book/list',
-  registerWriting: config ? '' : 'http://localhost:3000/book/register',
+  bookList: config ? '' : 'http://localhost:3000/book/list',
+  registerBook: config ? '' : 'http://localhost:3000/book/register',
   login: config ? '' : 'http://localhost:3000/auth/google',
   logout: config ? '' : 'http://localhost:3000/auth/logout',
   checkUser: config ? '' : 'http://localhost:3000/auth/check',
@@ -44,9 +44,17 @@ export default{
       console.log(err);
     }
   },
-  registerWriting: async (book) => {
+  getBookList: async () => {
     try{
-      let response = await axios.post(api.registerWriting, book) 
+      let response = await axios.get(api.bookList) 
+      return response.data || null;
+    } catch(err) {
+      console.log(err);
+    }
+  },
+  registerBook: async (book) => {
+    try{
+      let response = await axios.post(api.registerBook, book) 
       return response.data || null;
     } catch(err) {
       console.log(err);

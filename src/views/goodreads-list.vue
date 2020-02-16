@@ -1,8 +1,8 @@
 <template>
   <article class="width:100%; height: 100%">
     <header class="main-header">
-      <div class="text-logo">
-        GoodReads
+      <div class="book-logo">
+        <img src="@/assets/img/book-logo.png" width="80" height="80" alt="logo">
       </div>
       <div class="dropdown-custom">
         <b-button 
@@ -30,7 +30,7 @@
       </b-button>
       <div class="search-input">
         <div class="main-title">
-          책을 읽읍시다... 일주일에 한권씩
+          생각보다 유익해서 당황하셨어요?!
         </div>
         <input type="text" placeholder=" search..." class="search-text" required>
         <button type="button" class="submit">
@@ -40,54 +40,19 @@
     </header>
     <main>
       <div class="books-container">
-          <div class="gallery">
-                <div class="gallery-item" tabindex="0">
-                    <img src="https://images.unsplash.com/photo-1511765224389-37f0e77cf0eb?w=500&h=500&fit=crop" class="gallery-image" alt="">
-                    <!-- <div class="gallery-item-info">
-                        <ul>
-                            <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 56</li>
-                            <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 2</li>
-                        </ul>
-                    </div> -->
-                </div>
-                <div class="gallery-item" tabindex="0">
-                    <img src="https://images.unsplash.com/photo-1497445462247-4330a224fdb1?w=500&h=500&fit=crop" class="gallery-image" alt="">
-                    <!-- <div class="gallery-item-info">
-                        <ul>
-                            <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 89</li>
-                            <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 5</li>
-                        </ul>
-                    </div> -->
-                </div>
-
-                <div class="gallery-item" tabindex="0">
-                    <img src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=500&h=500&fit=crop" class="gallery-image" alt="">
-                   
-                        <!-- <span class="visually-hidden">Gallery</span><i class="fas fa-clone" aria-hidden="true"></i>
-                    </div>
-                    <div class="gallery-item-info">
-                        <ul>
-                            <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 42</li>
-                            <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 1</li>
-                        </ul>
-                    </div> -->
-                </div>
-
-                 <div class="gallery-item" tabindex="0">
-                    <img src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=500&h=500&fit=crop" class="gallery-image" alt="">
-                </div>
-          </div>
-            <!-- End of gallery -->
+        <div v-for="(book, index) in books" :key=index>
+          <img :src="url + book.filename" alt="" width="200" height="200">
         </div>
-        <!-- End of container -->
+      </div>
     </main>
-     <b-modal :active.sync="isLoginModalActive"
-              has-modal-card
-              trap-focus
-              aria-role="dialog"
-              aria-modal>
-        <login-modal />
-      </b-modal>
+     <b-modal 
+      :active.sync="isLoginModalActive"
+      has-modal-card
+      trap-focus
+      aria-role="dialog"
+      aria-modal>
+      <login-modal />
+    </b-modal>
   </article>
 </template>
 
@@ -96,16 +61,21 @@ import API from '@/api/index.js';
 import LoginModal from '@/components/login-modal.vue';
 import { mapState } from 'vuex';
 
+let config = process.env.NODE_ENV === 'production'
+
 export default {
   components: {
     LoginModal
   },
   mounted() {
+    this.url = config ? '' : 'http://localhost:3000/'
     this.$store.dispatch('checkUserInfo');
+    this.$store.dispatch('getBookList');
   },
   computed: {
     ...mapState([
-      'user'
+      'user',
+      'books'
     ]),
   },
   methods: {
@@ -134,7 +104,8 @@ export default {
     return {
       index: 0,
       isLoginModalActive: false,
-      isUserProfileOpen: false
+      isUserProfileOpen: false,
+      url: ''
     }
   }
 }
@@ -150,7 +121,7 @@ export default {
   justify-content: center;
   align-items: center;
 
-  & > .text-logo {
+  & > .book-logo {
     position: absolute;
     margin: 10px;
     top: 0;
@@ -190,7 +161,7 @@ export default {
     cursor: pointer;
 
     & > i {
-      font-size: 2.2rem;
+      font-size: 1.6rem;
       color: #EEE;
     }
   }
@@ -212,7 +183,7 @@ export default {
 
     & > .main-title {
       color: #FFF;
-      font-size: 1.6rem;
+      font-size: 2rem;
     }
 
     & > .search-text{
@@ -249,128 +220,10 @@ export default {
 }
 
 .books-container {
-  max-width: 90%;
-  margin: 0 auto;
-  padding: 0;
-  margin-top: 70px;
-}
-
-::-webkit-input-placeholder{
-  color: #DDD;
-}
-
-::-moz-input-placeholder{
-  color: #DDD;
-}
-
-::-ms-input-placeholder{
-  color: #DDD;
-}
-
-.text:focus{
-  box-shadow: 1px 1px 8px orange;
-}
-
-.submit:active{
-  box-shadow: 0px 0px 7px orange;
-}
-
-/* Gallery Section */
-
-/* .gallery {
-  display: flex;
-  flex-wrap: wrap;
-  margin: -1rem -1rem;
-  padding-bottom: 3rem;
-}
-
-.gallery-item {
-  position: relative;
-  flex: 1 0 32rem;
-  margin: 1rem;
-  color: #fff;
-  cursor: pointer;
-} */
-
-.gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    grid-gap: 3rem;
-}
-
-.gallery-item,
-.gallery {
-    width: auto; 
-    margin: 0;
-}
-
-/* .gallery-item:hover .gallery-item-info,
-.gallery-item:focus .gallery-item-info {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
-}
-
-.gallery-item-info {
-    display: none;
-}
-
-.gallery-item-info li {
-    display: inline-block;
-    font-size: 1.7rem;
-    font-weight: 600;
-}
-
-.gallery-item-likes {
-    margin-right: 2.2rem;
-}
-
-.gallery-item-type {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    font-size: 2.5rem;
-    text-shadow: 0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 0.1);
-} */
-
-/* .fa-clone,
-.fa-comment {
-    transform: rotateY(180deg);
-} */
-
-.gallery-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-
-/* Loader */
-
-/*
-
-The following code will only run if your browser supports CSS grid.
-
-Remove or comment-out the code block below to see how the browser will fall-back to flexbox & floated styling. 
-
-*/
-
-@supports (display: grid) {
-    /* .gallery {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        grid-gap: 2rem;
-    }
-    
-    .gallery-item,
-    .gallery {
-        width: auto;
-        margin: 0;
-    } */
+  // max-width: 90%;
+  // margin: 0 auto;
+  // padding: 0;
+  // margin-top: 70px;
+  padding: 40px;
 }
 </style>

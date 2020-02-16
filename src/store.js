@@ -7,19 +7,30 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: { // data
-    user: {}
+    user: {},
+    books: []
   },
   getters: { // computed
     userInfo: state => {
       return state.user;
+    },
+    bookList: state => {
+      return state.books;
     }
   },
   mutations: {
+    getBookList: (state, payload) => {
+      state.books = [...payload];
+    },
     getUserInfo: (state, payload) => {
       state.user = {...payload};
     }
   },
   actions: {
+    getBookList: async (context) => {
+      let response = await API.getBookList()
+      return context.commit('getBookList', response);
+    },
     checkUserInfo: async (context) => {
       let response = await API.checkUser();
       return context.commit('getUserInfo', response.data);
