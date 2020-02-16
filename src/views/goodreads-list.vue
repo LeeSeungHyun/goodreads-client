@@ -30,11 +30,12 @@
       </b-button>
       <div class="search-input">
         <div class="main-title">
-          생각보다 유익해서 당황하셨어요?!
+          <div>생각보다 유익해서 당황하셨어요?! ^^</div>
+          <div>Book Fishing</div>
         </div>
         <input type="text" placeholder=" search..." class="search-text" required>
         <button type="button" class="submit">
-            <i class="fas fa-search"></i>
+          <i class="fas fa-search"></i>
         </button>
       </div>
     </header>
@@ -49,6 +50,7 @@
       :active.sync="isLoginModalActive"
       has-modal-card
       trap-focus
+      :width="280"
       aria-role="dialog"
       aria-modal>
       <login-modal />
@@ -70,7 +72,7 @@ export default {
   mounted() {
     this.url = config ? '' : 'http://localhost:3000/'
     this.$store.dispatch('checkUserInfo');
-    this.$store.dispatch('getBookList');
+    // this.$store.dispatch('getBookList');
   },
   computed: {
     ...mapState([
@@ -184,6 +186,9 @@ export default {
     & > .main-title {
       color: #FFF;
       font-size: 2rem;
+      & > div:nth-child(2) {
+        margin-top: 18px;
+      }
     }
 
     & > .search-text{
@@ -220,10 +225,6 @@ export default {
 }
 
 .books-container {
-  // max-width: 90%;
-  // margin: 0 auto;
-  // padding: 0;
-  // margin-top: 70px;
   padding: 40px;
 }
 </style>

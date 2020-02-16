@@ -17,19 +17,20 @@
     <div class="contents">
       <div class="contents-title">
         책 공유 같이 해요!!
+        <b-button size="is-small" @click="searchBook">검색하기</b-button>
       </div>   
       <div class="book-name">
-        <b-field label="book name" :label-position="labelPosition">
+        <b-field>
           <b-input v-model="bookName" name="bookName" placeholder="책 이름을 입력해주세요."></b-input>
         </b-field>
       </div>
       <div class="book-author">
-        <b-field label="author" :label-position="labelPosition">
+        <b-field>
           <b-input v-model="author" placeholder="저자 이름을 입력해주세요."></b-input>
         </b-field>
       </div>
       <div class="book-message">
-        <b-field label="message" :label-position="labelPosition">
+        <b-field>
           <b-input v-model="message" maxlength="300" type="textarea" placeholder="책에 대한 짧은 감상평 남겨주세요. (최대 300자)"></b-input>
         </b-field>
       </div>
@@ -50,14 +51,27 @@
         <b-button @click="backToBookList">뒤로가기</b-button>
       </div>
     </div>
+    <b-modal 
+      :active.sync="isBookSearchModalActive"
+      has-modal-card
+      :width="400"
+      trap-focus
+      aria-role="dialog"
+      aria-modal>
+      <book-search-modal/>
+    </b-modal>
   </form>
 </template>
 
 <script>
 import API from '@/api/index.js';
+import BookSearchModal from '@/components/book-search-modal.vue';
 import { mapState } from 'vuex';
 
 export default {
+  components: {
+    BookSearchModal
+  },
   mounted() {
     this.$store.dispatch('checkUserInfo');
   },
@@ -79,6 +93,9 @@ export default {
     },
     selectRate() {
       // console.log(this.$refs.bookRate)
+    },
+    searchBook() {
+      this.isBookSearchModalActive = true;
     },
     backToBookList() {
       this.$router.replace(this.$route.query.redirect || '/')
@@ -120,6 +137,7 @@ export default {
       author: '',
       message: '',
       rate: null,
+      isBookSearchModalActive: false,
       labelPosition: 'on-border',
       texts: ['매우 불만족', '불만족', '보통', '만족', '매우 만족']
     }

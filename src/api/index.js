@@ -1,14 +1,19 @@
 import axios from 'axios';
 
-let config = process.env.NODE_ENV === 'production'
+let env = process.env.NODE_ENV === 'production'
 
 const api = {
-  bookList: config ? '' : 'http://localhost:3000/book/list',
-  registerBook: config ? '' : 'http://localhost:3000/book/register',
-  login: config ? '' : 'http://localhost:3000/auth/google',
-  logout: config ? '' : 'http://localhost:3000/auth/logout',
-  checkUser: config ? '' : 'http://localhost:3000/auth/check',
+  bookList: env ? '' : 'http://localhost:3000/book/list',
+  registerBook: env ? '' : 'http://localhost:3000/book/register',
+  login: env ? '' : 'http://localhost:3000/auth/google',
+  logout: env ? '' : 'http://localhost:3000/auth/logout',
+  checkUser: env ? '' : 'http://localhost:3000/auth/check',
+  kakaoBook: 'https://dapi.kakao.com/v3/search/book',
 };
+
+const config = {
+  appKey: 'KakaoAK e382e5fe0284648ec925142a6db4f021'
+}
 
 export default{
   checkUser: async () => {
@@ -55,6 +60,22 @@ export default{
   registerBook: async (book) => {
     try{
       let response = await axios.post(api.registerBook, book) 
+      return response.data || null;
+    } catch(err) {
+      console.log(err);
+    }
+  },
+  getBookInfo: async (searchText) => {
+    try{
+      let response = await axios.get(api.kakaoBook, { 
+        params:{
+          query: searchText,
+          target: 'title&person'
+        },
+        headers: { 
+          'Authorization': 'KakaoAK e382e5fe0284648ec925142a6db4f021'
+        } 
+      })
       return response.data || null;
     } catch(err) {
       console.log(err);
