@@ -21,7 +21,7 @@
       </div>   
       <div class="book-name">
         <b-field>
-          <b-input v-model="bookName" name="bookName" placeholder="책 이름을 입력해주세요."></b-input>
+          <b-input v-model="bookName" placeholder="책 이름을 입력해주세요."></b-input>
         </b-field>
       </div>
       <div class="book-author">
@@ -29,12 +29,17 @@
           <b-input v-model="author" placeholder="저자 이름을 입력해주세요."></b-input>
         </b-field>
       </div>
+      <div class="book-publisher">
+        <b-field>
+          <b-input v-model="publisher" placeholder="출판사를 입력해주세요."></b-input>
+        </b-field>
+      </div>
       <div class="book-message">
         <b-field>
           <b-input v-model="message" maxlength="300" type="textarea" placeholder="책에 대한 짧은 감상평 남겨주세요. (최대 300자)"></b-input>
         </b-field>
       </div>
-      <div class="book-rates">
+      <!-- <div class="book-rates">
         <div>책을 평가해주세요.</div>
         <b-rate 
           icon-pack="fas" 
@@ -45,7 +50,7 @@
           ref="bookRate"
         >
         </b-rate>
-      </div>
+      </div> -->
       <div class="book-buttons">
         <b-button type="is-primary" @click="registerBook">등록하기</b-button>
         <b-button @click="backToBookList">뒤로가기</b-button>
@@ -58,7 +63,9 @@
       trap-focus
       aria-role="dialog"
       aria-modal>
-      <book-search-modal/>
+      <book-search-modal
+        v-on:getBookInfo="getBookInfo"
+      />
     </b-modal>
   </form>
 </template>
@@ -91,6 +98,13 @@ export default {
       };
       reader.readAsDataURL(file);
     },
+    getBookInfo(book) {
+      this.bookImage = book.thumbnail;
+      this.bookName = book.title;
+      this.author = book.authors[0];
+      this.publisher = book.publisher;
+      
+    },
     selectRate() {
       // console.log(this.$refs.bookRate)
     },
@@ -104,19 +118,22 @@ export default {
       this.bookImage = '';
       this.bookName = '';
       this.author = '';
+      this.publisher = ''
       this.message = '';
       this.rate = null;
     },
     async registerBook() {
       const formData = new FormData();
       
-      formData.append('userid', this.user.user.uniqueid);
+      formData.append('userid', this.user.user._id);
       formData.append('username', this.user.user.username);
       formData.append('bookname', this.bookName);
       formData.append('author', this.author);
+      formData.append('publisher', this.publisher);
       formData.append('message', this.message);
-      formData.append('rate', this.rate);
       formData.append('bookfile', this.file);
+
+      console.log(formData)
 
       let response = await API.registerBook(formData)
       if(response.message === 'success') {
@@ -135,8 +152,8 @@ export default {
       bookImage: '',
       bookName: '',
       author: '',
+      publisher: '',
       message: '',
-      rate: null,
       isBookSearchModalActive: false,
       labelPosition: 'on-border',
       texts: ['매우 불만족', '불만족', '보통', '만족', '매우 만족']
@@ -246,13 +263,9 @@ $Phone: "screen and (max-width : 768px)";
 
     & > .book-name,
         .book-author,
+        .book-publisher,
         .book-message {
-          margin-top: 16px;
-        }
-    & > .book-rates {
-      & > div:nth-child(1) {
-        font-size: 0.8rem;
-      }
+      margin-top: 14px;
     }
 
     & > .book-buttons {
