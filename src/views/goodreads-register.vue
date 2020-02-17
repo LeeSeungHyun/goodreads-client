@@ -3,16 +3,16 @@
     <div class="image-preview">
       <div class="label-container" v-show="bookImage.length === 0">
         <div>
-          <i class="fas fa-upload"></i>
+          <i class="fas fa-book"></i>
         </div>
         <div>
           <label for="image-upload">
-            Select a image file
+            <img src="@/assets/img/book-logo.png" width="80" height="80" alt="logo">
           </label>
         </div>
       </div>
-      <input type="file" ref="file" name="image" id="image-upload" data-width="500" data-height="500" @change="onFileChanged($event)" accept="image/*" />
-      <img alt="" v-if="bookImage != null" :src=bookImage />
+      <!-- <input type="file" ref="file" name="image" id="image-upload" data-width="500" data-height="500" @change="onFileChanged($event)" accept="image/*" /> -->
+      <img alt="" v-if="bookImage != null" :src=bookImage  width="140" height="194"/>
     </div>
     <div class="contents">
       <div class="contents-title">
@@ -88,22 +88,24 @@ export default {
     ]),
   },
   methods: {
-    onFileChanged(event) {
-      const file = event.target.files[0];
-      let reader = new FileReader();
+    // onFileChanged(event) {
+    //   const file = event.target.files[0];
+    //   let reader = new FileReader();
 
-      this.file = file;
-      reader.onload = (e) => {
-        this.bookImage= e.target['result'];
-      };
-      reader.readAsDataURL(file);
-    },
+    //   this.file = file;
+  
+    //   reader.onload = (e) => {
+    //     this.bookImage= e.target['result'];
+    //   };
+    //   reader.readAsDataURL(file);
+    // },
     getBookInfo(book) {
       this.bookImage = book.thumbnail;
       this.bookName = book.title;
       this.author = book.authors[0];
       this.publisher = book.publisher;
-      
+
+      this.isBookSearchModalActive = false;
     },
     selectRate() {
       // console.log(this.$refs.bookRate)
@@ -123,19 +125,28 @@ export default {
       this.rate = null;
     },
     async registerBook() {
-      const formData = new FormData();
+      // const formData = new FormData();
       
-      formData.append('userid', this.user.user._id);
-      formData.append('username', this.user.user.username);
-      formData.append('bookname', this.bookName);
-      formData.append('author', this.author);
-      formData.append('publisher', this.publisher);
-      formData.append('message', this.message);
-      formData.append('bookfile', this.file);
+      // formData.append('userid', this.user.user._id);
+      // formData.append('username', this.user.user.username);
+      // formData.append('bookname', this.bookName);
+      // formData.append('author', this.author);
+      // formData.append('publisher', this.publisher);
+      // formData.append('message', this.message);
+      // formData.append('bookimage', this.bookImage);
 
-      console.log(formData)
+      // formData.append('bookfile', this.file);
+      let bookInfo = {
+        'userid': this.user.user._id,
+        'username': this.user.user.username,
+        'bookname': this.bookName,
+        'author': this.author,
+        'publisher': this.publisher,
+        'message': this.message,
+        'bookimage': this.bookImage
+      }
 
-      let response = await API.registerBook(formData)
+      let response = await API.registerBook(bookInfo)
       if(response.message === 'success') {
         this.resetForm();
         this.$buefy.toast.open({
@@ -178,8 +189,8 @@ $Phone: "screen and (max-width : 768px)";
   }
 
   & >.image-preview {
-    width: 300px;
-    height: 300px;
+    width: 140px;
+    height: 194px;
     border: 1px solid #ddd;
     border-radius: 4px;
     position: relative;
@@ -188,8 +199,6 @@ $Phone: "screen and (max-width : 768px)";
     color: #fff;
 
   @media #{$Phone} {
-    width: 250px;
-    height: 250px;
     border: 1px solid #ddd;
     border-radius: 4px;
     position: relative;
@@ -197,17 +206,6 @@ $Phone: "screen and (max-width : 768px)";
     background-color: #fff;
     color: #fff;
   }
-
-    & > #image-upload {
-      width: 300px;
-      height: 300px;
-
-      @media #{$Phone} {
-        width: 250px;
-        height: 250px;
-      }
-    }
-
     & > .label-container {
       width: 130px;
       height: 80px;
@@ -225,7 +223,7 @@ $Phone: "screen and (max-width : 768px)";
         color: #000;
       }
        & > div:nth-child(2) {
-        background-color: #5882FA;
+        background-color: #7957d5;
         margin-top: 14px;
         font-size: 0.8rem;
         line-height: 1.6rem;

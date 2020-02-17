@@ -1,5 +1,6 @@
 <template>
-  <article class="width:100%; height: 100%">
+  <article>
+    <div :class="[this.isUserProfileOpen === false || 'background-filter']"></div>
     <header class="main-header">
       <div class="book-logo">
         <img src="@/assets/img/book-logo.png" width="80" height="80" alt="logo">
@@ -114,6 +115,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.background-filter {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background:rgba(0,0,0,0.75);
+}
 .main-header {
   background-image: url('../assets/img/books-background.jpg');
   height: 360px;
