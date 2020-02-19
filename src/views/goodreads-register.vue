@@ -16,7 +16,7 @@
     </div>
     <div class="contents">
       <div class="contents-title">
-        책 공유 같이 해요!!
+        Book Fishing과 함께해요!!
         <b-button size="is-small" @click="searchBook">검색하기</b-button>
       </div>   
       <div class="book-name">

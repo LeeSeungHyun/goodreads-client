@@ -1,6 +1,6 @@
 <template>
   <article>
-    <div :class="[this.isUserProfileOpen === false || 'background-filter']"></div>
+    <div :class="[this.isUserProfileActive === false || 'background-filter']"></div>
     <header class="main-header">
       <div class="book-logo">
         <img src="@/assets/img/book-logo.png" width="80" height="80" alt="logo">
@@ -16,7 +16,7 @@
           <i class="fas fa-sign-out-alt"></i>
         </b-button>
       </div>
-      <div class="dropdown-content" v-if="isUserProfileOpen === true">
+      <div class="dropdown-content" v-if="isUserProfileActive === true">
         <router-link to="/register" tag="button">글쓰기</router-link>
         <b-button size="is-small" @click="logoutUser">Logout</b-button>
       </div>
@@ -43,11 +43,11 @@
     <main>
       <div class="books-container">
         <div v-for="(book, index) in books" :key=index>
-          <img :src="url + book.filename" alt="" width="200" height="200">
+          <img :src="book.bookimage" alt="" width="120" height="200" @click="getBookDetail(book)">
         </div>
       </div>
     </main>
-     <b-modal 
+    <b-modal 
       :active.sync="isLoginModalActive"
       has-modal-card
       trap-focus
@@ -56,24 +56,33 @@
       aria-modal>
       <login-modal />
     </b-modal>
+    <b-modal 
+      :active.sync="isBookDetailActive"
+      has-modal-card
+      trap-focus
+      aria-role="dialog"
+      aria-modal>
+      <book-detail :book="book"/>
+    </b-modal>
   </article>
 </template>
 
 <script>
 import API from '@/api/index.js';
 import LoginModal from '@/components/login-modal.vue';
+import BookDetail from '@/components/book-detail.vue';
 import { mapState } from 'vuex';
 
 let config = process.env.NODE_ENV === 'production'
 
 export default {
   components: {
-    LoginModal
+    LoginModal,
+    BookDetail
   },
   mounted() {
-    this.url = config ? '' : 'http://localhost:3000/'
     this.$store.dispatch('checkUserInfo');
-    // this.$store.dispatch('getBookList');
+    this.$store.dispatch('getBookList');
   },
   computed: {
     ...mapState([
@@ -85,12 +94,16 @@ export default {
     userLogin() {
       this.showModal = true;
     },
+    getBookDetail(book) {
+      this.book = {...book};
+      this.isBookDetailActive = this.isBookDetailActive ? false : true;
+    },
     logoutUser() {
       this.$store.dispatch('logoutUserInfo');
-      this.isUserProfileOpen = false;
+      this.isUserProfileActive = false;
     },
     toggleUserProfile() {
-      this.isUserProfileOpen = this.isUserProfileOpen ? false : true;
+      this.isUserProfileActive = this.isUserProfileActive ? false : true;
     },
     async checkUser() {
       try {
@@ -106,9 +119,10 @@ export default {
   data() {
     return {
       index: 0,
+      book: {},
       isLoginModalActive: false,
-      isUserProfileOpen: false,
-      url: ''
+      isUserProfileActive: false,
+      isBookDetailActive: false
     }
   }
 }
@@ -125,7 +139,7 @@ export default {
 }
 .main-header {
   background-image: url('../assets/img/books-background.jpg');
-  height: 360px;
+  height: 340px;
   background-position: center;
   background-size: cover;
   display: flex;
