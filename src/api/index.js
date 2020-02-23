@@ -10,6 +10,8 @@ const api = {
   checkUser: env ? '' : 'http://localhost:3000/auth/check',
   kakaoBook: 'https://dapi.kakao.com/v3/search/book',
   updateUser: env ? '' : 'http://localhost:3000/user/update',
+  bookCommentList: env ? '' : 'http://localhost:3000/book/comment/list',
+  commentSave: env ? '' : 'http://localhost:3000/book/comment/save',
 };
 
 const config = {
@@ -86,6 +88,22 @@ export default{
           'Authorization': 'KakaoAK e382e5fe0284648ec925142a6db4f021'
         } 
       })
+      return response.data || null;
+    } catch(err) {
+      console.log(err);
+    }
+  },
+  getBookCommentList: async (bookid) => {
+    try{
+      let response = await axios.get(api.bookCommentList, { params: { bookid: bookid }});
+      return response.data || null;
+    } catch(err) {
+      console.log(err);
+    }
+  },
+  saveBookComment: async (bookComment) => {
+    try{
+      let response = await axios.post(api.commentSave, bookComment);
       return response.data || null;
     } catch(err) {
       console.log(err);

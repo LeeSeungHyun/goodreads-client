@@ -50,8 +50,8 @@
             >
             </b-rate>
             <b-field>
-              <b-input class="book-reply-input" size="is-small" v-model="review" placeholder="댓글 달기.."></b-input>
-              <b-button size="is-small" @click="registerReply">게시</b-button>
+              <b-input class="book-reply-input" size="is-small" v-model="comment" placeholder="댓글 달기.."></b-input>
+              <b-button size="is-small" @click="saveComment">게시</b-button>
             </b-field>
           </div>
         </div>
@@ -61,28 +61,54 @@
 </template>
 
 <script>
+import API from '@/api/index.js';
+import { mapState } from 'vuex';
+
 let config = process.env.NODE_ENV === 'production'
 
 export default {
   props: {
     book: Object
   },
+  computed: {
+    ...mapState([
+      'user'
+    ]),
+  },
   mounted() {
-    this.config = config ? 'https://frozen-hamlet-20379.herokuapp.com/' : 'http://localhost:3000/'
+    this.config = config ? 'https://frozen-hamlet-20379.herokuapp.com/' : 'http://localhost:3000/';
+    this.getCommentList();
   },
   methods: {
     selectRate() {
       // rate: ''
     },
-    registerReply() {
+    async getCommentList() {
+      let response = await API.getBookCommentList(this.book._id);
+      console.log(response);
+    },
+    async saveComment() {
+      let commentObj = {
+        bookid: this.book._id,
+        userid: this.user._id,
+        username: this.user.username,
+        profileimage: this.user.profileimage,
+        comment: this.comment,
+        rate: this.rate
+      }
+      // console.log(commentObj);
+      let response = await API.saveBookComment(commentObj);
 
+      if(response.message === 'success') {
+
+      }
     }
   },
   data() {
     return {
       texts: ['매우 불만족', '불만족', '보통', '만족', '매우 만족'],
       rate: null,
-      review: '',
+      comment: '',
       config: '',
     }
   }
