@@ -1,14 +1,14 @@
 <template>
   <article>
-    <div :class="[this.isUserProfileActive === false || 'background-filter']"></div>
+    <!-- <div :class="[this.isUserProfileActive === false || 'background-filter']"></div> -->
     <header class="main-header">
       <div class="book-logo">
-        <img src="@/assets/img/book-logo.png" width="80" height="80" alt="logo">
+        <img src="@/assets/img/book-logo.png" width="70" height="70" alt="logo">
       </div>
       <div class="dropdown-custom">
         <b-button 
           size="is-small" 
-          v-if="Object.keys(user).length !== 0" 
+         
           type="is-danger" 
           class="logout-button" 
           @click="toggleUserProfile"
@@ -17,8 +17,22 @@
         </b-button>
       </div>
       <div class="dropdown-content" v-if="isUserProfileActive === true">
-        <router-link to="/register" tag="button">글쓰기</router-link>
-        <b-button size="is-small" @click="logoutUser">Logout</b-button>
+        <!-- <router-link to="/register" tag="button">글쓰기</router-link> -->
+        <b-button class="logout" size="is-small" @click="logoutUser">Logout</b-button>
+
+        <div class="image-preview">
+          <!-- <input type="file" ref="file" name="image" @change="onProfileImageChanged($event)" accept="image/*" /> -->
+          <img alt="" :src='config + user.profileimage'  width="80" height="80"/>
+        </div>
+        <div class="profile-intro">
+          <div class="profile-name">
+            {{user.username}}
+            <b-button class="profile-edit" size="is-small" @click="editUserProfile">Edit</b-button>
+          </div>
+          <div class="profile-mail">{{user.job}}</div>
+           <div class="profile-mail">{{user.email}}</div>
+        </div>
+
       </div>
       <b-button 
         size="is-small" 
@@ -27,7 +41,7 @@
         class="login-button" 
         @click="isLoginModalActive = true"
       >
-        <i class="fas fa-sign-in-alt"></i>
+        <i class="fas fa-sign-in-alt"></i> Login
       </b-button>
       <div class="search-input">
         <div class="main-title">
@@ -64,6 +78,14 @@
       aria-modal>
       <book-detail :book="book"/>
     </b-modal>
+    <b-modal 
+      :active.sync="isUserProfileEditActive"
+      has-modal-card
+      trap-focus
+      aria-role="dialog"
+      aria-modal>
+      <user-profile />
+    </b-modal>
   </article>
 </template>
 
@@ -71,6 +93,7 @@
 import API from '@/api/index.js';
 import LoginModal from '@/components/login-modal.vue';
 import BookDetail from '@/components/book-detail.vue';
+import UserProfile from '@/components/user-profile.vue';
 import { mapState } from 'vuex';
 
 let config = process.env.NODE_ENV === 'production'
@@ -78,17 +101,20 @@ let config = process.env.NODE_ENV === 'production'
 export default {
   components: {
     LoginModal,
-    BookDetail
-  },
-  mounted() {
-    this.$store.dispatch('checkUserInfo');
-    this.$store.dispatch('getBookList');
+    BookDetail,
+    UserProfile
   },
   computed: {
     ...mapState([
       'user',
-      'books'
+      'books',
+      'profile'
     ]),
+  },
+  mounted() {
+    this.config = config ? 'https://frozen-hamlet-20379.herokuapp.com/' : 'http://localhost:3000/'
+    this.$store.dispatch('checkUserInfo');
+    this.$store.dispatch('getBookList');
   },
   methods: {
     userLogin() {
@@ -105,6 +131,20 @@ export default {
     toggleUserProfile() {
       this.isUserProfileActive = this.isUserProfileActive ? false : true;
     },
+    editUserProfile() {
+      this.isUserProfileEditActive = this.isUserProfileEditActive ? false : true;
+    },
+    onProfileImageChanged(event) {
+      const file = event.target.files[0];
+      let reader = new FileReader();
+
+      this.file = file;
+  
+      reader.onload = (e) => {
+        this.profileImage= e.target['result'];
+      };
+      reader.readAsDataURL(file);
+    },
     async checkUser() {
       try {
         let response = await API.checkUser();
@@ -120,8 +160,11 @@ export default {
     return {
       index: 0,
       book: {},
+      config: '',
+      profileImage: null,
       isLoginModalActive: false,
       isUserProfileActive: false,
+      isUserProfileEditActive: false,
       isBookDetailActive: false
     }
   }
@@ -135,7 +178,7 @@ export default {
   position: absolute;
   right: 0;
   top: 0;
-  background:rgba(0,0,0,0.75);
+  background:rgba(0,0,0,0.25);
 }
 .main-header {
   background-image: url('../assets/img/books-background.jpg');
@@ -174,8 +217,27 @@ export default {
     position: absolute;
     top: 50px;
     right: 14px;
-    width: 300px;
-    height: 320px;
+    width: 320px;
+    height: 140px;
+    display: flex;
+
+    & > .image-preview {
+      width: 70px;
+    }
+
+    & > .profile-intro {
+      flex: 1;
+      padding: 10px 0 0 20px;
+      & .profile-edit {
+        margin-left: 8px;
+      }
+    }
+
+    & > .logout {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+    }
   }
 
   & > .login-button {
@@ -249,5 +311,31 @@ export default {
 
 .books-container {
   padding: 40px;
+}
+
+.image-preview {
+  width: 70px;
+  height: 70px;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  background-color: #fff;
+  color: #fff;
+  margin-top: 5px;
+  margin-left: 10px;
+
+  & > input {
+    line-height: 70px;
+    font-size: 70px;
+    position: absolute;
+    opacity: 0;
+    z-index: 10;
+  }
+
+  & > img {
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>

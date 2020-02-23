@@ -8,6 +8,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: { // data
     user: {},
+    // profile: {},
     books: []
   },
   getters: { // computed
@@ -33,14 +34,12 @@ export default new Vuex.Store({
     },
     checkUserInfo: async (context) => {
       let response = await API.checkUser();
-      return context.commit('getUserInfo', response.data);
+      context.commit('getUserInfo', response.data.user);
     },
     logoutUserInfo: async (context) => {
       let response = await API.logoutUser();
       if(response.data.message === 'Logged out') {
-        return context.commit('getUserInfo', {});
-      } else {
-        return false;
+        context.commit('getUserInfo', {});
       }
     }
   }

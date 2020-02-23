@@ -11,7 +11,7 @@
           </label>
         </div>
       </div>
-      <!-- <input type="file" ref="file" name="image" id="image-upload" data-width="500" data-height="500" @change="onFileChanged($event)" accept="image/*" /> -->
+      <input type="file" ref="file" name="image" id="image-upload" data-width="500" data-height="500" @change="onFileChanged($event)" accept="image/*" />
       <img alt="" v-if="bookImage != null" :src=bookImage  width="140" height="194"/>
     </div>
     <div class="contents">
@@ -73,14 +73,18 @@
 <script>
 import API from '@/api/index.js';
 import BookSearchModal from '@/components/book-search-modal.vue';
+import LoginValidation from '@/mixins/login-validation.js';
 import { mapState } from 'vuex';
 
 export default {
   components: {
     BookSearchModal
   },
+  mixins: [
+    LoginValidation
+  ],
   mounted() {
-    this.$store.dispatch('checkUserInfo');
+    // this.$store.dispatch('checkUserInfo');
   },
   computed: {
     ...mapState([
@@ -137,13 +141,14 @@ export default {
 
       // formData.append('bookfile', this.file);
       let bookInfo = {
-        'userid': this.user.user._id,
-        'username': this.user.user.username,
-        'bookname': this.bookName,
-        'author': this.author,
-        'publisher': this.publisher,
-        'message': this.message,
-        'bookimage': this.bookImage
+        userid: this.user.user._id,
+        username: this.user.user.username,
+        bookname: this.bookName,
+        author: this.author,
+        publisher: this.publisher,
+        message: this.message,
+        profileimage: this.user.user.profileimage,
+        bookimage: this.bookImage
       }
 
       let response = await API.registerBook(bookInfo)

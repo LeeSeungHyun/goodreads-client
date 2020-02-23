@@ -9,6 +9,7 @@ const api = {
   logout: env ? '' : 'http://localhost:3000/auth/logout',
   checkUser: env ? '' : 'http://localhost:3000/auth/check',
   kakaoBook: 'https://dapi.kakao.com/v3/search/book',
+  updateUser: env ? '' : 'http://localhost:3000/user/update',
 };
 
 const config = {
@@ -27,16 +28,16 @@ export default{
       console.log(err);
     }
   },
-  googleLogin: async () => {
-    try {
-      let response = await axios.get(api.login, {
-        headers: { 'Content-Type': 'application/json' },
-        withCredentials: true
-      });
-      return response || null;
-    } catch(err) {
-      console.log(err);
-    }
+  googleLogin: () => {
+    // try {
+    //   let response = await axios.get(api.login, {
+    //     headers: { 'Content-Type': 'application/json' },
+    //     withCredentials: true
+    //   });
+    //   return response || null;
+    // } catch(err) {
+    //   console.log(err);
+    // }
   },
   logoutUser: async () => {
     try {
@@ -45,6 +46,15 @@ export default{
         withCredentials: true
       });
       return response || null;
+    } catch(err) {
+      console.log(err);
+    }
+  },
+  updateUser: async (user) => {
+    try{
+      let response = await axios.post(api.updateUser, user);
+      console.log(response);
+      return response.data || null;
     } catch(err) {
       console.log(err);
     }

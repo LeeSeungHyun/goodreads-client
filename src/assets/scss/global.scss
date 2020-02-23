@@ -1,10 +1,29 @@
+@font-face {
+  font-family: 'GmarketSans';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../../assets/font/GmarketSansTTFMedium.ttf'); 
+}
+
+// body {
+//   margin: 0;
+//   padding: 0;
+//   max-width: 1280px;
+//   margin: 0 auto;
+//   /* font-family: 'NotoSans' !important; */
+//   font-family: 'NotoSans' !important;
+//   background-color: #fcfcfc;
+//   /* -webkit-font-smoothing: antialiased;
+//   -moz-osx-font-smoothing: grayscale; */
+// }
+
 html {
   font-size: 14px !important;
-  font-family: "SpoqaHanSans", "Noto Sans SC", "APPLE SD Gothic NEO", "sans-serif";
 }
 
 body {
   // font-family: "Open Sans", Arial, sans-serif;
+  font-family: 'GmarketSans', Arial, sans-serif;
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -19,6 +38,10 @@ button {
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+.modal-card-head {
+  padding: 10px;
 }
 
 // .modal-mask {
