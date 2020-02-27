@@ -14,6 +14,16 @@
           <div class="book-body">
             <div class="book-image">
               <img :src="book.bookimage" alt="thumbnail" width="100">
+              <!-- <b-rate 
+                class="average-rate"
+                v-model="averageRate"
+                icon-pack="fas"
+                :spaced="true"
+                :disabled="true">
+              </b-rate> -->
+              <div class="average-rate">
+                평점: {{averageRate}}
+              </div>
             </div>
             <div class="book-content">
               <div class="book-name" v-line-clamp="2">{{book.bookname}}</div>
@@ -23,21 +33,46 @@
               </div>
               <div class="book-message">
                 {{book.message}}
-                Thank you, everyone. 맞아. 그래, 이건
+                <!-- Thank you, everyone. 맞아. 그래, 이건
                 이 앨범의 7번을 장식하는 track
                 I'd like to say sumthin' to all my friends and supporters
                 Who've been there since day one. 나와 문제 있던
                 이들에게도 감사해. They helped me find my way
                 In a way, anyway, 모든 건 내 음악 안에
-                녹아들어갔다 생각해.
+                녹아들어갔다 생각해. -->
               </div>
             </div>
           </div>
         </div>
         <div class="book-comments">
-          <div class="book-review">
+          <ul class="book-comment">
+            <div class="book-no-comments" :class="[this.commentList === null && 'book-display']">
+              책에 대한 소감을 댓글로 남겨주세요.
+            </div>
+            <li v-for="(comment, index) in commentList" :key=index class="li-comment">
            
-          </div>
+              <div class="li-comment-profile-image">
+                <img :src='config + comment.profileimage' alt="profile" width="22" height="22">
+              </div>
+              <div class="li-comment-username">
+                {{comment.username}}
+              </div>
+              <div class="li-comment-comment">
+                <b-rate 
+                  class="comment-rate"
+                  v-model="comment.rate"
+                  icon-pack="fas"
+                  :spaced="true"
+                  :disabled="true">
+                </b-rate>
+
+                <span>{{comment.createdtime | moment("YYYY-MM-DD HH:mm:ss")}}</span>
+                <div>
+                  {{comment.comment}}
+                </div>
+              </div>
+            </li>
+          </ul>
           <div class="book-reply">
             <b-rate 
               class="book-rate"
@@ -85,7 +120,17 @@ export default {
     },
     async getCommentList() {
       let response = await API.getBookCommentList(this.book._id);
-      console.log(response);
+
+      if(response.length > 0) {
+        this.commentList = [...response];
+        let length = this.commentList.length;
+        let sum = this.commentList.reduce((prev, next) => { return prev + next.rate }, 0)
+        let result = sum / length;
+        this.averageRate = parseFloat(result.toFixed(1));
+      } else {
+        this.commentList = null;
+      }
+
     },
     async saveComment() {
       let commentObj = {
@@ -100,38 +145,130 @@ export default {
       let response = await API.saveBookComment(commentObj);
 
       if(response.message === 'success') {
-
+        if(this.commentList === null) {
+          this.commentList = [];
+        } 
+        this.comment = '';
+        this.rate = 0;
+        this.commentList.unshift(commentObj);
+        this.$buefy.toast.open({
+          duration: 3000,
+          message: '등록 되었습니다.',
+          position: 'is-bottom',
+          type: 'is-success'
+        })
       }
     }
   },
   data() {
     return {
       texts: ['매우 불만족', '불만족', '보통', '만족', '매우 만족'],
-      rate: null,
+      rate: 0,
+      averageRate: 0,
       comment: '',
-      config: '',
+      commentList: [],
+      config: ''
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
+$Phone: "screen and (max-width : 640px)";
 .book-detail {
-  height: 400px;
+  // height: 400px;
   display: flex;
+  @media #{$Phone} {
+    display: block;
+  }
   & > .book-detail-info {
     width: 330px;
     padding-right: 20px;
     border-right: 1px solid rgba(0, 0, 0, 0.1);
+    @media #{$Phone} {
+      width: 100%;
+      border: 0;
+    }
   }
   & > .book-comments {
     flex: 1;
     padding-left: 20px;
     padding-bottom: 0;
 
-    .book-review {
-      height: 360px;
+    @media #{$Phone} {
+      width: 100%;
+      padding-left: 0;
+    }
+
+    .book-comment {
+      min-height: 200px;
+      max-height: 300px;
       overflow: auto;
+      -ms-overflow-style: none;
+
+      @media #{$Phone} {
+        width: 100%;
+        padding-left: 0;
+        margin-top: 20px;
+        min-height: 80px;
+        max-height: 160px;
+      }
+
+      .book-no-comments {
+        display: none;
+      }
+
+      .book-display {
+        display: block;
+        position: relative;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+    }
+
+    & .li-comment {
+      // display: flex;
+      margin-bottom: 16px;
+      & > .li-comment-profile-image {
+        width: 22px;
+        height: 22px;
+        border: 1px solid #ddd;
+        border-radius: 50%;
+        overflow: hidden;
+        background-color: #fff;
+        color: #fff;
+        display: inline-block;
+      }
+
+      & > .li-comment-username {
+        position: relative;
+        left: 6px;
+        bottom: 7px;
+        font-size: 0.6rem;
+        display: inline-block;
+      }
+
+      & > .li-comment-comment {
+        font-size: 0.8rem;
+        margin-top: -6px;
+
+        & > .comment-rate {
+          font-size: 0.5rem; 
+          display: inline;
+        }
+
+        & > span {
+          position: relative;
+          bottom: 7px;
+          font-size: 0.5rem;
+          // padding-left: 8px;
+          margin-left: 5px;
+          // border-left: 1px solid rgba(0, 0, 0, 0.3);
+          color: #bbb; 
+        }
+      }
     }
     .book-reply {
       font-size: 0.6rem;
@@ -173,6 +310,9 @@ export default {
     display: flex;
     & > .book-image {
       width: 116px;
+      & > .average-rate {
+        font-size: 0.8rem;
+      }
     }
     & > .book-content {
       flex: 1;
@@ -200,5 +340,8 @@ export default {
       }
     }
   }
+}
+::-webkit-scrollbar {
+  display:none;
 }
 </style>

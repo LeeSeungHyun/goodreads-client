@@ -29,8 +29,8 @@
             {{user.username}}
             <b-button class="profile-edit" size="is-small" @click="editUserProfile">Edit</b-button>
           </div>
-          <div class="profile-mail">{{user.job}}</div>
-           <div class="profile-mail">{{user.email}}</div>
+          <div class="profile-job">{{user.job}}</div>
+          <div class="profile-email">{{user.email}}</div>
         </div>
 
       </div>
@@ -182,7 +182,7 @@ export default {
 }
 .main-header {
   background-image: url('../assets/img/books-background.jpg');
-  height: 340px;
+  height: 320px;
   background-position: center;
   background-size: cover;
   display: flex;
@@ -230,6 +230,18 @@ export default {
       padding: 10px 0 0 20px;
       & .profile-edit {
         margin-left: 8px;
+        margin-top: -2px;
+      }
+
+      & > .profile-job {
+        margin-top: 2px;
+        font-size: 0.9rem;
+      }
+
+      & > .profile-email {
+        margin-top: 2px;
+        font-size: 0.9rem;
+        color: #bbb; 
       }
     }
 

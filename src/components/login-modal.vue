@@ -55,10 +55,6 @@ $Phone: "screen and (max-width : 768px)";
 .modal-card {
   width: 280px;
   margin: 0 auto;
-  & .modal-card-title {
-    font-size: 1.3rem;
-    font-weight: bold;
-  }
   & > .modal-card-body {
     text-align: center;
     & > .modal-intro {
