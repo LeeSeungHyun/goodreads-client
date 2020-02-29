@@ -11,7 +11,7 @@
           </label>
         </div>
       </div>
-      <input type="file" ref="file" name="image" id="image-upload" data-width="500" data-height="500" @change="onFileChanged($event)" accept="image/*" />
+      <!-- <input type="file" ref="file" name="image" id="image-upload" data-width="500" data-height="500" @change="onFileChanged($event)" accept="image/*" /> -->
       <img alt="" v-if="bookImage != null" :src=bookImage  width="140" height="194"/>
     </div>
     <div class="contents">

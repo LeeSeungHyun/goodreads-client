@@ -1,48 +1,49 @@
 <template>
   <article>
-    <!-- <div :class="[this.isUserProfileActive === false || 'background-filter']"></div> -->
     <header class="main-header">
-      <div class="book-logo">
-        <img src="@/assets/img/book-logo.png" width="70" height="70" alt="logo">
-      </div>
-      <div class="dropdown-custom">
+      <nav class="nav" id="nav-header">
+        <div class="book-logo">
+          <img src="@/assets/img/book-logo.png" width="70" height="70" alt="logo">
+        </div>
         <b-button 
           size="is-small" 
-         
-          type="is-danger" 
-          class="logout-button" 
-          @click="toggleUserProfile"
+          v-if="Object.keys(user).length === 0" 
+          type="is-primary" 
+          class="login-button" 
+          @click="isLoginModalActive = true"
         >
-          <i class="fas fa-sign-out-alt"></i>
+          <i class="fas fa-sign-in-alt"></i> Login
         </b-button>
-      </div>
-      <div class="dropdown-content" v-if="isUserProfileActive === true">
+        <div class="dropdown-custom">
+          <b-button 
+            size="is-small" 
+            v-if="Object.keys(user).length !== 0" 
+            type="is-danger" 
+            class="logout-button" 
+            @click="toggleUserProfile"
+          >
+          <i class="fas fa-sign-out-alt"></i>
+          </b-button>
+        </div>
+        <div class="dropdown-content" v-if="isUserProfileActive === true">
         <!-- <router-link to="/register" tag="button">글쓰기</router-link> -->
-        <b-button class="logout" size="is-small" @click="logoutUser">Logout</b-button>
+          <b-button class="logout" size="is-small" @click="logoutUser">Logout</b-button>
 
-        <div class="image-preview">
+          <div class="image-preview">
           <!-- <input type="file" ref="file" name="image" @change="onProfileImageChanged($event)" accept="image/*" /> -->
-          <img alt="" :src='config + user.profileimage'  width="80" height="80"/>
-        </div>
-        <div class="profile-intro">
-          <div class="profile-name">
-            {{user.username}}
-            <b-button class="profile-edit" size="is-small" @click="editUserProfile">Edit</b-button>
+            <img alt="" :src='config + user.profileimage'  width="80" height="80"/>
           </div>
-          <div class="profile-job">{{user.job}}</div>
-          <div class="profile-email">{{user.email}}</div>
+          <div class="profile-intro">
+            <div class="profile-name">
+              {{user.username}}
+              <b-button class="profile-edit" size="is-small" @click="editUserProfile">Edit</b-button>
+            </div>
+            <div class="profile-job">{{user.job}}</div>
+            <div class="profile-email">{{user.email}}</div>
+          </div>
         </div>
-
-      </div>
-      <b-button 
-        size="is-small" 
-        v-if="Object.keys(user).length === 0" 
-        type="is-primary" 
-        class="login-button" 
-        @click="isLoginModalActive = true"
-      >
-        <i class="fas fa-sign-in-alt"></i> Login
-      </b-button>
+      </nav>
+    
       <div class="search-input">
         <div class="main-title">
           <div>생각보다 유익해서 당황하셨어요?! ^^</div>
@@ -54,10 +55,38 @@
         </button>
       </div>
     </header>
+    
     <main>
       <div class="books-container">
         <div v-for="(book, index) in books" :key=index>
-          <img :src="book.bookimage" alt="" width="120" height="200" @click="getBookDetail(book)">
+          <img :src="book.bookimage" alt="" width="150" style="border: 1px solid #eee" @click="getBookDetail(book)">
+        </div>
+        <div>
+          <img src="https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F540843%3Ftimestamp%3D20200223122259" alt="" width="156" style="border: 1px solid #eee">
+        </div>
+        <div>
+          <img src="https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F540843%3Ftimestamp%3D20200223122259" alt="" width="156" style="border: 1px solid #eee">
+        </div>
+        <div>
+          <img src="https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F540843%3Ftimestamp%3D20200223122259" alt="" width="156" style="border: 1px solid #eee">
+        </div>
+        <div>
+          <img src="https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F540843%3Ftimestamp%3D20200223122259" alt="" width="156" style="border: 1px solid #eee">
+        </div>
+        <div>
+          <img src="https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F540843%3Ftimestamp%3D20200223122259" alt="" width="156" style="border: 1px solid #eee">
+        </div>
+        <div>
+          <img src="https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F540843%3Ftimestamp%3D20200223122259" alt="" width="156" style="border: 1px solid #eee">
+        </div>
+        <div>
+          <img src="https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F540843%3Ftimestamp%3D20200223122259" alt="" width="156" style="border: 1px solid #eee">
+        </div>
+        <div>
+          <img src="https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F540843%3Ftimestamp%3D20200223122259" alt="" width="156" style="border: 1px solid #eee">
+        </div>
+        <div>
+          <img src="https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F540843%3Ftimestamp%3D20200223122259" alt="" width="156" style="border: 1px solid #eee">
         </div>
       </div>
     </main>
@@ -88,7 +117,6 @@
     </b-modal>
   </article>
 </template>
-
 <script>
 import API from '@/api/index.js';
 import LoginModal from '@/components/login-modal.vue';
@@ -111,10 +139,16 @@ export default {
       'profile'
     ]),
   },
+  created() {
+    window.addEventListener('scroll', this.handleScroll);
+  },
   mounted() {
     this.config = config ? 'https://frozen-hamlet-20379.herokuapp.com/' : 'http://localhost:3000/'
     this.$store.dispatch('checkUserInfo');
     this.$store.dispatch('getBookList');
+  },
+  destroyed() {
+    window.addEventListener('scroll', this.handleScroll);
   },
   methods: {
     userLogin() {
@@ -154,6 +188,15 @@ export default {
       } catch(err) {
         console.log(err)
       }
+    },
+    handleScroll (event) {
+      let scrollY = window.scrollY
+      let element = document.getElementById('nav-header');
+      if(scrollY > 50) {
+        element.classList.add('affix');
+      } else {
+        element.classList.remove("affix");
+      }
     }
   },
   data() {
@@ -172,6 +215,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+$Phone: "screen and (max-width : 768px)";
 .background-filter {
   bottom: 0;
   left: 0;
@@ -189,14 +233,15 @@ export default {
   justify-content: center;
   align-items: center;
 
-  & > .book-logo {
+  & .book-logo {
     position: absolute;
-    margin: 10px;
+    margin-top: 6px;
+    margin-left: 10px;
     top: 0;
     left: 0;
   }
 
-  & > .dropdown-custom {
+  & .dropdown-custom {
     position: absolute;
     top: 0;
     right: 0;
@@ -252,7 +297,7 @@ export default {
     }
   }
 
-  & > .login-button {
+  & .login-button {
     position: absolute;
     margin: 14px;
     top: 0;
@@ -273,7 +318,7 @@ export default {
     cursor: pointer;
   }
 
-  & > .search-input{
+  & .search-input{
     line-height: 100%;
     display: table;
     margin: 0;
@@ -281,7 +326,7 @@ export default {
     text-align: center;
 
     & > .main-title {
-      color: #FFF;
+      color: #fff;
       font-size: 2rem;
       & > div:nth-child(2) {
         margin-top: 18px;
@@ -321,8 +366,23 @@ export default {
   }
 }
 
+main {
+  width: 100%;
+  margin: 0 auto;
+  padding: 30px;
+}
+
 .books-container {
-  padding: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  padding-bottom: 3rem;
+
+  & > div {
+    text-align: center;
+    position: relative;
+    flex: 1 0 156px;
+    cursor: pointer;
+  }
 }
 
 .image-preview {
@@ -350,4 +410,38 @@ export default {
     height: 100%;
   }
 }
+
+@supports (display: grid) {
+  .books-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(156px, 1fr));
+    grid-gap: 30px;
+    @media (max-width: 420px) {
+      grid-template-columns: repeat(auto-fit, minmax(126px, 1fr));
+    }
+
+    & > div {
+      position: relative;
+      cursor: pointer;
+    }
+  }
+}
+
+.nav {
+  width: 100%;
+  height: 48px;
+  position: fixed;
+  top: 0;
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+}
+
+.affix {
+  padding: 0;
+  background-color: #7957d5;
+}
+
 </style>
