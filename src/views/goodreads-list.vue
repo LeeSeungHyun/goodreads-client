@@ -3,7 +3,9 @@
     <header class="main-header">
       <nav class="nav" id="nav-header">
         <div class="book-logo">
-          <img src="@/assets/img/book-logo.png" width="70" height="70" alt="logo">
+          <a href="#">
+            <img src="@/assets/img/book-logo.png" width="70" height="70" alt="logo">
+          </a>
         </div>
         <b-button 
           size="is-small" 
@@ -328,8 +330,14 @@ $Phone: "screen and (max-width : 768px)";
     & > .main-title {
       color: #fff;
       font-size: 2rem;
+      @media #{$Phone} {
+        font-size: 1.7rem;
+      }
+      @media screen and (max-width: 380px)  {
+        font-size: 1.4rem;
+      }
       & > div:nth-child(2) {
-        margin-top: 18px;
+        margin-top: 20px;
       }
     }
 
@@ -337,14 +345,13 @@ $Phone: "screen and (max-width : 768px)";
       height: 30px;
       padding: 8px;
       width: 30%;
-      min-width: 320px;
-      color: #DDD;
+      min-width: 260px;
       margin-top: 30px;
       border: 1px solid orange;
       box-shadow: 1px 0px 3px orange;
       border-radius: 50px;
-      font-size: 15px;
-      text-transform: capitalize;
+      font-size: 1rem;
+      // text-transform: capitalize;
       outline: none;
       background-color: #FFF;
     }
@@ -362,6 +369,11 @@ $Phone: "screen and (max-width : 768px)";
       box-shadow: 0px 0px 10px orange;
       outline: none;
       cursor: pointer;
+      @media screen and (max-width: 380px)  {
+        font-size: 0.8rem;
+        width: 50px;
+        border-radius: 30px;
+      }
     }
   }
 }
@@ -370,6 +382,8 @@ main {
   width: 100%;
   margin: 0 auto;
   padding: 30px;
+  // position: relative;
+  z-index: 1;
 }
 
 .books-container {
@@ -416,7 +430,7 @@ main {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(156px, 1fr));
     grid-gap: 30px;
-    @media (max-width: 420px) {
+    @media screen and (max-width: 420px) {
       grid-template-columns: repeat(auto-fit, minmax(126px, 1fr));
     }
 
@@ -432,11 +446,11 @@ main {
   height: 48px;
   position: fixed;
   top: 0;
-  text-align: center;
   padding-top: 20px;
   padding-bottom: 20px;
   -webkit-transition: all 0.4s ease;
   transition: all 0.4s ease;
+  z-index: 2;
 }
 
 .affix {

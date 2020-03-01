@@ -1,18 +1,7 @@
 import axios from 'axios';
 
 let env = process.env.NODE_ENV === 'production'
-
-const api = {
-  bookList: env ? '' : 'http://localhost:3000/book/list',
-  registerBook: env ? '' : 'http://localhost:3000/book/register',
-  login: env ? '' : 'http://localhost:3000/auth/google',
-  logout: env ? '' : 'http://localhost:3000/auth/logout',
-  checkUser: env ? '' : 'http://localhost:3000/auth/check',
-  kakaoBook: 'https://dapi.kakao.com/v3/search/book',
-  updateUser: env ? '' : 'http://localhost:3000/user/update',
-  bookCommentList: env ? '' : 'http://localhost:3000/book/comment/list',
-  commentSave: env ? '' : 'http://localhost:3000/book/comment/save',
-};
+const url = env === 'production' ? '' : 'http://localhost:3000';
 
 const config = {
   appKey: 'KakaoAK e382e5fe0284648ec925142a6db4f021'
@@ -21,7 +10,7 @@ const config = {
 export default{
   checkUser: async () => {
     try {
-      let response = await axios.get(api.checkUser, {
+      let response = await axios.get(url + '/auth/check', {
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true
       });
@@ -30,20 +19,9 @@ export default{
       console.log(err);
     }
   },
-  googleLogin: () => {
-    // try {
-    //   let response = await axios.get(api.login, {
-    //     headers: { 'Content-Type': 'application/json' },
-    //     withCredentials: true
-    //   });
-    //   return response || null;
-    // } catch(err) {
-    //   console.log(err);
-    // }
-  },
   logoutUser: async () => {
     try {
-      let response = await axios.get(api.logout, {
+      let response = await axios.get(url + '/auth/logout', {
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true
       });
@@ -54,7 +32,7 @@ export default{
   },
   updateUser: async (user) => {
     try{
-      let response = await axios.post(api.updateUser, user);
+      let response = await axios.post(url + '/user/update', user);
       console.log(response);
       return response.data || null;
     } catch(err) {
@@ -63,7 +41,7 @@ export default{
   },
   getBookList: async () => {
     try{
-      let response = await axios.get(api.bookList) 
+      let response = await axios.get(url + '/book/list') 
       return response.data || null;
     } catch(err) {
       console.log(err);
@@ -71,7 +49,7 @@ export default{
   },
   registerBook: async (book) => {
     try{
-      let response = await axios.post(api.registerBook, book) 
+      let response = await axios.post(url + '/book/register', book) 
       return response.data || null;
     } catch(err) {
       console.log(err);
@@ -79,7 +57,7 @@ export default{
   },
   getBookInfo: async (searchText) => {
     try{
-      let response = await axios.get(api.kakaoBook, { 
+      let response = await axios.get('https://dapi.kakao.com/v3/search/book', { 
         params:{
           query: searchText,
           target: 'title&person'
@@ -95,7 +73,7 @@ export default{
   },
   getBookCommentList: async (bookid) => {
     try{
-      let response = await axios.get(api.bookCommentList, { params: { bookid: bookid }});
+      let response = await axios.get(url + '/book/comment/list', { params: { bookid: bookid }});
       return response.data || null;
     } catch(err) {
       console.log(err);
@@ -103,7 +81,7 @@ export default{
   },
   saveBookComment: async (bookComment) => {
     try{
-      let response = await axios.post(api.commentSave, bookComment);
+      let response = await axios.post(url + '/book/comment/save', bookComment);
       return response.data || null;
     } catch(err) {
       console.log(err);
