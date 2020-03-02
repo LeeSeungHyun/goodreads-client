@@ -145,6 +145,7 @@ export default {
     window.addEventListener('scroll', this.handleScroll);
   },
   mounted() {
+    console.log(process.env)
     this.config = config ? 'https://book-fishing.herokuapp.com/' : 'http://localhost:3000/'
     this.$store.dispatch('checkUserInfo');
     this.$store.dispatch('getBookList');
