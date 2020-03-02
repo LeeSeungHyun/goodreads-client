@@ -25,26 +25,33 @@
 <script>
 import API from '@/api/index.js';
 
+let config = process.env.NODE_ENV === 'production'
+
 export default {
   props: {
     userInfo: Object,
     email: String,
     password: String
   },
+  mounted() {
+    let config = process.env.NODE_ENV === 'production'
+    this.config = config ? 'https://book-fishing.herokuapp.com' : 'http://localhost:3000';
+  },
   methods: {
     async googleLogin() {
       this.isLoading = true;
-      window.location.href = 'http://localhost:3000/auth/google';
+      window.location.href =  this.config + '/auth/google';
     },
     async facebookLogin() {
       this.isLoading = true;
-      window.location.href = 'http://localhost:3000/auth/facebook';
+      window.location.href = this.config + '/auth/facebook';
     },
   },
   data() {
     return {
       isFullPage: true,
-      isLoading: false
+      isLoading: false,
+      config: ''
     }
   }
 }

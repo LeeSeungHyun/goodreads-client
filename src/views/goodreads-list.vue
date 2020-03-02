@@ -145,7 +145,7 @@ export default {
     window.addEventListener('scroll', this.handleScroll);
   },
   mounted() {
-    this.config = config ? 'https://frozen-hamlet-20379.herokuapp.com/' : 'http://localhost:3000/'
+    this.config = config ? 'https://book-fishing.herokuapp.com/' : 'http://localhost:3000/'
     this.$store.dispatch('checkUserInfo');
     this.$store.dispatch('getBookList');
   },
