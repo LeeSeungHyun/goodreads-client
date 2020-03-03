@@ -63,33 +63,6 @@
         <div v-for="(book, index) in books" :key=index>
           <img :src="book.bookimage" alt="" width="150" style="border: 1px solid #eee" @click="getBookDetail(book)">
         </div>
-        <div>
-          <img src="https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F540843%3Ftimestamp%3D20200223122259" alt="" width="156" style="border: 1px solid #eee">
-        </div>
-        <div>
-          <img src="https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F540843%3Ftimestamp%3D20200223122259" alt="" width="156" style="border: 1px solid #eee">
-        </div>
-        <div>
-          <img src="https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F540843%3Ftimestamp%3D20200223122259" alt="" width="156" style="border: 1px solid #eee">
-        </div>
-        <div>
-          <img src="https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F540843%3Ftimestamp%3D20200223122259" alt="" width="156" style="border: 1px solid #eee">
-        </div>
-        <div>
-          <img src="https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F540843%3Ftimestamp%3D20200223122259" alt="" width="156" style="border: 1px solid #eee">
-        </div>
-        <div>
-          <img src="https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F540843%3Ftimestamp%3D20200223122259" alt="" width="156" style="border: 1px solid #eee">
-        </div>
-        <div>
-          <img src="https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F540843%3Ftimestamp%3D20200223122259" alt="" width="156" style="border: 1px solid #eee">
-        </div>
-        <div>
-          <img src="https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F540843%3Ftimestamp%3D20200223122259" alt="" width="156" style="border: 1px solid #eee">
-        </div>
-        <div>
-          <img src="https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F540843%3Ftimestamp%3D20200223122259" alt="" width="156" style="border: 1px solid #eee">
-        </div>
       </div>
     </main>
     <b-modal 
