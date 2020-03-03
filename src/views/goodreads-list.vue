@@ -402,10 +402,10 @@ main {
 @supports (display: grid) {
   .books-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(156px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(156px, 1fr));
     grid-gap: 30px;
     @media screen and (max-width: 420px) {
-      grid-template-columns: repeat(auto-fit, minmax(126px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(126px, 1fr));
     }
 
     & > div {
