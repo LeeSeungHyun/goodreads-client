@@ -73,7 +73,7 @@
               </div>
             </li>
           </ul>
-          <div class="book-reply">
+          <div class="book-reply" v-if="Object.keys(user).length !== 0">
             <b-rate 
               class="book-rate"
               icon-pack="fas" 
@@ -88,6 +88,9 @@
               <b-input class="book-reply-input" size="is-small" v-model="comment" placeholder="댓글 달기.."></b-input>
               <b-button size="is-small" @click="saveComment">게시</b-button>
             </b-field>
+          </div>
+          <div v-if="Object.keys(user).length === 0" class="no-user-info">
+            <span>로그인을 하고 댓글을 달아주세요.</span>
           </div>
         </div>
       </div>
@@ -279,6 +282,13 @@ $Phone: "screen and (max-width : 640px)";
       & .book-reply-input {
         width: 90%;
         margin-right: 4px;
+      }
+    }
+    .no-user-info {
+      font-size: 0.8rem;
+      & > span {
+        position: relative; 
+        top: 8px;
       }
     }
   }

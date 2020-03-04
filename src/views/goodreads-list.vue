@@ -45,7 +45,6 @@
           </div>
         </div>
       </nav>
-    
       <div class="search-input">
         <div class="main-title">
           <div>생각보다 유익해서 당황하셨어요?! ^^</div>
@@ -56,8 +55,14 @@
           <i class="fas fa-search"></i>
         </button>
       </div>
+      <b-button 
+        v-if="Object.keys(user).length !== 0" 
+        @click="registerBook" 
+        class="register-button"
+      >
+        <i class="fas fa-pen"></i> 글쓰기
+      </b-button>
     </header>
-    
     <main>
       <div class="books-container">
         <div v-for="(book, index) in books" :key=index>
@@ -134,6 +139,9 @@ export default {
       this.book = {...book};
       this.isBookDetailActive = this.isBookDetailActive ? false : true;
     },
+    registerBook () {
+      this.$router.replace(this.$route.query.redirect || '/register')
+    },
     logoutUser() {
       this.$store.dispatch('logoutUserInfo');
       this.isUserProfileActive = false;
@@ -203,6 +211,7 @@ $Phone: "screen and (max-width : 768px)";
 .main-header {
   background-image: url('../assets/img/books-background.jpg');
   height: 320px;
+  position: relative;
   background-position: center;
   background-size: cover;
   display: flex;
@@ -294,6 +303,13 @@ $Phone: "screen and (max-width : 768px)";
     cursor: pointer;
   }
 
+  .register-button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 14px;
+  }
+
   & .search-input{
     line-height: 100%;
     display: table;
@@ -355,7 +371,7 @@ $Phone: "screen and (max-width : 768px)";
 main {
   width: 100%;
   margin: 0 auto;
-  padding: 30px;
+  padding: 40px 30px 0 30px;
   // position: relative;
   z-index: 1;
 }
