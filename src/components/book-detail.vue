@@ -204,7 +204,7 @@ $Phone: "screen and (max-width : 640px)";
     }
 
     .book-comment {
-      min-height: 200px;
+      min-height: 250px;
       max-height: 300px;
       overflow: auto;
       -ms-overflow-style: none;
@@ -285,6 +285,8 @@ $Phone: "screen and (max-width : 640px)";
       }
     }
     .no-user-info {
+      // position: absolute;
+      // bottom: 14px; 
       font-size: 0.8rem;
       & > span {
         position: relative; 

@@ -1,84 +1,112 @@
 <template>
-  <form class="form-container" @submit.prevent="validateBeforeSubmit"> 
-    <div class="image-preview">
-      <div class="label-container" v-show="bookImage.length === 0">
-        <div>
-          <i class="fas fa-book"></i>
+  <ValidationObserver ref="observer">
+    <div class="form-container"> 
+      <div class="image-preview">
+        <div class="label-container" v-show="bookImage.length === 0">
+          <div>
+            <i class="fas fa-book"></i>
+          </div>
+          <div>
+            <label for="image-upload">
+              <img src="@/assets/img/book-logo.png" width="80" height="80" alt="logo">
+            </label>
+          </div>
         </div>
-        <div>
-          <label for="image-upload">
-            <img src="@/assets/img/book-logo.png" width="80" height="80" alt="logo">
-          </label>
+        <!-- <input type="file" ref="file" name="image" id="image-upload" data-width="500" data-height="500" @change="onFileChanged($event)" accept="image/*" /> -->
+        <img alt="" v-if="bookImage != null" :src=bookImage  width="140" height="194"/>
+      </div>
+      <div class="contents">
+        <div class="contents-title">
+          검색을 통해 책을 선택해주세요.
+          <b-button size="is-small" @click="searchBook">검색하기</b-button>
+        </div>   
+        <div class="book-name">
+          <ValidationProvider name="book name" rules="required">
+            <div slot-scope="{ errors }">
+              <b-field>
+                <b-input v-model="bookName" placeholder="책 이름을 입력해주세요."></b-input>
+              </b-field>
+              <span>{{ errors[0] }}</span>
+            </div>
+          </ValidationProvider>
+        </div>
+        <div class="book-author">
+          <ValidationProvider name="author" rules="required">
+            <div slot-scope="{ errors }">
+              <b-field>
+                <b-input v-model="author" placeholder="저자 이름을 입력해주세요."></b-input>
+              </b-field>
+              <span>{{ errors[0] }}</span>
+            </div>
+          </ValidationProvider>
+        </div>
+        <div class="book-publisher">
+          <ValidationProvider name="publisher" rules="required">
+            <div slot-scope="{ errors }">
+              <b-field>
+                <b-input v-model="publisher" placeholder="출판사를 입력해주세요."></b-input>
+              </b-field>
+              <span>{{ errors[0] }}</span>
+            </div>
+          </ValidationProvider>
+        </div>
+        <div class="book-message">
+          <ValidationProvider name="message" rules="required">
+            <div slot-scope="{ errors }">
+              <b-field>
+                <b-input v-model="message" maxlength="200" type="textarea" placeholder="책에 대한 짧은 감상평 남겨주세요. (최대 200자)"></b-input>
+              </b-field>
+              <span style="position: relative; top: -18px">{{ errors[0] }}</span>
+            </div>
+          </ValidationProvider>
+          <!-- <b-field>
+            <b-input v-model="message" maxlength="200" type="textarea" placeholder="책에 대한 짧은 감상평 남겨주세요. (최대 200자)"></b-input>
+          </b-field> -->
+        </div>
+        <!-- <div class="book-rates">
+          <div>책을 평가해주세요.</div>
+          <b-rate 
+            icon-pack="fas" 
+            @change="selectRate" 
+            :show-text="true"
+            :texts="texts"
+            v-model="rate"
+            ref="bookRate"
+          >
+          </b-rate>
+        </div> -->
+        <div class="book-buttons">
+          <b-button type="is-primary" @click="registerBook">등록하기</b-button>
+          <b-button @click="backToBookList">뒤로가기</b-button>
         </div>
       </div>
-      <!-- <input type="file" ref="file" name="image" id="image-upload" data-width="500" data-height="500" @change="onFileChanged($event)" accept="image/*" /> -->
-      <img alt="" v-if="bookImage != null" :src=bookImage  width="140" height="194"/>
+      <b-modal 
+        :active.sync="isBookSearchModalActive"
+        has-modal-card
+        :width="400"
+        trap-focus
+        aria-role="dialog"
+        aria-modal>
+        <book-search-modal
+          v-on:getBookInfo="getBookInfo"
+        />
+      </b-modal>
     </div>
-    <div class="contents">
-      <div class="contents-title">
-        Book Fishing과 함께해요!!
-        <b-button size="is-small" @click="searchBook">검색하기</b-button>
-      </div>   
-      <div class="book-name">
-        <b-field>
-          <b-input v-model="bookName" placeholder="책 이름을 입력해주세요."></b-input>
-        </b-field>
-      </div>
-      <div class="book-author">
-        <b-field>
-          <b-input v-model="author" placeholder="저자 이름을 입력해주세요."></b-input>
-        </b-field>
-      </div>
-      <div class="book-publisher">
-        <b-field>
-          <b-input v-model="publisher" placeholder="출판사를 입력해주세요."></b-input>
-        </b-field>
-      </div>
-      <div class="book-message">
-        <b-field>
-          <b-input v-model="message" maxlength="300" type="textarea" placeholder="책에 대한 짧은 감상평 남겨주세요. (최대 300자)"></b-input>
-        </b-field>
-      </div>
-      <!-- <div class="book-rates">
-        <div>책을 평가해주세요.</div>
-        <b-rate 
-          icon-pack="fas" 
-          @change="selectRate" 
-          :show-text="true"
-          :texts="texts"
-          v-model="rate"
-          ref="bookRate"
-        >
-        </b-rate>
-      </div> -->
-      <div class="book-buttons">
-        <b-button type="is-primary" @click="registerBook">등록하기</b-button>
-        <b-button @click="backToBookList">뒤로가기</b-button>
-      </div>
-    </div>
-    <b-modal 
-      :active.sync="isBookSearchModalActive"
-      has-modal-card
-      :width="400"
-      trap-focus
-      aria-role="dialog"
-      aria-modal>
-      <book-search-modal
-        v-on:getBookInfo="getBookInfo"
-      />
-    </b-modal>
-  </form>
+  </ValidationObserver>
 </template>
 
 <script>
 import API from '@/api/index.js';
 import BookSearchModal from '@/components/book-search-modal.vue';
 import LoginValidation from '@/mixins/login-validation.js';
+import { ValidationObserver, ValidationProvider } from 'vee-validate';
 import { mapState } from 'vuex';
 
 export default {
   components: {
-    BookSearchModal
+    BookSearchModal,
+    ValidationObserver,
+    ValidationProvider
   },
   mixins: [
     LoginValidation
@@ -129,37 +157,29 @@ export default {
       this.rate = null;
     },
     async registerBook() {
-      // const formData = new FormData();
-      
-      // formData.append('userid', this.user.user._id);
-      // formData.append('username', this.user.user.username);
-      // formData.append('bookname', this.bookName);
-      // formData.append('author', this.author);
-      // formData.append('publisher', this.publisher);
-      // formData.append('message', this.message);
-      // formData.append('bookimage', this.bookImage);
+      const isValid = await this.$refs.observer.validate();
+      if (isValid) {
+        let bookInfo = {
+          userid: this.user.user._id,
+          username: this.user.user.username,
+          bookname: this.bookName,
+          author: this.author,
+          publisher: this.publisher,
+          message: this.message,
+          profileimage: this.user.user.profileimage,
+          bookimage: this.bookImage
+        }
 
-      // formData.append('bookfile', this.file);
-      let bookInfo = {
-        userid: this.user.user._id,
-        username: this.user.user.username,
-        bookname: this.bookName,
-        author: this.author,
-        publisher: this.publisher,
-        message: this.message,
-        profileimage: this.user.user.profileimage,
-        bookimage: this.bookImage
-      }
-
-      let response = await API.registerBook(bookInfo)
-      if(response.message === 'success') {
-        this.resetForm();
-        this.$buefy.toast.open({
-          duration: 3000,
-          message: '등록 되었습니다.',
-          position: 'is-bottom',
-          type: 'is-success'
-        })
+        let response = await API.registerBook(bookInfo)
+        if(response.message === 'success') {
+          this.resetForm();
+          this.$buefy.toast.open({
+            duration: 3000,
+            message: '등록 되었습니다.',
+            position: 'is-bottom',
+            type: 'is-success'
+          })
+        }
       }
     }
   },
@@ -269,6 +289,9 @@ $Phone: "screen and (max-width : 768px)";
         .book-publisher,
         .book-message {
       margin-top: 14px;
+      & span {
+        color: red;
+      } 
     }
 
     & > .book-buttons {

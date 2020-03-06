@@ -123,7 +123,6 @@ export default {
     window.addEventListener('scroll', this.handleScroll);
   },
   mounted() {
-    console.log(process.env)
     this.config = config ? 'https://book-fishing.herokuapp.com/' : 'http://localhost:3000/'
     this.$store.dispatch('checkUserInfo');
     this.$store.dispatch('getBookList');
@@ -217,7 +216,9 @@ $Phone: "screen and (max-width : 768px)";
   display: flex;
   justify-content: center;
   align-items: center;
-
+  @media #{$Phone} {
+    height: 260px;
+  }
   & .book-logo {
     position: absolute;
     margin-top: 6px;
