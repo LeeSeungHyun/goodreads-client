@@ -65,6 +65,14 @@
                 {{comment.username}}
                 <span v-if="comment.userid === user._id">
                   <b-button type="is-text" size="is-small" @click="updateCommentForm(comment)">수정</b-button>
+                  <!-- <b-button 
+                    type="is-text" 
+                    size="is-small" 
+                    v-if="commentMode === 'update' && Object.keys(this.commentForUpdate).length > 0 && comment._id === this.commentForUpdate._id" 
+                    @click="updateCommentForm(comment)"
+                  >
+                    수정 취소
+                  </b-button> -->
                   <b-button type="is-text" size="is-small" @click="confirmCommentDelete(comment._id)">삭제</b-button>
                 </span>
               </div>
@@ -160,7 +168,6 @@ export default {
         comment: this.comment,
         rate: this.rate
       }
-      // console.log(commentObj);
       let response = await API.saveBookComment(commentObj);
 
       if(response.message === 'success') {
@@ -199,6 +206,7 @@ export default {
    
       if(response.nModified === 1) {
         this.commentMode = 'create';
+
         this.getCommentList();
         this.$buefy.toast.open({
           duration: 3000,
@@ -236,7 +244,6 @@ export default {
     },
     async deleteComment(commentId) {
       let response = await API.deleteBookComment(commentId);
-      console.log(response);
       if(response.deletedCount === 1) {
         this.commentList = this.commentList.filter((comment) => {
           return comment._id !== commentId;
