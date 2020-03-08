@@ -29,16 +29,20 @@ export default new VueRouter({
       component: GoodreadsLogin
     },
     {
+      name: 'list',
       path: '/list',
-      component: GoodreadsList
+      component: GoodreadsList,
+      props: true
     },
     {
       path: '/list/:id',
       component: GoodreadsDetail
     },
     {
+      name: 'register',
       path: '/register',
-      component: GoodreadsRegister
+      component: GoodreadsRegister,
+      props: true
     },
   ]
 });

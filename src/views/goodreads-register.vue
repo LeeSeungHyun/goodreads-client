@@ -21,44 +21,44 @@
           <b-button size="is-small" @click="searchBook">검색하기</b-button>
         </div>   
         <div class="book-name">
-          <ValidationProvider name="book name" rules="required">
-            <div slot-scope="{ errors }">
+          <!-- <ValidationProvider name="book name" rules="required">
+            <div slot-scope="{ errors }"> -->
               <b-field>
                 <b-input v-model="bookName" placeholder="책 이름을 입력해주세요."></b-input>
               </b-field>
-              <span>{{ errors[0] }}</span>
+              <!-- <span>{{ errors[0] }}</span>
             </div>
-          </ValidationProvider>
+          </ValidationProvider> -->
         </div>
         <div class="book-author">
-          <ValidationProvider name="author" rules="required">
-            <div slot-scope="{ errors }">
+          <!-- <ValidationProvider name="author" rules="required">
+            <div slot-scope="{ errors }"> -->
               <b-field>
                 <b-input v-model="author" placeholder="저자 이름을 입력해주세요."></b-input>
               </b-field>
-              <span>{{ errors[0] }}</span>
+            <!--  <span>{{ errors[0] }}</span>
             </div>
-          </ValidationProvider>
+          </ValidationProvider> -->
         </div>
         <div class="book-publisher">
-          <ValidationProvider name="publisher" rules="required">
-            <div slot-scope="{ errors }">
+          <!-- <ValidationProvider name="publisher" rules="required">
+            <div slot-scope="{ errors }"> -->
               <b-field>
                 <b-input v-model="publisher" placeholder="출판사를 입력해주세요."></b-input>
               </b-field>
-              <span>{{ errors[0] }}</span>
+              <!-- <span>{{ errors[0] }}</span>
             </div>
-          </ValidationProvider>
+          </ValidationProvider> -->
         </div>
         <div class="book-message">
-          <ValidationProvider name="message" rules="required">
-            <div slot-scope="{ errors }">
+          <!-- <ValidationProvider name="message" rules="required">
+            <div slot-scope="{ errors }"> -->
               <b-field>
                 <b-input v-model="message" maxlength="200" type="textarea" placeholder="책에 대한 짧은 감상평 남겨주세요. (최대 200자)"></b-input>
               </b-field>
-              <span style="position: relative; top: -18px">{{ errors[0] }}</span>
+              <!-- <span style="position: relative; top: -18px">{{ errors[0] }}</span>
             </div>
-          </ValidationProvider>
+          </ValidationProvider> -->
           <!-- <b-field>
             <b-input v-model="message" maxlength="200" type="textarea" placeholder="책에 대한 짧은 감상평 남겨주세요. (최대 200자)"></b-input>
           </b-field> -->
@@ -76,7 +76,8 @@
           </b-rate>
         </div> -->
         <div class="book-buttons">
-          <b-button type="is-primary" @click="registerBook">등록하기</b-button>
+          <b-button type="is-primary" @click="registerBook" v-if="mode === 'create'">등록하기</b-button>
+          <b-button type="is-primary" @click="updateBook" v-if="mode === 'update'">수정하기</b-button>
           <b-button @click="backToBookList">뒤로가기</b-button>
         </div>
       </div>
@@ -112,7 +113,18 @@ export default {
     LoginValidation
   ],
   mounted() {
-    // this.$store.dispatch('checkUserInfo');
+    let params = this.$route.params;
+    if(params.hasOwnProperty('book')) {
+      this.bookImage = params.book.bookimage
+      this.bookName = params.book.bookname
+      this.author = params.book.author
+      this.publisher = params.book.publisher
+      this.message = params.book.message
+      
+      this.mode = 'update'
+    } else {
+      this.mode = 'create'
+    }
   },
   computed: {
     ...mapState([
@@ -157,8 +169,11 @@ export default {
       this.rate = null;
     },
     async registerBook() {
-      const isValid = await this.$refs.observer.validate();
-      if (isValid) {
+      // const isValid = await this.$refs.observer.validate();
+      // if (isValid) {
+
+      if(this.bookImage !== '' && this.bookName !== '' &&
+         this.author !== '' && this.publisher !== '' && this.message !== '') {
         let bookInfo = {
           userid: this.user.user._id,
           username: this.user.user.username,
@@ -170,7 +185,7 @@ export default {
           bookimage: this.bookImage
         }
 
-        let response = await API.registerBook(bookInfo)
+        let response = await API.registerBook(bookInfo);
         if(response.message === 'success') {
           this.resetForm();
           this.$buefy.toast.open({
@@ -180,6 +195,39 @@ export default {
             type: 'is-success'
           })
         }
+      } else {
+        this.$buefy.dialog.alert('모든 정보를 입력해주세요.');
+      }
+    },
+    async updateBook() {
+      if(this.bookImage !== '' && this.bookName !== '' &&
+      this.author !== '' && this.publisher !== '' && this.message !== '') {
+        let bookInfo = {
+          _id: this.$route.params.book._id,
+          userid: this.user.user._id,
+          username: this.user.user.username,
+          bookname: this.bookName,
+          author: this.author,
+          publisher: this.publisher,
+          message: this.message,
+          profileimage: this.user.user.profileimage,
+          bookimage: this.bookImage
+        }
+
+        let response = await API.updateBook(bookInfo);
+
+        if(response.nModified === 1) {
+          this.resetForm();
+          this.$router.push({ name: 'list', params: { book: bookInfo }})
+          this.$buefy.toast.open({
+            duration: 3000,
+            message: '수정 되었습니다.',
+            position: 'is-bottom',
+            type: 'is-success'
+          })
+        }
+      } else {
+        this.$buefy.dialog.alert('모든 정보를 입력해주세요.');
       }
     }
   },
@@ -191,6 +239,7 @@ export default {
       publisher: '',
       message: '',
       isBookSearchModalActive: false,
+      mode: '',
       labelPosition: 'on-border',
       texts: ['매우 불만족', '불만족', '보통', '만족', '매우 만족']
     }

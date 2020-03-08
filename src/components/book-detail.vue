@@ -10,6 +10,20 @@
             <div class="profile-username" v-line-clamp="1">
               {{book.username}}
             </div>
+            <div v-if="user._id === book.userid && Object.keys(user).length !== 0">
+              <b-dropdown aria-role="list">
+                <p
+                  class="ellipsis-vertical"
+                  slot="trigger"
+                  role="button"
+                >
+                  <i class="fas fa-ellipsis-v"></i>
+                </p>
+
+                <b-dropdown-item aria-role="listitem" @click="updateBook">수정</b-dropdown-item>
+                <b-dropdown-item aria-role="listitem" @click="confirmDelete">삭제</b-dropdown-item>
+              </b-dropdown>
+            </div>
           </div>
           <div class="book-body">
             <div class="book-image">
@@ -33,13 +47,6 @@
               </div>
               <div class="book-message">
                 {{book.message}}
-                <!-- Thank you, everyone. 맞아. 그래, 이건
-                이 앨범의 7번을 장식하는 track
-                I'd like to say sumthin' to all my friends and supporters
-                Who've been there since day one. 나와 문제 있던
-                이들에게도 감사해. They helped me find my way
-                In a way, anyway, 모든 건 내 음악 안에
-                녹아들어갔다 생각해. -->
               </div>
             </div>
           </div>
@@ -56,6 +63,10 @@
               </div>
               <div class="li-comment-username">
                 {{comment.username}}
+                <span v-if="comment.userid === user._id">
+                  <b-button type="is-text" size="is-small" @click="updateCommentForm(comment)">수정</b-button>
+                  <b-button type="is-text" size="is-small" @click="confirmCommentDelete(comment._id)">삭제</b-button>
+                </span>
               </div>
               <div class="li-comment-comment">
                 <b-rate 
@@ -65,7 +76,6 @@
                   :spaced="true"
                   :disabled="true">
                 </b-rate>
-
                 <span>{{comment.createdtime | moment("YYYY-MM-DD HH:mm:ss")}}</span>
                 <div>
                   {{comment.comment}}
@@ -86,7 +96,8 @@
             </b-rate>
             <b-field>
               <b-input class="book-reply-input" size="is-small" v-model="comment" placeholder="댓글 달기.."></b-input>
-              <b-button size="is-small" @click="saveComment">게시</b-button>
+              <b-button size="is-small" v-if="commentMode === 'create'" @click="saveComment">게시</b-button>
+              <b-button size="is-small" v-if="commentMode === 'update'" @click="updateComment">수정</b-button>
             </b-field>
           </div>
           <div v-if="Object.keys(user).length === 0" class="no-user-info">
@@ -136,6 +147,11 @@ export default {
 
     },
     async saveComment() {
+      if(this.comment === '' || this.rate === 0) {
+        this.$buefy.dialog.alert('별점 및 댓글 정보 모두 입력해주세요.');
+        return false;
+      }
+
       let commentObj = {
         bookid: this.book._id,
         userid: this.user._id,
@@ -161,10 +177,77 @@ export default {
           type: 'is-success'
         })
       }
+    },
+    updateCommentForm(comment) {
+      this.comment = comment.comment;
+      this.rate = comment.rate;
+
+      this.commentForUpdate = {...comment};
+
+      this.commentMode = 'update';
+    },
+    async updateComment() {
+      if(this.comment === '' || this.rate === 0) {
+        this.$buefy.dialog.alert('별점 및 댓글 정보 모두 입력해주세요.');
+        return false;
+      }
+
+      this.commentForUpdate.comment = this.comment;
+      this.commentForUpdate.rate = this.rate;
+
+      let response = await API.updateBookComment(this.commentForUpdate);
+   
+      if(response.nModified === 1) {
+        this.commentMode = 'create';
+        this.getCommentList();
+        this.$buefy.toast.open({
+          duration: 3000,
+          message: '수정 되었습니다.',
+          position: 'is-bottom',
+          type: 'is-success'
+        })
+      }
+    },
+    updateBook() {
+      this.$router.push({ name: 'register', params: { book: this.book }})
+    },
+    confirmDelete() {
+      this.$buefy.dialog.confirm({
+        message: '삭제하시겠습니까?',
+        confirmText: '확인',
+        cancelText: '취소',
+        onConfirm: () =>  {
+          this.deleteBook();
+        }
+      })
+    },
+    deleteBook() {
+      this.$emit('close', this.book._id);
+    },
+    confirmCommentDelete(commentId) {
+      this.$buefy.dialog.confirm({
+        message: '댓글을 삭제하시겠습니까?',
+        confirmText: '확인',
+        cancelText: '취소',
+        onConfirm: () =>  {
+          this.deleteComment(commentId);
+        }
+      })
+    },
+    async deleteComment(commentId) {
+      let response = await API.deleteBookComment(commentId);
+      console.log(response);
+      if(response.deletedCount === 1) {
+        this.commentList = this.commentList.filter((comment) => {
+          return comment._id !== commentId;
+        })
+      }
     }
   },
   data() {
     return {
+      commentMode: 'create',
+      commentForUpdate: {},
       texts: ['매우 불만족', '불만족', '보통', '만족', '매우 만족'],
       rate: 0,
       averageRate: 0,
@@ -251,6 +334,14 @@ $Phone: "screen and (max-width : 640px)";
         bottom: 7px;
         font-size: 0.6rem;
         display: inline-block;
+        & > span {
+          margin-left: 10px;
+          position: relative;
+          top: -6px;
+          & button {
+            padding: 0 2px;
+          }
+        }
       }
 
       & > .li-comment-comment {
@@ -315,6 +406,9 @@ $Phone: "screen and (max-width : 640px)";
       position: relative;
       top: 1px;
       left: 10px;
+    }
+    & .ellipsis-vertical {
+      cursor: pointer;
     }
   }
 

@@ -55,6 +55,22 @@ export default{
       console.log(err);
     }
   },
+  updateBook: async (book) => {
+    try{
+      let response = await axios.post(url + '/book/update', book);
+      return response.data || null;
+    } catch(err) {
+      console.log(err);
+    }
+  },
+  deleteBook: async (bookId) => {
+    try{
+      let response = await axios.post(url + '/book/delete', { _id: bookId }) ;
+      return response.data || null;
+    } catch(err) {
+      console.log(err);
+    }
+  },
   getBookInfo: async (searchText) => {
     try{
       let response = await axios.get('https://dapi.kakao.com/v3/search/book', { 
@@ -82,6 +98,22 @@ export default{
   saveBookComment: async (bookComment) => {
     try{
       let response = await axios.post(url + '/book/comment/save', bookComment);
+      return response.data || null;
+    } catch(err) {
+      console.log(err);
+    }
+  },
+  updateBookComment: async (bookComment) => {
+    try{
+      let response = await axios.post(url + '/book/comment/update', bookComment);
+      return response.data || null;
+    } catch(err) {
+      console.log(err);
+    }
+  },
+  deleteBookComment: async (commentId) => {
+    try{
+      let response = await axios.post(url + '/book/comment/delete', { _id: commentId });
       return response.data || null;
     } catch(err) {
       console.log(err);

@@ -23,6 +23,11 @@ export default new Vuex.Store({
     getBookList: (state, payload) => {
       state.books = [...payload];
     },
+    deleteBook: (state, payload) => {
+      state.books = state.books.filter((book) => {
+        return book._id !== payload;
+      });
+    },
     getUserInfo: (state, payload) => {
       state.user = {...payload};
     }
@@ -30,7 +35,7 @@ export default new Vuex.Store({
   actions: {
     getBookList: async (context) => {
       let response = await API.getBookList()
-      return context.commit('getBookList', response);
+      context.commit('getBookList', response);
     },
     checkUserInfo: async (context) => {
       let response = await API.checkUser();

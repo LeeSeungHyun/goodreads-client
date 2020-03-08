@@ -85,7 +85,10 @@
       trap-focus
       aria-role="dialog"
       aria-modal>
-      <book-detail :book="book"/>
+      <book-detail 
+        :book="book"
+        v-on:close="closeBookDetailpage"
+      />
     </b-modal>
     <b-modal 
       :active.sync="isUserProfileEditActive"
@@ -126,6 +129,11 @@ export default {
     this.config = config ? 'https://book-fishing.herokuapp.com/' : 'http://localhost:3000/'
     this.$store.dispatch('checkUserInfo');
     this.$store.dispatch('getBookList');
+
+    let params = this.$route.params;
+    if(params.hasOwnProperty('book')) {
+      this.getBookDetail(params.book);
+    }
   },
   destroyed() {
     window.addEventListener('scroll', this.handleScroll);
@@ -144,6 +152,13 @@ export default {
     logoutUser() {
       this.$store.dispatch('logoutUserInfo');
       this.isUserProfileActive = false;
+    },
+    async closeBookDetailpage(bookId) {
+      let response = await API.deleteBook(bookId);
+      if(response.deletedCount === 1) {
+        this.$store.commit('deleteBook', bookId);
+        this.isBookDetailActive = false;
+      }
     },
     toggleUserProfile() {
       this.isUserProfileActive = this.isUserProfileActive ? false : true;
@@ -217,7 +232,7 @@ $Phone: "screen and (max-width : 768px)";
   justify-content: center;
   align-items: center;
   @media #{$Phone} {
-    height: 260px;
+    height: 280px;
   }
   & .book-logo {
     position: absolute;
