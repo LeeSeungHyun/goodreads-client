@@ -20,6 +20,11 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    searchBookList: (state, payload) => {
+      state.books = state.books.filter((book) => {
+        return book.bookname.toLowerCase().indexOf(payload.toLowerCase()) > -1
+      })
+    },
     getBookList: (state, payload) => {
       state.books = [...payload];
     },
@@ -36,6 +41,7 @@ export default new Vuex.Store({
     getBookList: async (context) => {
       let response = await API.getBookList()
       context.commit('getBookList', response);
+      return response;
     },
     checkUserInfo: async (context) => {
       let response = await API.checkUser();

@@ -55,7 +55,6 @@ export default {
   },
   mounted() {
     this.config = config ? 'https://book-fishing.herokuapp.com/' : 'http://localhost:3000/'
-    console.log(this.config + this.user.profileimage);
     this.userName = this.user.username;
     this.profileImage = this.user.profileimage;
     this.job = this.user.job;

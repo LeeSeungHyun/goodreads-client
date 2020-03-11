@@ -18,7 +18,7 @@
           </button>
         </div>
       </section>
-      <b-loading :is-full-page="isFullPage" :active.sync="isLoading" :can-cancel="true"></b-loading>
+      <b-loading :is-full-page="isFullPage" :active.sync="isLoading"></b-loading>
   </div>
 </template>
 

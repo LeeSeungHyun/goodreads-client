@@ -1,5 +1,6 @@
 <template>
   <article>
+    <!-- <div :class="[this.searchText === '' || 'background-filter']"></div> -->
     <header class="main-header">
       <nav class="nav" id="nav-header">
         <div class="book-logo">
@@ -49,9 +50,22 @@
         <div class="main-title">
           <div>생각보다 유익해서 당황하셨어요?! ^^</div>
           <div>Book Fishing</div>
-        </div>
-        <input type="text" placeholder=" search..." class="search-text" required>
-        <button type="button" class="submit">
+        </div>   
+        <b-field class="search-text">
+          <b-autocomplete
+            rounded
+            icon-pack="fas"
+            icon="search"
+            v-model="searchText"
+            :data="filteredDataArray"
+            placeholder="책 제목을 검색해주세요."
+            field="bookname"
+            clearable
+            @select="option => selected = option">
+            <template slot="empty">No results found</template>
+          </b-autocomplete>
+        </b-field>
+        <button type="button" class="search-submit" @click="searchBook">
           <i class="fas fa-search"></i>
         </button>
       </div>
@@ -64,6 +78,8 @@
       </b-button>
     </header>
     <main>
+      <b-loading :is-full-page="isFullPage" :active.sync="isLoading" :can-cancel="true">
+      </b-loading>
       <div class="books-container">
         <div v-for="(book, index) in books" :key=index>
           <img :src="book.bookimage" alt="" width="150" style="border: 1px solid #eee" @click="getBookDetail(book)">
@@ -115,20 +131,46 @@ export default {
     BookDetail,
     UserProfile
   },
+  watch: {
+    selected: function(selected) {
+      if(selected !== null) {
+        this.$store.commit('searchBookList', selected.bookname);
+      }
+    },
+    searchText: function(searchText) {
+      if(searchText === '') {
+        this.$store.dispatch('getBookList');
+      }
+    }
+  },
   computed: {
     ...mapState([
       'user',
       'books',
       'profile'
     ]),
+    filteredDataArray() {
+      return this.books.filter((option) => {
+        return option.bookname
+          .toString()
+          .toLowerCase()
+          .indexOf(this.searchText.toLowerCase()) >= 0
+      })
+    }
   },
   created() {
     window.addEventListener('scroll', this.handleScroll);
   },
   mounted() {
+    
     this.config = config ? 'https://book-fishing.herokuapp.com/' : 'http://localhost:3000/'
     this.$store.dispatch('checkUserInfo');
-    this.$store.dispatch('getBookList');
+    if(this.books.length === 0) {
+      this.isLoading = true;
+      this.$store.dispatch('getBookList').then((res) => {
+        this.isLoading = false;
+      });
+    }
 
     let params = this.$route.params;
     if(params.hasOwnProperty('book')) {
@@ -160,6 +202,19 @@ export default {
         this.isBookDetailActive = false;
       }
     },
+    searchBook() {
+      let isSearch = false;
+      this.books.forEach((book) => {
+        if(book.bookname.toLowerCase().indexOf(this.searchText.toLowerCase()) > -1) {
+          isSearch = true;
+        }
+      })
+      if(isSearch) {
+        this.$store.commit('searchBookList', this.searchText);
+      } else {
+        this.$buefy.dialog.alert('검색한 내용이 없습니다.');
+      }
+    },
     toggleUserProfile() {
       this.isUserProfileActive = this.isUserProfileActive ? false : true;
     },
@@ -177,16 +232,6 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    async checkUser() {
-      try {
-        let response = await API.checkUser();
-        if(response !== null) {
-          console.log(response.data)
-        }
-      } catch(err) {
-        console.log(err)
-      }
-    },
     handleScroll (event) {
       let scrollY = window.scrollY
       let element = document.getElementById('nav-header');
@@ -200,8 +245,12 @@ export default {
   data() {
     return {
       index: 0,
+      isFullPage: true,
+      isLoading: null,
       book: {},
       config: '',
+      searchText: '',
+      selected: null,
       profileImage: null,
       isLoginModalActive: false,
       isUserProfileActive: false,
@@ -220,6 +269,7 @@ $Phone: "screen and (max-width : 768px)";
   position: absolute;
   right: 0;
   top: 0;
+  z-index: 2;
   background:rgba(0,0,0,0.25);
 }
 .main-header {
@@ -353,28 +403,32 @@ $Phone: "screen and (max-width : 768px)";
       width: 30%;
       min-width: 260px;
       margin-top: 30px;
-      border: 1px solid orange;
-      box-shadow: 1px 0px 3px orange;
-      border-radius: 50px;
+      // border: 1px solid #7957d5;
+      // box-shadow: 1px 0px 3px #7957d5;
+      // border-radius: 50px;
       font-size: 1rem;
       // text-transform: capitalize;
       outline: none;
-      background-color: #FFF;
+      display: inline-block;
+      // background-color: #FFF;
     }
 
-    & > .submit{
+    & > .search-submit{
       padding: 10px;
       height: 40px;
       width: 80px;
       font-size: 1rem;
       color: white;
-      background: orange;
+      background-color: #7957d5;;
       border: none;
-      margin: 10px;
+      margin: 4px;
+      margin-top: 20px;
       border-radius: 50px;
-      box-shadow: 0px 0px 10px orange;
+      box-shadow: 0px 0px 10px #7957d5;;
       outline: none;
       cursor: pointer;
+      position: relative;
+      top: 11px;
       @media screen and (max-width: 380px)  {
         font-size: 0.8rem;
         width: 50px;
@@ -388,7 +442,6 @@ main {
   width: 100%;
   margin: 0 auto;
   padding: 40px 30px 0 30px;
-  // position: relative;
   z-index: 1;
 }
 
