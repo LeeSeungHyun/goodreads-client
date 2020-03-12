@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import VueCarousel from 'vue-carousel';
 import App from './App.vue'
 import router from './router';
 import store from './store';
@@ -8,8 +9,8 @@ import VueMoment from 'vue-moment';
 import LineClamp from 'vue-line-clamp';
 import 'buefy/dist/buefy.css';
 import "@/assets/scss/global.scss";
-import '@fortawesome/fontawesome-free/css/all.css';
-import '@fortawesome/fontawesome-free/js/all.js';
+// import '@fortawesome/fontawesome-free/css/all.css';
+// import '@fortawesome/fontawesome-free/js/all.js';
 
 import { extend } from 'vee-validate';
 import { required } from 'vee-validate/dist/rules';
@@ -32,6 +33,7 @@ Vue.config.productionTip = false
 Vue.use(Buefy)
 Vue.use(VueDebounce)
 Vue.use(VueMoment)
+Vue.use(VueCarousel);
 Vue.use(LineClamp)
 
 new Vue({

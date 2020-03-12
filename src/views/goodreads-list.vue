@@ -30,6 +30,7 @@
         </div>
         <div class="dropdown-content" v-if="isUserProfileActive === true">
         <!-- <router-link to="/register" tag="button">글쓰기</router-link> -->
+          <b-button class="history" size="is-small" @click="logoutUser">기록</b-button>
           <b-button class="logout" size="is-small" @click="logoutUser">Logout</b-button>
 
           <div class="image-preview">
@@ -51,19 +52,12 @@
           <div>생각보다 유익해서 당황하셨어요?! ^^</div>
           <div>Book Fishing</div>
         </div>   
+      
         <b-field class="search-text">
-          <b-autocomplete
-            rounded
-            icon-pack="fas"
-            icon="search"
+          <b-input 
             v-model="searchText"
-            :data="filteredDataArray"
-            placeholder="책 제목을 검색해주세요."
-            field="bookname"
-            clearable
-            @select="option => selected = option">
-            <template slot="empty">No results found</template>
-          </b-autocomplete>
+            placeholder="책 제목 및 저자 이름으로 검색해주세요."
+          ></b-input>
         </b-field>
         <button type="button" class="search-submit" @click="searchBook">
           <i class="fas fa-search"></i>
@@ -80,9 +74,68 @@
     <main>
       <b-loading :is-full-page="isFullPage" :active.sync="isLoading" :can-cancel="true">
       </b-loading>
-      <div class="books-container">
-        <div v-for="(book, index) in books" :key=index>
-          <img :src="book.bookimage" alt="" width="150" style="border: 1px solid #eee" @click="getBookDetail(book)">
+      <div class="in-order-of-rate">
+        <div class="rate-title">
+          평점 높은 순
+        </div>
+        <div>
+          <carousel 
+            :navigationEnabled="true" 
+            paginationActiveColor="#7957d5" 
+            :minSwipeDistance="10"
+            :perPageCustom="[[320, 2], [420, 3], [576, 4], [768, 5], [992, 6],[1080, 7], [1280, 8], [1600, 10]]" 
+            :paginationSize="8"
+            :paginationPadding="10"
+          >
+            <slide v-for="(book, index) in books" :key=index class="slider">
+              <img :src="book.bookimage" alt="" width="100%" style="border: 1px solid #eee" @click="getBookDetail(book)">
+              <div>
+                <div v-line-clamp="1">
+                  {{book.bookname}}
+                </div>
+                <b-rate 
+                  class="average-rate"
+                  v-model="averageRate"
+                  icon-pack="fas"
+                  :show-score="true"
+                  :spaced="true"
+                  :disabled="true">
+                </b-rate>
+              </div>
+            </slide>
+          </carousel>
+        </div>
+      </div>
+      <div class="in-order-of-rate">
+        <div class="rate-title">
+          평점 높은 순
+        </div>
+        <div>
+          <carousel 
+            :navigationEnabled="true" 
+            paginationActiveColor="#7957d5" 
+            :minSwipeDistance="10"
+            :perPageCustom="[[320, 2], [420, 3], [576, 4], [768, 5], [992, 6],[1080, 7], [1280, 8], [1600, 10]]" 
+            :paginationSize="8"
+            :paginationPadding="10"
+          >
+            <slide v-for="(book, index) in books" :key=index class="slider">
+              <img :src="book.bookimage" alt="" width="100%" style="border: 1px solid #eee" @click="getBookDetail(book)">
+              <div>
+                <div v-line-clamp="1">
+                  {{book.bookname}}
+                </div>
+                <b-rate 
+                  class="average-rate"
+                  v-model="averageRate"
+                  icon-pack="fas"
+                  :show-score="true"
+                  :spaced="true"
+                  :disabled="true">
+                </b-rate>
+              </div>
+            </slide>
+          </carousel>
         </div>
       </div>
     </main>
@@ -121,6 +174,7 @@ import API from '@/api/index.js';
 import LoginModal from '@/components/login-modal.vue';
 import BookDetail from '@/components/book-detail.vue';
 import UserProfile from '@/components/user-profile.vue';
+import { Carousel, Slide } from 'vue-carousel';
 import { mapState } from 'vuex';
 
 let config = process.env.NODE_ENV === 'production'
@@ -162,7 +216,6 @@ export default {
     window.addEventListener('scroll', this.handleScroll);
   },
   mounted() {
-    
     this.config = config ? 'https://book-fishing.herokuapp.com/' : 'http://localhost:3000/'
     this.$store.dispatch('checkUserInfo');
     if(this.books.length === 0) {
@@ -247,6 +300,7 @@ export default {
       index: 0,
       isFullPage: true,
       isLoading: null,
+      averageRate: 3.5,
       book: {},
       config: '',
       searchText: '',
@@ -255,7 +309,21 @@ export default {
       isLoginModalActive: false,
       isUserProfileActive: false,
       isUserProfileEditActive: false,
-      isBookDetailActive: false
+      isBookDetailActive: false,
+
+
+      rate: 4.6,
+      maxs: 5,
+      sizes: '',
+      packs: 'fas',
+      icons: 'star',
+      score: false,
+      custom: '',
+      text: false,
+      texts: ['Very bad', 'Bad', 'Good', 'Very good', 'Awesome'],
+      isRtl:false,
+      isSpaced: false,
+      isDisabled: true
     }
   }
 }
@@ -341,6 +409,12 @@ $Phone: "screen and (max-width : 768px)";
       }
     }
 
+    & > .history {
+      position: absolute;
+      bottom: 4px;
+      right: 60px;
+    }
+
     & > .logout {
       position: absolute;
       bottom: 4px;
@@ -405,7 +479,7 @@ $Phone: "screen and (max-width : 768px)";
       margin-top: 30px;
       // border: 1px solid #7957d5;
       // box-shadow: 1px 0px 3px #7957d5;
-      // border-radius: 50px;
+      border-radius: 50px;
       font-size: 1rem;
       // text-transform: capitalize;
       outline: none;
@@ -419,12 +493,12 @@ $Phone: "screen and (max-width : 768px)";
       width: 80px;
       font-size: 1rem;
       color: white;
-      background-color: #7957d5;;
+      background-color: #7957d5;
       border: none;
       margin: 4px;
       margin-top: 20px;
       border-radius: 50px;
-      box-shadow: 0px 0px 10px #7957d5;;
+      box-shadow: 0px 0px 10px #7957d5;
       outline: none;
       cursor: pointer;
       position: relative;
@@ -443,6 +517,22 @@ main {
   margin: 0 auto;
   padding: 40px 30px 0 30px;
   z-index: 1;
+  text-align: left;
+
+  & .in-order-of-rate {
+    margin-bottom: 60px;
+    & .rate-title {
+      font-size: 1.4rem;
+      padding: 12px;
+    }
+    & .slider {
+      cursor: pointer;
+      padding: 12px;
+    }
+    & .average-rate {
+      font-size: 0.6rem;
+    }
+  }
 }
 
 .books-container {
@@ -450,7 +540,7 @@ main {
   flex-wrap: wrap;
   padding-bottom: 3rem;
 
-  & > div {
+  & div {
     text-align: center;
     position: relative;
     flex: 1 0 156px;
