@@ -118,5 +118,13 @@ export default{
     } catch(err) {
       console.log(err);
     }
-  }
+  },
+  getCommentList: async () => {
+    try{
+      let response = await axios.get(url + '/comment/list') 
+      return response.data || null;
+    } catch(err) {
+      console.log(err);
+    }
+  },
 }

@@ -108,7 +108,7 @@
       </div>
       <div class="in-order-of-rate">
         <div class="rate-title">
-          평점 높은 순
+          최신 글 
         </div>
         <div>
           <carousel 
@@ -156,6 +156,7 @@
       aria-modal>
       <book-detail 
         :book="book"
+        :bookCommentList="bookCommentList"
         v-on:close="closeBookDetailpage"
       />
     </b-modal>
@@ -201,16 +202,9 @@ export default {
     ...mapState([
       'user',
       'books',
+      'comments',
       'profile'
-    ]),
-    filteredDataArray() {
-      return this.books.filter((option) => {
-        return option.bookname
-          .toString()
-          .toLowerCase()
-          .indexOf(this.searchText.toLowerCase()) >= 0
-      })
-    }
+    ])
   },
   created() {
     window.addEventListener('scroll', this.handleScroll);
@@ -221,7 +215,9 @@ export default {
     if(this.books.length === 0) {
       this.isLoading = true;
       this.$store.dispatch('getBookList').then((res) => {
-        this.isLoading = false;
+        this.$store.dispatch('getCommentList').then((res) => {
+          this.isLoading = false;
+        });
       });
     }
 
@@ -239,6 +235,9 @@ export default {
     },
     getBookDetail(book) {
       this.book = {...book};
+      this.bookCommentList = this.comments.filter((comment) => {
+        return comment.bookid === book._id;
+      })
       this.isBookDetailActive = this.isBookDetailActive ? false : true;
     },
     registerBook () {
@@ -311,19 +310,7 @@ export default {
       isUserProfileEditActive: false,
       isBookDetailActive: false,
 
-
-      rate: 4.6,
-      maxs: 5,
-      sizes: '',
-      packs: 'fas',
-      icons: 'star',
-      score: false,
-      custom: '',
-      text: false,
-      texts: ['Very bad', 'Bad', 'Good', 'Very good', 'Awesome'],
-      isRtl:false,
-      isSpaced: false,
-      isDisabled: true
+      bookCommentList: []
     }
   }
 }

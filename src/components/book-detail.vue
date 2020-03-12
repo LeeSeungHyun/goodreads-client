@@ -53,7 +53,7 @@
         </div>
         <div class="book-comments">
           <ul class="book-comment">
-            <div class="book-no-comments" :class="[this.commentList === null && 'book-display']">
+            <div class="book-no-comments" :class="[this.commentList.length === 0 && 'book-display']">
               책에 대한 소감을 댓글로 남겨주세요.
             </div>
             <li v-for="(comment, index) in commentList" :key=index class="li-comment">
@@ -125,7 +125,8 @@ let config = process.env.NODE_ENV === 'production'
 
 export default {
   props: {
-    book: Object
+    book: Object,
+    bookCommentList: Array
   },
   computed: {
     ...mapState([
@@ -141,17 +142,17 @@ export default {
       // rate: ''
     },
     async getCommentList() {
-      let response = await API.getBookCommentList(this.book._id);
-
-      if(response.length > 0) {
-        this.commentList = [...response];
-        let length = this.commentList.length;
-        let sum = this.commentList.reduce((prev, next) => { return prev + next.rate }, 0)
-        let result = sum / length;
-        this.averageRate = parseFloat(result.toFixed(1));
-      } else {
-        this.commentList = null;
-      }
+      // let response = await API.getBookCommentList(this.book._id);
+      this.commentList = [...this.bookCommentList]
+      // if(response.length > 0) {
+      //   this.commentList = [...response];
+      //   let length = this.commentList.length;
+      //   let sum = this.commentList.reduce((prev, next) => { return prev + next.rate }, 0)
+      //   let result = sum / length;
+      //   this.averageRate = parseFloat(result.toFixed(1));
+      // } else {
+      //   this.commentList = null;
+      // }
 
     },
     async saveComment() {
@@ -174,6 +175,7 @@ export default {
         if(this.commentList === null) {
           this.commentList = [];
         } 
+        this.$store.commit('saveComment', commentObj);
         this.comment = '';
         this.rate = 0;
         this.commentList.unshift(commentObj);
@@ -358,6 +360,8 @@ $Phone: "screen and (max-width : 640px)";
         & > .comment-rate {
           font-size: 0.5rem; 
           display: inline;
+          position: relative;
+          bottom: 7px;
         }
 
         & > span {

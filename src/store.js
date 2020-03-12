@@ -9,7 +9,8 @@ export default new Vuex.Store({
   state: { // data
     user: {},
     // profile: {},
-    books: []
+    books: [],
+    comments: []
   },
   getters: { // computed
     userInfo: state => {
@@ -17,6 +18,9 @@ export default new Vuex.Store({
     },
     bookList: state => {
       return state.books;
+    },
+    CommentList: state => {
+      return state.comments;
     }
   },
   mutations: {
@@ -27,6 +31,12 @@ export default new Vuex.Store({
     },
     getBookList: (state, payload) => {
       state.books = [...payload];
+    },
+    getCommentList: (state, payload) => {
+      state.comments = [...payload];
+    },
+    saveComment: (state, payload) => {
+      state.comments.push(payload);
     },
     deleteBook: (state, payload) => {
       state.books = state.books.filter((book) => {
@@ -52,6 +62,11 @@ export default new Vuex.Store({
       if(response.data.message === 'Logged out') {
         context.commit('getUserInfo', {});
       }
+    },
+    getCommentList: async (context) => {
+      let response = await API.getCommentList()
+      context.commit('getCommentList', response);
+      return response;
     }
   }
 });
