@@ -143,17 +143,9 @@ export default {
     },
     async getCommentList() {
       // let response = await API.getBookCommentList(this.book._id);
-      this.commentList = [...this.bookCommentList]
-      // if(response.length > 0) {
-      //   this.commentList = [...response];
-      //   let length = this.commentList.length;
-      //   let sum = this.commentList.reduce((prev, next) => { return prev + next.rate }, 0)
-      //   let result = sum / length;
-      //   this.averageRate = parseFloat(result.toFixed(1));
-      // } else {
-      //   this.commentList = null;
-      // }
-
+      this.commentList = this.bookCommentList.sort((a, b) => {
+        return a.createdtime > b.createdtime ? -1 : a.createdtime < b.createdtime ? 1 : 0;
+      })
     },
     async saveComment() {
       if(this.comment === '' || this.rate === 0) {
@@ -175,15 +167,17 @@ export default {
         if(this.commentList === null) {
           this.commentList = [];
         } 
-        this.$store.commit('saveComment', commentObj);
-        this.comment = '';
-        this.rate = 0;
-        this.commentList.unshift(commentObj);
-        this.$buefy.toast.open({
-          duration: 3000,
-          message: '등록 되었습니다.',
-          position: 'is-bottom',
-          type: 'is-success'
+        // this.$store.commit('saveComment', commentObj);
+        this.$store.dispatch('getCommentList').then((res) => {
+          this.comment = '';
+          this.rate = 0;
+          this.commentList.unshift(commentObj);
+          this.$buefy.toast.open({
+            duration: 3000,
+            message: '등록 되었습니다.',
+            position: 'is-bottom',
+            type: 'is-success'
+          })
         })
       }
     },
@@ -209,7 +203,21 @@ export default {
       if(response.nModified === 1) {
         this.commentMode = 'create';
 
-        this.getCommentList();
+        // this.getCommentList();
+        this.commentList.forEach((comment, index) => {
+          if(comment._id === this.commentForUpdate._id) {
+            this.$store.commit('updateComment', { 
+              'index': index, 
+              'comment': this.commentForUpdate.comment, 
+              'rate': this.commentForUpdate.rate 
+            });
+            this.commentList[index].comment = this.commentForUpdate.comment;
+            this.commentList[index].rate = this.commentForUpdate.rate;
+          }
+        })
+
+        this.comment = ''
+        this.rate = 0;
         this.$buefy.toast.open({
           duration: 3000,
           message: '수정 되었습니다.',
@@ -249,6 +257,14 @@ export default {
       if(response.deletedCount === 1) {
         this.commentList = this.commentList.filter((comment) => {
           return comment._id !== commentId;
+        })
+        this.$store.commit('deleteComment', commentId);
+
+        this.$buefy.toast.open({
+          duration: 3000,
+          message: '삭제 되었습니다.',
+          position: 'is-bottom',
+          type: 'is-success'
         })
       }
     }
@@ -361,12 +377,12 @@ $Phone: "screen and (max-width : 640px)";
           font-size: 0.5rem; 
           display: inline;
           position: relative;
-          bottom: 7px;
+          bottom: 4px;
         }
 
         & > span {
           position: relative;
-          bottom: 7px;
+          bottom: 4px;
           font-size: 0.5rem;
           // padding-left: 8px;
           margin-left: 5px;

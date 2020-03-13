@@ -38,6 +38,15 @@ export default new Vuex.Store({
     saveComment: (state, payload) => {
       state.comments.push(payload);
     },
+    updateComment: (state, payload) => {
+      state.comments[payload.index].comment = payload.comment;
+      state.comments[payload.index].rate = payload.rate;
+    },
+    deleteComment: (state, payload) => {
+      state.comments = state.comments.filter((comment) => {
+        return comment._id !== payload;
+      })
+    },
     deleteBook: (state, payload) => {
       state.books = state.books.filter((book) => {
         return book._id !== payload;

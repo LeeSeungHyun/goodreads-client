@@ -208,6 +208,7 @@ export default {
   },
   created() {
     window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener('click', this.handleClick);
   },
   mounted() {
     this.config = config ? 'https://book-fishing.herokuapp.com/' : 'http://localhost:3000/'
@@ -227,7 +228,8 @@ export default {
     }
   },
   destroyed() {
-    window.addEventListener('scroll', this.handleScroll);
+    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('click', this.handleClick);
   },
   methods: {
     userLogin() {
@@ -252,6 +254,12 @@ export default {
       if(response.deletedCount === 1) {
         this.$store.commit('deleteBook', bookId);
         this.isBookDetailActive = false;
+        this.$buefy.toast.open({
+          duration: 3000,
+          message: '삭제 되었습니다.',
+          position: 'is-bottom',
+          type: 'is-success'
+        })
       }
     },
     searchBook() {
@@ -291,6 +299,14 @@ export default {
         element.classList.add('affix');
       } else {
         element.classList.remove("affix");
+      }
+    },
+    handleClick (event) {
+      if (!event.target.matches('.logout-button') && 
+          !event.target.matches('.logout-button i') && 
+          !event.target.matches('.dropdown-content') && 
+          !event.target.matches('.dropdown-content *')) {
+        this.isUserProfileActive = false;
       }
     }
   },
