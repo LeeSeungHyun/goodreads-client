@@ -74,7 +74,7 @@
     <main>
       <b-loading :is-full-page="isFullPage" :active.sync="isLoading" :can-cancel="true">
       </b-loading>
-      <div class="in-order-of-rate">
+      <div class="in-order-of-rate" v-if="isLoading === false">
         <div class="rate-title">
           평점 높은 순
         </div>
@@ -95,7 +95,7 @@
                 </div>
                 <b-rate 
                   class="average-rate"
-                  v-model="averageRate"
+                  :value="book.averageRate"
                   icon-pack="fas"
                   :show-score="true"
                   :spaced="true"
@@ -106,7 +106,7 @@
           </carousel>
         </div>
       </div>
-      <div class="in-order-of-rate">
+      <div class="in-order-of-recently" v-if="isLoading === false">
         <div class="rate-title">
           최신 글 
         </div>
@@ -119,22 +119,6 @@
             :paginationSize="8"
             :paginationPadding="10"
           >
-            <slide v-for="(book, index) in books" :key=index class="slider">
-              <img :src="book.bookimage" alt="" width="100%" style="border: 1px solid #eee" @click="getBookDetail(book)">
-              <div>
-                <div v-line-clamp="1">
-                  {{book.bookname}}
-                </div>
-                <b-rate 
-                  class="average-rate"
-                  v-model="averageRate"
-                  icon-pack="fas"
-                  :show-score="true"
-                  :spaced="true"
-                  :disabled="true">
-                </b-rate>
-              </div>
-            </slide>
           </carousel>
         </div>
       </div>
@@ -194,7 +178,12 @@ export default {
     },
     searchText: function(searchText) {
       if(searchText === '') {
-        this.$store.dispatch('getBookList');
+        this.$store.dispatch('getBookList').then((res) => {
+          this.books.forEach((book) => {
+            this.$store.commit('addAverageRate', { bookId: book._id, averageRate: this.getAverageOfRate(book._id) });
+          })
+          this.$store.commit('sortOfAverateRate');
+        });
       }
     }
   },
@@ -213,17 +202,28 @@ export default {
   mounted() {
     this.config = config ? 'https://book-fishing.herokuapp.com/' : 'http://localhost:3000/'
     this.$store.dispatch('checkUserInfo');
+
+    console.log(this.books);
+   
     if(this.books.length === 0) {
       this.isLoading = true;
       this.$store.dispatch('getBookList').then((res) => {
         this.$store.dispatch('getCommentList').then((res) => {
           this.isLoading = false;
+          this.books.forEach((book) => {
+            this.$store.commit('addAverageRate', { bookId: book._id, averageRate: this.getAverageOfRate(book._id) });
+          })
+          this.$store.commit('sortOfAverateRate');
         });
       });
     }
 
     let params = this.$route.params;
     if(params.hasOwnProperty('book')) {
+      this.books.forEach((book) => {
+          this.$store.commit('addAverageRate', { bookId: book._id, averageRate: this.getAverageOfRate(book._id) });
+        })
+      this.$store.commit('sortOfAverateRate');
       this.getBookDetail(params.book);
     }
   },
@@ -232,6 +232,27 @@ export default {
     window.removeEventListener('click', this.handleClick);
   },
   methods: {
+    sortOfAverageRate() {
+      this.books = this.books.sort((a, b) => {
+        return a.averageRate > b.averageRate ? -1 : a.averageRate < b.averageRate ? 1 : 0;
+      })
+    },
+    getAverageOfRate(bookId) {
+      let length = 0;
+      let sum = 0;
+      this.comments.forEach((comment) => {
+        if(comment.bookid === bookId) {
+          sum += comment.rate
+          length++;
+        }
+      })
+      if(length === 0) {
+        return 0;
+      } else {
+        let result = sum / length;
+        return parseFloat(result.toFixed(1));
+      }
+    },
     userLogin() {
       this.showModal = true;
     },
@@ -314,7 +335,7 @@ export default {
     return {
       index: 0,
       isFullPage: true,
-      isLoading: null,
+      isLoading: false,
       averageRate: 3.5,
       book: {},
       config: '',
@@ -325,8 +346,7 @@ export default {
       isUserProfileActive: false,
       isUserProfileEditActive: false,
       isBookDetailActive: false,
-
-      bookCommentList: []
+      bookCommentList: [],
     }
   }
 }

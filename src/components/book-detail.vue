@@ -28,13 +28,14 @@
           <div class="book-body">
             <div class="book-image">
               <img :src="book.bookimage" alt="thumbnail" width="100">
-              <!-- <b-rate 
+              <b-rate 
                 class="average-rate"
-                v-model="averageRate"
+                :value="book.averageRate"
                 icon-pack="fas"
                 :spaced="true"
+                :show-score="true"
                 :disabled="true">
-              </b-rate> -->
+              </b-rate>
               <div class="average-rate">
                 평점: {{averageRate}}
               </div>
@@ -73,7 +74,7 @@
                   >
                     수정 취소
                   </b-button> -->
-                  <b-button type="is-text" size="is-small" @click="confirmCommentDelete(comment._id)">삭제</b-button>
+                  <b-button type="is-text" size="is-small" @click="confirmCommentDelete(comment)">삭제</b-button>
                 </span>
               </div>
               <div class="li-comment-comment">
@@ -130,7 +131,8 @@ export default {
   },
   computed: {
     ...mapState([
-      'user'
+      'user',
+      'comments'
     ]),
   },
   mounted() {
@@ -141,8 +143,23 @@ export default {
     selectRate() {
       // rate: ''
     },
+    getAverageOfRate(bookId) {
+      let length = 0;
+      let sum = 0;
+      this.comments.forEach((comment) => {
+        if(comment.bookid === bookId) {
+          sum += comment.rate
+          length++;
+        }
+      })
+      if(length === 0) {
+        return 0;
+      } else {
+        let result = sum / length;
+        return parseFloat(result.toFixed(1));
+      }
+    },
     async getCommentList() {
-      // let response = await API.getBookCommentList(this.book._id);
       this.commentList = this.bookCommentList.sort((a, b) => {
         return a.createdtime > b.createdtime ? -1 : a.createdtime < b.createdtime ? 1 : 0;
       })
@@ -167,11 +184,12 @@ export default {
         if(this.commentList === null) {
           this.commentList = [];
         } 
-        // this.$store.commit('saveComment', commentObj);
         this.$store.dispatch('getCommentList').then((res) => {
           this.comment = '';
           this.rate = 0;
           this.commentList.unshift(commentObj);
+          this.$store.commit('addAverageRate', { bookId: commentObj.bookid, averageRate: this.getAverageOfRate(commentObj.bookid) });
+          this.$store.commit('sortOfAverateRate');
           this.$buefy.toast.open({
             duration: 3000,
             message: '등록 되었습니다.',
@@ -184,9 +202,7 @@ export default {
     updateCommentForm(comment) {
       this.comment = comment.comment;
       this.rate = comment.rate;
-
       this.commentForUpdate = {...comment};
-
       this.commentMode = 'update';
     },
     async updateComment() {
@@ -215,9 +231,10 @@ export default {
             this.commentList[index].rate = this.commentForUpdate.rate;
           }
         })
-
         this.comment = ''
         this.rate = 0;
+        this.$store.commit('addAverageRate', { bookId: this.commentForUpdate.bookid, averageRate: this.getAverageOfRate(this.commentForUpdate.bookid) });
+        this.$store.commit('sortOfAverateRate');
         this.$buefy.toast.open({
           duration: 3000,
           message: '수정 되었습니다.',
@@ -242,24 +259,25 @@ export default {
     deleteBook() {
       this.$emit('close', this.book._id);
     },
-    confirmCommentDelete(commentId) {
+    confirmCommentDelete(comment) {
       this.$buefy.dialog.confirm({
         message: '댓글을 삭제하시겠습니까?',
         confirmText: '확인',
         cancelText: '취소',
         onConfirm: () =>  {
-          this.deleteComment(commentId);
+          this.deleteComment(comment);
         }
       })
     },
-    async deleteComment(commentId) {
-      let response = await API.deleteBookComment(commentId);
+    async deleteComment(commentObj) {
+      let response = await API.deleteBookComment(commentObj._id);
       if(response.deletedCount === 1) {
         this.commentList = this.commentList.filter((comment) => {
-          return comment._id !== commentId;
+          return comment._id !== commentObj._id;
         })
-        this.$store.commit('deleteComment', commentId);
-
+        this.$store.commit('deleteComment', commentObj._id);
+        this.$store.commit('addAverageRate', { bookId: commentObj.bookid, averageRate: this.getAverageOfRate(commentObj.bookid) });
+        this.$store.commit('sortOfAverateRate');
         this.$buefy.toast.open({
           duration: 3000,
           message: '삭제 되었습니다.',
@@ -312,8 +330,8 @@ $Phone: "screen and (max-width : 640px)";
     }
 
     .book-comment {
-      min-height: 250px;
-      max-height: 300px;
+      min-height: 260px;
+      max-height: 320px;
       overflow: auto;
       -ms-overflow-style: none;
 
@@ -322,7 +340,7 @@ $Phone: "screen and (max-width : 640px)";
         padding-left: 0;
         margin-top: 20px;
         min-height: 80px;
-        max-height: 160px;
+        max-height: 140px;
       }
 
       .book-no-comments {
@@ -393,6 +411,8 @@ $Phone: "screen and (max-width : 640px)";
     }
     .book-reply {
       font-size: 0.6rem;
+      position: relative;
+      bottom: 0;
       & .book-rate {
         margin-bottom: 0;
       }
@@ -444,7 +464,7 @@ $Phone: "screen and (max-width : 640px)";
     & > .book-image {
       width: 116px;
       & > .average-rate {
-        font-size: 0.8rem;
+        font-size: 0.5rem;
       }
     }
     & > .book-content {

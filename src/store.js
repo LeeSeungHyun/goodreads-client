@@ -32,6 +32,23 @@ export default new Vuex.Store({
     getBookList: (state, payload) => {
       state.books = [...payload];
     },
+    addAverageRate: (state, payload) => {
+      state.books.forEach((book) => {
+        if(book._id === payload.bookId) {
+          book.averageRate = payload.averageRate;
+        }
+      })
+    },
+    sortOfAverateRate: (state) => {
+      state.books = state.books.sort((a, b) => {
+        return a.averageRate > b.averageRate ? -1 : a.averageRate < b.averageRate ? 1 : 0;
+      })
+    },
+    deleteBook: (state, payload) => {
+      state.books = state.books.filter((book) => {
+        return book._id !== payload;
+      });
+    },
     getCommentList: (state, payload) => {
       state.comments = [...payload];
     },
@@ -46,11 +63,6 @@ export default new Vuex.Store({
       state.comments = state.comments.filter((comment) => {
         return comment._id !== payload;
       })
-    },
-    deleteBook: (state, payload) => {
-      state.books = state.books.filter((book) => {
-        return book._id !== payload;
-      });
     },
     getUserInfo: (state, payload) => {
       state.user = {...payload};

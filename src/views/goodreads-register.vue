@@ -158,7 +158,7 @@ export default {
       this.isBookSearchModalActive = true;
     },
     backToBookList() {
-      this.$router.replace(this.$route.query.redirect || '/')
+      this.$router.push({ name: 'list' });
     },
     resetForm() {
       this.bookImage = '';
@@ -186,14 +186,17 @@ export default {
         }
 
         let response = await API.registerBook(bookInfo);
+
         if(response.message === 'success') {
-          this.resetForm();
-          this.$buefy.toast.open({
-            duration: 3000,
-            message: '등록 되었습니다.',
-            position: 'is-bottom',
-            type: 'is-success'
-          })
+          this.$store.dispatch('getBookList').then((res) => {
+            this.resetForm();
+            this.$buefy.toast.open({
+              duration: 3000,
+              message: '등록 되었습니다.',
+              position: 'is-bottom',
+              type: 'is-success'
+            })
+          });
         }
       } else {
         this.$buefy.dialog.alert('모든 정보를 입력해주세요.');
@@ -217,14 +220,16 @@ export default {
         let response = await API.updateBook(bookInfo);
 
         if(response.nModified === 1) {
-          this.resetForm();
-          this.$router.push({ name: 'list', params: { book: bookInfo }})
-          this.$buefy.toast.open({
-            duration: 3000,
-            message: '수정 되었습니다.',
-            position: 'is-bottom',
-            type: 'is-success'
-          })
+          this.$store.dispatch('getBookList').then((res) => {
+            this.resetForm();
+            this.$router.push({ name: 'list', params: { book: bookInfo }})
+            this.$buefy.toast.open({
+              duration: 3000,
+              message: '수정 되었습니다.',
+              position: 'is-bottom',
+              type: 'is-success'
+            })
+          });
         }
       } else {
         this.$buefy.dialog.alert('모든 정보를 입력해주세요.');
