@@ -30,7 +30,7 @@
         </div>
         <div class="dropdown-content" v-if="isUserProfileActive === true">
         <!-- <router-link to="/register" tag="button">글쓰기</router-link> -->
-          <b-button class="history" size="is-small" @click="logoutUser">기록</b-button>
+          <b-button class="history" size="is-small" @click="userDetail">상세활동내역</b-button>
           <b-button class="logout" size="is-small" @click="logoutUser">Logout</b-button>
 
           <div class="image-preview">
@@ -56,6 +56,8 @@
         <b-field class="search-text">
           <b-input 
             v-model="searchText"
+            icon-pack="fas"
+            icon="search"
             placeholder="책 제목 및 저자 이름으로 검색해주세요."
           ></b-input>
         </b-field>
@@ -202,8 +204,6 @@ export default {
   mounted() {
     this.config = config ? 'https://book-fishing.herokuapp.com/' : 'http://localhost:3000/'
     this.$store.dispatch('checkUserInfo');
-
-    console.log(this.books);
    
     if(this.books.length === 0) {
       this.isLoading = true;
@@ -221,8 +221,8 @@ export default {
     let params = this.$route.params;
     if(params.hasOwnProperty('book')) {
       this.books.forEach((book) => {
-          this.$store.commit('addAverageRate', { bookId: book._id, averageRate: this.getAverageOfRate(book._id) });
-        })
+        this.$store.commit('addAverageRate', { bookId: book._id, averageRate: this.getAverageOfRate(book._id) });
+      })
       this.$store.commit('sortOfAverateRate');
       this.getBookDetail(params.book);
     }
@@ -265,6 +265,9 @@ export default {
     },
     registerBook () {
       this.$router.replace(this.$route.query.redirect || '/register')
+    },
+    userDetail() {
+      this.$router.replace(this.$route.query.redirect || '/user/detail')
     },
     logoutUser() {
       this.$store.dispatch('logoutUserInfo');

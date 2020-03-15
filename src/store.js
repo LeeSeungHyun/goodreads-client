@@ -8,7 +8,6 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: { // data
     user: {},
-    // profile: {},
     books: [],
     comments: []
   },
@@ -77,6 +76,7 @@ export default new Vuex.Store({
     checkUserInfo: async (context) => {
       let response = await API.checkUser();
       context.commit('getUserInfo', response.data.user);
+      return response.data.user;
     },
     logoutUserInfo: async (context) => {
       let response = await API.logoutUser();

@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import store from '@/store';
 import GoodreadsLogin from '@/views/goodreads-login.vue';
-import GoodreadsDetail from '@/views/goodreads-detail.vue';
+import GoodreadsUserDetail from '@/views/goodreads-user-detail.vue';
 import GoodreadsList from '@/views/goodreads-list.vue';
 import GoodreadsRegister from '@/views/goodreads-register.vue';
 
@@ -35,8 +35,8 @@ export default new VueRouter({
       props: true
     },
     {
-      path: '/list/:id',
-      component: GoodreadsDetail
+      path: '/user/detail',
+      component: GoodreadsUserDetail
     },
     {
       name: 'register',

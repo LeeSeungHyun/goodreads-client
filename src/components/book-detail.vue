@@ -30,14 +30,14 @@
               <img :src="book.bookimage" alt="thumbnail" width="100">
               <b-rate 
                 class="average-rate"
-                :value="book.averageRate"
+                :value="getAverageOfRateForDetail()"
                 icon-pack="fas"
-                :spaced="true"
+                :spaced="false"
                 :show-score="true"
                 :disabled="true">
               </b-rate>
               <div class="average-rate">
-                평점: {{averageRate}}
+               123123
               </div>
             </div>
             <div class="book-content">
@@ -142,6 +142,19 @@ export default {
   methods: {
     selectRate() {
       // rate: ''
+    },
+    getAverageOfRateForDetail() {
+      let length = this.commentList.length;
+
+      if(length > 0) {
+        let sum = this.commentList.reduce((acc, comment) => {
+          return acc += comment.rate;
+        }, 0);
+        let result = sum / length;
+        return parseFloat(result.toFixed(1));
+      } else {
+        return 0;
+      }
     },
     getAverageOfRate(bookId) {
       let length = 0;
@@ -464,7 +477,7 @@ $Phone: "screen and (max-width : 640px)";
     & > .book-image {
       width: 116px;
       & > .average-rate {
-        font-size: 0.5rem;
+        font-size: 0.7rem;
       }
     }
     & > .book-content {
