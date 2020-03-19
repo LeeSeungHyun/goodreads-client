@@ -54,7 +54,7 @@
           <!-- <ValidationProvider name="message" rules="required">
             <div slot-scope="{ errors }"> -->
               <b-field>
-                <b-input v-model="message" maxlength="200" type="textarea" placeholder="책에 대한 짧은 감상평 남겨주세요. (최대 200자)"></b-input>
+                <b-input v-model="message" maxlength="100" type="textarea" placeholder="책에 대한 짧은 감상평 남겨주세요. (최대 100자)"></b-input>
               </b-field>
               <!-- <span style="position: relative; top: -18px">{{ errors[0] }}</span>
             </div>
@@ -125,10 +125,23 @@ export default {
     } else {
       this.mode = 'create'
     }
+
+    if(this.books.length === 0) {
+        this.$store.dispatch('getBookList').then((res) => {
+          this.$store.dispatch('getCommentList').then((res) => {
+          this.books.forEach((book) => {
+            this.$store.commit('addAverageRate', { bookId: book._id, averageRate: this.getAverageOfRate(book._id) });
+          })
+          this.$store.commit('sortOfAverateRate');
+        });
+      });
+    }
   },
   computed: {
     ...mapState([
-      'user'
+      'user',
+      'books',
+      'comments'
     ]),
   },
   methods: {
@@ -188,7 +201,13 @@ export default {
         let response = await API.registerBook(bookInfo);
 
         if(response.message === 'success') {
+         
           this.$store.dispatch('getBookList').then((res) => {
+            this.books.forEach((book) => {
+              this.$store.commit('addAverageRate', { bookId: book._id, averageRate: this.getAverageOfRate(book._id) });
+            })
+            this.$store.commit('sortOfAverateRate');
+
             this.resetForm();
             this.$buefy.toast.open({
               duration: 3000,
@@ -200,6 +219,22 @@ export default {
         }
       } else {
         this.$buefy.dialog.alert('모든 정보를 입력해주세요.');
+      }
+    },
+    getAverageOfRate(bookId) {
+      let length = 0;
+      let sum = 0;
+      this.comments.forEach((comment) => {
+        if(comment.bookid === bookId) {
+          sum += comment.rate
+          length++;
+        }
+      })
+      if(length === 0) {
+        return 0;
+      } else {
+        let result = sum / length;
+        return parseFloat(result.toFixed(1));
       }
     },
     async updateBook() {

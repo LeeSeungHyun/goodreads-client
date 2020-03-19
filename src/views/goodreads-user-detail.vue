@@ -2,30 +2,84 @@
   <div class="container">
     <div class="user-container">
       <div class="profile-image">
-        <img alt="" :src='config + user.profileimage' width="80" height="80"/>
+        <img alt="" :src='config + user.profileimage' width="80" />
       </div>
       <div class="user-info">
-        <div>
+        <div class="user-name">
           {{ user.username }}
         </div>
-        <div>
+        <div class="user-job">
           {{ user.job }}
         </div>
-          <div>
+        <div class="user-email">
           {{ user.email }}
         </div>
       </div>
     </div>
-    <section>
+    <section class="user-detail-container">
       <b-tabs type="is-boxed">
         <b-tab-item label="Pictures" icon="search">
           1
         </b-tab-item>
         <b-tab-item label="Music" icon="search">
-          2
+          <ul class="book-list">
+            <li v-for="(book, index) of bookListForUserDetail" :key=index>
+              <div style="margin-bottom: 50px">
+                <div class="book-body">
+                  <div class="book-image">
+                    <img :src="book.bookimage" alt="thumbnail" width="100">
+                    <b-rate 
+                      class="average-rate"
+                      :value="book.averageRate"
+                      icon-pack="fas"
+                      :spaced="false"
+                      :show-score="true"
+                      :disabled="true">
+                    </b-rate>
+                  </div>
+                  <div class="book-content">
+                    <div class="book-name" v-line-clamp="2">{{book.bookname}}</div>
+                    <div class="book-etc-info">
+                      <span class="author">{{book.author}}</span>
+                      <span class="publisher">{{book.publisher}}</span>
+                    </div>
+                    <div class="book-message">
+                      {{book.message}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
         </b-tab-item>
         <b-tab-item label="Videos" icon="video">
-          
+          <ul class="book-comment">
+            <div class="book-no-comments" :class="[this.commentListUserDetail.length === 0 && 'comment-display']">
+              등록한 댓글이 없습니다.
+            </div>
+            <li v-for="(comment, index) of commentListUserDetail" :key=index class="li-comment">
+           
+              <div class="li-comment-profile-image">
+                <img :src='config + comment.profileimage' alt="profile" width="22" height="22">
+              </div>
+              <div class="li-comment-username">
+                {{comment.username}}
+              </div>
+              <div class="li-comment-comment">
+                <b-rate 
+                  class="comment-rate"
+                  v-model="comment.rate"
+                  icon-pack="fas"
+                  :spaced="true"
+                  :disabled="true">
+                </b-rate>
+                <span>{{comment.createdtime | moment("YYYY-MM-DD HH:mm:ss")}}</span>
+                <div>
+                  {{comment.comment}}
+                </div>
+              </div>
+            </li>
+          </ul>
         </b-tab-item>
       </b-tabs>
     </section>
@@ -48,36 +102,37 @@ export default {
     ]),
   },
   mixins: [
-    LoginValidation
+    // oginValidationL
   ],
   mounted() {
     this.config = config ? 'https://book-fishing.herokuapp.com/' : 'http://localhost:3000/';
-
-    this.$store.dispatch('checkUserInfo').then((res) => {
-      this.profileImage = this.user.profileimage;
-      this.userName = this.user.username;
-
-      // if(this.books.length === 0) {
-        this.$store.dispatch('getBookList').then((res) => {
-          this.$store.dispatch('getCommentList').then((res) => {
-            this.bookListForUserDetail = this.books.filter((book) => {
-              return book.userid === this.user._id;
-            })
-
-            this.commentListUserDetail = this.comments.filter((comment) => {
-              return comment.userid === this.user._id;
-            })
-          });
+  
+    if(Object.keys(this.user).length === 0) {
+      this.$store.dispatch('getBookList').then((res) => {
+        this.$store.dispatch('getCommentList').then((res) => {
+          this.getSortOfBooksAndComments();
         });
-      // }
-    });
+      });
+    } else {
+      this.getSortOfBooksAndComments();
+    }
   },
   methods: {
     backToBookList() {
       this.$router.push({ name: 'list' });
     },
-    sortOfBooks() {
+    getSortOfBooksAndComments() {
+      this.bookListForUserDetail = this.books.filter((book) => {
+        return book.userid === this.user._id;
+      }).sort((a, b) => {
+        return a.createdtime > b.createdtime ? -1 : a.createdtime < b.createdtime ? 1 : 0;
+      })
 
+      this.commentListUserDetail = this.comments.filter((comment) => {
+        return comment.userid === this.user._id;
+      }).sort((a, b) => {
+        return a.createdtime > b.createdtime ? -1 : a.createdtime < b.createdtime ? 1 : 0;
+      })
     }
   },
   data() {
@@ -102,9 +157,144 @@ export default {
     display: flex;
     & > .profile-image {
       width: 80px;
+      border: 1px solid #ddd;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+      background-color: #fff;
+      color: #fff;
+      margin-top: 5px;
+      margin-left: 10px;
     }
-    & > .user-name {
+    & > .user-info {
       flex: 1;
+      margin-top: 20px;
+      margin-left: 15px;
+
+      & > .user-job {
+        margin-top: 2px;
+        font-size: 0.9rem;
+      }
+
+      & > .user-email {
+        margin-top: 2px;
+        font-size: 0.9rem;
+        color: #bbb; 
+      }
+    }
+  }
+
+  & > .user-detail-container {
+    margin-top: 20px;
+
+    & .book-list {
+      height: calc(100vh - 280px);
+      overflow: auto;
+
+      & .book-body {
+        display: flex;
+        & > .book-image {
+          width: 116px;
+          & > .average-rate {
+            font-size: 0.7rem;
+          }
+        }
+        & > .book-content {
+          flex: 1;
+          & > .book-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+          }
+          & > .book-etc-info {
+            font-size: 0.8rem;
+            margin-top: 6px;
+            & > .author {
+              border-right: 1px solid rgba(0, 0, 0, 0.3);
+              padding-right: 5px;
+              height: 5px;
+            }
+            & > .publisher {
+              padding-left: 5px;
+            }
+          }
+
+          & > .book-message {
+            margin-top: 16px;
+            font-size: 0.85rem;
+            line-height: 24px;
+          }
+        }
+      }
+    }
+
+    & .book-comment {
+      height: calc(100vh - 280px);
+      overflow: auto;
+
+      .book-no-comments {
+        display: none;
+      }
+
+      .comment-display {
+        display: block;
+        position: relative;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+    }
+
+    & .li-comment {
+      margin-bottom: 16px;
+      & > .li-comment-profile-image {
+        width: 22px;
+        height: 22px;
+        border: 1px solid #ddd;
+        border-radius: 50%;
+        overflow: hidden;
+        background-color: #fff;
+        color: #fff;
+        display: inline-block;
+      }
+
+      & > .li-comment-username {
+        position: relative;
+        left: 6px;
+        bottom: 7px;
+        font-size: 0.8rem;
+        display: inline-block;
+        & > span {
+          margin-left: 10px;
+          position: relative;
+          top: -6px;
+          & button {
+            padding: 0 2px;
+          }
+        }
+      }
+
+      & > .li-comment-comment {
+        font-size: 0.9rem;
+        margin-top: -6px;
+
+        & > .comment-rate {
+          font-size: 0.6rem; 
+          display: inline;
+          position: relative;
+          bottom: 4px;
+        }
+
+        & > span {
+          position: relative;
+          bottom: 4px;
+          font-size: 0.7rem;
+          // padding-left: 8px;
+          margin-left: 5px;
+          // border-left: 1px solid rgba(0, 0, 0, 0.3);
+          color: #bbb; 
+        }
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <article>
-    <!-- <div :class="[this.searchText === '' || 'background-filter']"></div> -->
+    <!-- <div :class="[this.isUserProfileActive === false || 'background-filter']"></div> -->
     <header class="main-header">
       <nav class="nav" id="nav-header">
         <div class="book-logo">
@@ -54,7 +54,7 @@
         </div>   
       
         <b-field class="search-text">
-          <b-input 
+          <b-input style="position: relative; z-index: 1"
             v-model="searchText"
             icon-pack="fas"
             icon="search"
