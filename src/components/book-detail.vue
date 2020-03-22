@@ -36,8 +36,15 @@
                 :show-score="true"
                 :disabled="true">
               </b-rate>
-              <div class="average-rate">
-               123123
+              <div class="my-book" v-if="Object.keys(user).length !== 0">
+                <!-- <b-button 
+                  type="is-text"
+                  style="padding: 0; color: #fb366e;"
+                > -->
+                  <i @click="toggleFavorite" v-if="isFavorite === true" class="fas fa-heart selected-favorite"></i>
+                  <i @click="toggleFavorite" v-if="isFavorite === false" class="fas fa-heart unselected-favorite"></i>
+                <!-- </b-button> -->
+                <span>찜 하기</span>
               </div>
             </div>
             <div class="book-content">
@@ -138,6 +145,17 @@ export default {
   mounted() {
     this.config = config ? 'https://book-fishing.herokuapp.com/' : 'http://localhost:3000/';
     this.getCommentList();
+    let temp = this.book.favoriteList.filter((favorite) => {
+      return favorite.userid === this.user._id;
+    });
+
+    console.log(this.book);
+  
+    if(temp.length > 0) {
+      this.isFavorite = true;
+    } else {
+      this.isFavorite = false;
+    }
   },
   methods: {
     selectRate() {
@@ -285,7 +303,7 @@ export default {
     async deleteComment(commentObj) {
       let response = await API.deleteBookComment(commentObj._id);
       if(response.deletedCount === 1) {
-        this.commentList = this.commentList.filter((comment) => {
+        this.commentList = this.commentList.filter(comment => {
           return comment._id !== commentObj._id;
         })
         this.$store.commit('deleteComment', commentObj._id);
@@ -298,6 +316,31 @@ export default {
           type: 'is-success'
         })
       }
+    },
+    async toggleFavorite() {
+      // this.isFavorite = this.isFavorite === true ? false : true;
+      let obj = {
+        bookid: this.book._id,
+        userid: this.user._id,
+        username: this.user.username,
+      }
+
+      if(this.isFavorite === true) {
+        let response = await API.deleteFavorite(obj);
+        if(response.hasOwnProperty('userid')) {
+          // this.book.favoriteList = this.book.favoriteList.filter(favorite => {
+          //   return favorite.userid !== this.user._id;
+          // })
+          this.isFavorite = false;
+        };
+      } else {
+        let response = await API.saveFavorite(obj);
+        if(response.hasOwnProperty('userid')) {
+          // this.book.favoriteList.push({userid: this.user._id, username: this.user.username});
+         
+          this.isFavorite = true;
+        };
+      }
     }
   },
   data() {
@@ -309,7 +352,8 @@ export default {
       averageRate: 0,
       comment: '',
       commentList: [],
-      config: ''
+      config: '',
+      isFavorite: false
     }
   }
 }
@@ -344,7 +388,7 @@ $Phone: "screen and (max-width : 640px)";
 
     .book-comment {
       min-height: 260px;
-      max-height: 320px;
+      max-height: 280px;
       overflow: auto;
       -ms-overflow-style: none;
 
@@ -415,9 +459,7 @@ $Phone: "screen and (max-width : 640px)";
           position: relative;
           bottom: 4px;
           font-size: 0.5rem;
-          // padding-left: 8px;
           margin-left: 5px;
-          // border-left: 1px solid rgba(0, 0, 0, 0.3);
           color: #bbb; 
         }
       }
@@ -436,8 +478,6 @@ $Phone: "screen and (max-width : 640px)";
       }
     }
     .no-user-info {
-      // position: absolute;
-      // bottom: 14px; 
       font-size: 0.8rem;
       & > span {
         position: relative; 
@@ -478,6 +518,25 @@ $Phone: "screen and (max-width : 640px)";
       width: 116px;
       & > .average-rate {
         font-size: 0.7rem;
+      }
+
+      & > .my-book {
+        & i {
+          cursor: pointer;
+        }
+        & .selected-favorite {
+          color: #fb366e;
+        }
+        & .unselected-favorite {
+          color: #000;
+        }
+        & span {
+          color: #000;
+          font-size: 0.7rem;
+          position: relative;
+          left: 6px;
+          top: -2px;
+        }
       }
     }
     & > .book-content {

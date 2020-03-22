@@ -54,7 +54,7 @@
           <!-- <ValidationProvider name="message" rules="required">
             <div slot-scope="{ errors }"> -->
               <b-field>
-                <b-input v-model="message" maxlength="100" type="textarea" placeholder="책에 대한 짧은 감상평 남겨주세요. (최대 100자)"></b-input>
+                <b-input v-model="message" maxlength="150" type="textarea" placeholder="책에 대한 짧은 감상평 남겨주세요. (최대 150자)"></b-input>
               </b-field>
               <!-- <span style="position: relative; top: -18px">{{ errors[0] }}</span>
             </div>

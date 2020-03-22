@@ -15,7 +15,7 @@
           class="login-button" 
           @click="isLoginModalActive = true"
         >
-          <i class="fas fa-sign-in-alt"></i> Login
+          Login <i class="fas fa-sign-in-alt"></i>
         </b-button>
         <div class="dropdown-custom">
           <b-button 

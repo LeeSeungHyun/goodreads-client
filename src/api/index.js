@@ -127,4 +127,28 @@ export default{
       console.log(err);
     }
   },
+  saveFavorite: async (favoriteObj) => {
+    try{
+      let response = await axios.post(url + '/book/favorite/save', favoriteObj);
+      return response.data || null;
+    } catch(err) {
+      console.log(err);
+    }
+  },
+  deleteFavorite: async (favoriteObj) => {
+    try{
+      let response = await axios.post(url + '/book/favorite/delete', favoriteObj);
+      return response.data || null;
+    } catch(err) {
+      console.log(err);
+    }
+  },
+  getFavoriteList: async () => {
+    try{
+      let response = await axios.get(url + '/comment/list') 
+      return response.data || null;
+    } catch(err) {
+      console.log(err);
+    }
+  },
 }
