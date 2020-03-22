@@ -63,6 +63,16 @@ export default new Vuex.Store({
         return comment._id !== payload;
       })
     },
+    saveFavorite: (state, payload) => {
+      state.books.map(book => {
+        
+      })
+    },
+    deleteFavorite: (state, payload) => {
+      state.books.forEach(book => {
+
+      })
+    },
     getUserInfo: (state, payload) => {
       state.user = {...payload};
     }
