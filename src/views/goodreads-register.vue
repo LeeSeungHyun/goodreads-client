@@ -100,6 +100,7 @@
 import API from '@/api/index.js';
 import BookSearchModal from '@/components/book-search-modal.vue';
 import LoginValidation from '@/mixins/login-validation.js';
+import commonMethods from '@/mixins/common-methods.js';
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
 import { mapState } from 'vuex';
 
@@ -110,7 +111,8 @@ export default {
     ValidationProvider
   },
   mixins: [
-    LoginValidation
+    LoginValidation,
+    commonMethods
   ],
   mounted() {
     let params = this.$route.params;
@@ -219,22 +221,6 @@ export default {
         }
       } else {
         this.$buefy.dialog.alert('모든 정보를 입력해주세요.');
-      }
-    },
-    getAverageOfRate(bookId) {
-      let length = 0;
-      let sum = 0;
-      this.comments.forEach((comment) => {
-        if(comment.bookid === bookId) {
-          sum += comment.rate
-          length++;
-        }
-      })
-      if(length === 0) {
-        return 0;
-      } else {
-        let result = sum / length;
-        return parseFloat(result.toFixed(1));
       }
     },
     async updateBook() {

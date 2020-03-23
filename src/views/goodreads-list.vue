@@ -108,7 +108,7 @@
           </carousel>
         </div>
       </div>
-      <div class="in-order-of-recently" v-if="isLoading === false">
+      <div class="in-order-of-rate" v-if="isLoading === false">
         <div class="rate-title">
           최신 글 
         </div>
@@ -121,10 +121,29 @@
             :paginationSize="8"
             :paginationPadding="10"
           >
+            <slide v-for="(book, index) in sortedByTimeBooks" :key=index class="slider">
+              <img :src="book.bookimage" alt="" width="100%" style="border: 1px solid #eee" @click="getBookDetail(book)">
+              <div>
+                <div v-line-clamp="1">
+                  {{book.bookname}}
+                </div>
+                <!-- <b-rate 
+                  class="average-rate"
+                  :value="book.averageRate"
+                  icon-pack="fas"
+                  :show-score="true"
+                  :spaced="true"
+                  :disabled="true">
+                </b-rate> -->
+              </div>
+            </slide>
           </carousel>
         </div>
       </div>
     </main>
+    <footer style="margin-top: 20px; height: 220px; background-color: black">
+
+    </footer>
     <b-modal 
       :active.sync="isLoginModalActive"
       has-modal-card
@@ -147,6 +166,7 @@
       />
     </b-modal>
     <b-modal 
+      class="user-profile"
       :active.sync="isUserProfileEditActive"
       has-modal-card
       trap-focus
@@ -161,6 +181,7 @@ import API from '@/api/index.js';
 import LoginModal from '@/components/login-modal.vue';
 import BookDetail from '@/components/book-detail.vue';
 import UserProfile from '@/components/user-profile.vue';
+import commonMethods from '@/mixins/common-methods.js';
 import { Carousel, Slide } from 'vue-carousel';
 import { mapState } from 'vuex';
 
@@ -172,6 +193,9 @@ export default {
     BookDetail,
     UserProfile
   },
+  mixins: [
+    commonMethods
+  ],
   watch: {
     selected: function(selected) {
       if(selected !== null) {
@@ -210,16 +234,23 @@ export default {
       this.$store.dispatch('getBookList').then((res) => {
         this.$store.dispatch('getCommentList').then((res) => {
           this.isLoading = false;
+          this.sortedByTimeBooks = [...this.books];
           this.books.forEach((book) => {
             this.$store.commit('addAverageRate', { bookId: book._id, averageRate: this.getAverageOfRate(book._id) });
           })
           this.$store.commit('sortOfAverateRate');
         });
       });
+    } else {
+      this.sortedByTimeBooks = [...this.books];
+      this.sortedByTimeBooks.sort((a, b) => {
+        return a.createdTime > b.createdTime ? -1 : a.createdTime < b.createdTime ? 1 : 0;
+      })
     }
 
     let params = this.$route.params;
     if(params.hasOwnProperty('book')) {
+      this.sortedByTimeBooks = [...this.books];
       this.books.forEach((book) => {
         this.$store.commit('addAverageRate', { bookId: book._id, averageRate: this.getAverageOfRate(book._id) });
       })
@@ -232,27 +263,6 @@ export default {
     window.removeEventListener('click', this.handleClick);
   },
   methods: {
-    sortOfAverageRate() {
-      this.books = this.books.sort((a, b) => {
-        return a.averageRate > b.averageRate ? -1 : a.averageRate < b.averageRate ? 1 : 0;
-      })
-    },
-    getAverageOfRate(bookId) {
-      let length = 0;
-      let sum = 0;
-      this.comments.forEach((comment) => {
-        if(comment.bookid === bookId) {
-          sum += comment.rate
-          length++;
-        }
-      })
-      if(length === 0) {
-        return 0;
-      } else {
-        let result = sum / length;
-        return parseFloat(result.toFixed(1));
-      }
-    },
     userLogin() {
       this.showModal = true;
     },
@@ -277,6 +287,10 @@ export default {
       let response = await API.deleteBook(bookId);
       if(response.deletedCount === 1) {
         this.$store.commit('deleteBook', bookId);
+        this.sortedByTimeBooks = [...this.books];
+        this.sortedByTimeBooks.sort((a, b) => {
+          return a.createdTime > b.createdTime ? -1 : a.createdTime < b.createdTime ? 1 : 0;
+        })
         this.isBookDetailActive = false;
         this.$buefy.toast.open({
           duration: 3000,
@@ -327,9 +341,11 @@ export default {
     },
     handleClick (event) {
       if (!event.target.matches('.logout-button') && 
-          !event.target.matches('.logout-button i') && 
+          !event.target.matches('.logout-button *') && 
           !event.target.matches('.dropdown-content') && 
-          !event.target.matches('.dropdown-content *')) {
+          !event.target.matches('.dropdown-content *') &&
+          !event.target.matches('.user-profile') && 
+          !event.target.matches('.user-profile *')) {
         this.isUserProfileActive = false;
       }
     }
@@ -349,6 +365,7 @@ export default {
       isUserProfileActive: false,
       isUserProfileEditActive: false,
       isBookDetailActive: false,
+      sortedByTimeBooks: [],
       bookCommentList: [],
     }
   }

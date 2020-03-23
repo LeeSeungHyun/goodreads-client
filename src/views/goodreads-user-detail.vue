@@ -19,7 +19,35 @@
     <section class="user-detail-container">
       <b-tabs type="is-boxed">
         <b-tab-item label="Pictures" icon="search">
-          1
+          <ul class="book-list">
+            <li v-for="(book, index) of bookListFavorite" :key=index>
+              <div style="margin-bottom: 50px">
+                <div class="book-body">
+                  <div class="book-image">
+                    <img :src="book.bookimage" alt="thumbnail" width="100">
+                    <b-rate 
+                      class="average-rate"
+                      :value="book.averageRate"
+                      icon-pack="fas"
+                      :spaced="false"
+                      :show-score="true"
+                      :disabled="true">
+                    </b-rate>
+                  </div>
+                  <div class="book-content">
+                    <div class="book-name" v-line-clamp="2">{{book.bookname}}</div>
+                    <div class="book-etc-info">
+                      <span class="author">{{book.author}}</span>
+                      <span class="publisher">{{book.publisher}}</span>
+                    </div>
+                    <div class="book-message">
+                      {{book.message}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
         </b-tab-item>
         <b-tab-item label="Music" icon="search">
           <ul class="book-list">
@@ -89,6 +117,7 @@
 
 <script>
 import LoginValidation from '@/mixins/login-validation.js';
+import commonMethods from '@/mixins/common-methods.js';
 import { mapState } from 'vuex';
 
 let config = process.env.NODE_ENV === 'production'
@@ -102,27 +131,32 @@ export default {
     ]),
   },
   mixins: [
-    // oginValidationL
+    // LoginValidation
+    commonMethods
   ],
   mounted() {
     this.config = config ? 'https://book-fishing.herokuapp.com/' : 'http://localhost:3000/';
-  
+    this.$store.dispatch('checkUserInfo');
     if(Object.keys(this.user).length === 0) {
       this.$store.dispatch('getBookList').then((res) => {
         this.$store.dispatch('getCommentList').then((res) => {
-          this.getSortOfBooksAndComments();
+          this.books.forEach((book) => {
+            this.$store.commit('addAverageRate', { bookId: book._id, averageRate: this.getAverageOfRate(book._id) });
+          })
+          this.$store.commit('sortOfAverateRate');
+          this.getSortOfBookInfo();
         });
       });
     } else {
-      this.getSortOfBooksAndComments();
+      this.getSortOfBookInfo();
     }
   },
   methods: {
     backToBookList() {
       this.$router.push({ name: 'list' });
     },
-    getSortOfBooksAndComments() {
-      this.bookListForUserDetail = this.books.filter((book) => {
+    getSortOfBookInfo() {
+      this.bookListForUserDetail = this.books.filter(book => {
         return book.userid === this.user._id;
       }).sort((a, b) => {
         return a.createdtime > b.createdtime ? -1 : a.createdtime < b.createdtime ? 1 : 0;
@@ -132,6 +166,12 @@ export default {
         return comment.userid === this.user._id;
       }).sort((a, b) => {
         return a.createdtime > b.createdtime ? -1 : a.createdtime < b.createdtime ? 1 : 0;
+      })
+
+      this.bookListFavorite = this.books.filter(book => {
+        for(let i = 0; i < book.favoriteList.length; i++) {
+          return book.favoriteList[i].userid === this.user._id;
+        }
       })
     }
   },
@@ -143,6 +183,7 @@ export default {
       commentListUserDetail: [],
       registeredBookForUserDetail: [],
       bookListForUserDetail: [],
+      bookListFavorite: []
     }
   }
 }

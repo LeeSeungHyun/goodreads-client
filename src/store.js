@@ -9,6 +9,8 @@ export default new Vuex.Store({
   state: { // data
     user: {},
     books: [],
+    sortedbyRateBooks: [],
+    sortedbyTimeBooks: [],
     comments: []
   },
   getters: { // computed
@@ -64,13 +66,19 @@ export default new Vuex.Store({
       })
     },
     saveFavorite: (state, payload) => {
-      state.books.map(book => {
-        
+      state.books.forEach(book => {
+        if(book._id === payload.bookid) {
+          book.favoriteList.push({ userid: payload.userid, username: payload.username });
+        }
       })
     },
     deleteFavorite: (state, payload) => {
       state.books.forEach(book => {
-
+        if(book._id === payload.bookid) {
+          book.favoriteList = book.favoriteList.filter(favorite => {
+            return payload.userid !== favorite.userid;
+          })
+        }
       })
     },
     getUserInfo: (state, payload) => {

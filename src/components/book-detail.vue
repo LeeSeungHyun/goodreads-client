@@ -148,8 +148,6 @@ export default {
     let temp = this.book.favoriteList.filter((favorite) => {
       return favorite.userid === this.user._id;
     });
-
-    console.log(this.book);
   
     if(temp.length > 0) {
       this.isFavorite = true;
@@ -318,7 +316,6 @@ export default {
       }
     },
     async toggleFavorite() {
-      // this.isFavorite = this.isFavorite === true ? false : true;
       let obj = {
         bookid: this.book._id,
         userid: this.user._id,
@@ -331,13 +328,14 @@ export default {
           // this.book.favoriteList = this.book.favoriteList.filter(favorite => {
           //   return favorite.userid !== this.user._id;
           // })
+          this.$store.commit('deleteFavorite', obj);
+          
           this.isFavorite = false;
         };
       } else {
         let response = await API.saveFavorite(obj);
         if(response.hasOwnProperty('userid')) {
-          // this.book.favoriteList.push({userid: this.user._id, username: this.user.username});
-         
+          this.$store.commit('saveFavorite', obj);
           this.isFavorite = true;
         };
       }
