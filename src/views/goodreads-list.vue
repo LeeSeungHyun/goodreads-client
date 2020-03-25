@@ -141,8 +141,10 @@
         </div>
       </div>
     </main>
-    <footer style="margin-top: 20px; height: 220px; background-color: black">
-
+    <footer v-if="isLoading === false">
+      <div>
+        Copyright ⓒ 2020. All rights reserved
+      </div>
     </footer>
     <b-modal 
       :active.sync="isLoginModalActive"
@@ -614,6 +616,19 @@ main {
   & > img {
     width: 100%;
     height: 100%;
+  }
+}
+
+footer {
+  // margin-top: 20px; 
+  height: 50px; 
+  background-color: #3e3e3e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  & div {
+    color: #fff;
+    font-size: 0.9rem;
   }
 }
 

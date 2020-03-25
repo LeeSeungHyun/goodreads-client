@@ -18,8 +18,14 @@
     </div>
     <section class="user-detail-container">
       <b-tabs type="is-boxed">
-        <b-tab-item label="Pictures" icon="search">
+        <b-tab-item>
+          <template slot="header">
+            <span> 찜 목록 <b-tag rounded> {{ bookListFavorite.length }} </b-tag> </span>
+          </template>
           <ul class="book-list">
+            <!-- <div class="book-no-comments" :class="[this.bookListFavorite.length === 0 && 'comment-display']">
+              찜한 책이 없습니다.
+            </div> -->
             <li v-for="(book, index) of bookListFavorite" :key=index>
               <div style="margin-bottom: 50px">
                 <div class="book-body">
@@ -49,8 +55,14 @@
             </li>
           </ul>
         </b-tab-item>
-        <b-tab-item label="Music" icon="search">
+        <b-tab-item>
+          <template slot="header">
+            <span> 글 등록 목록 <b-tag rounded> {{ bookListForUserDetail.length }} </b-tag> </span>
+          </template>
           <ul class="book-list">
+            <!-- <div class="book-no-comments" :class="[this.bookListForUserDetail.length === 0 && 'comment-display']">
+              등록한 책이 없습니다.
+            </div> -->
             <li v-for="(book, index) of bookListForUserDetail" :key=index>
               <div style="margin-bottom: 50px">
                 <div class="book-body">
@@ -80,7 +92,10 @@
             </li>
           </ul>
         </b-tab-item>
-        <b-tab-item label="Videos" icon="video">
+        <b-tab-item>
+          <template slot="header">
+            <span> 댓글 목록 <b-tag rounded> {{ commentListUserDetail.length }} </b-tag> </span>
+          </template>
           <ul class="book-comment">
             <div class="book-no-comments" :class="[this.commentListUserDetail.length === 0 && 'comment-display']">
               등록한 댓글이 없습니다.
@@ -338,5 +353,21 @@ export default {
       }
     }
   }
+}
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 10px;
+}
+ 
+::-webkit-scrollbar-track {
+    background-color: #ebebeb;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: #6d6d6d; 
 }
 </style>

@@ -41,8 +41,10 @@
                   type="is-text"
                   style="padding: 0; color: #fb366e;"
                 > -->
+                  <!-- <i @click="toggleFavorite" v-if="isFavorite === true" class="fas fa-heart selected-favorite"></i>
+                  <i @click="toggleFavorite" v-if="isFavorite === false" class="fas fa-heart unselected-favorite"></i> -->
                   <i @click="toggleFavorite" v-if="isFavorite === true" class="fas fa-heart selected-favorite"></i>
-                  <i @click="toggleFavorite" v-if="isFavorite === false" class="fas fa-heart unselected-favorite"></i>
+                  <i @click="toggleFavorite" v-if="isFavorite === false" class="heart icon"></i>
                 <!-- </b-button> -->
                 <span>찜 하기</span>
               </div>
@@ -72,7 +74,7 @@
               <div class="li-comment-username">
                 {{comment.username}}
                 <span v-if="comment.userid === user._id">
-                  <b-button type="is-text" size="is-small" @click="updateCommentForm(comment)">수정</b-button>
+                  <!-- <b-button type="is-text" size="is-small" @click="updateCommentForm(comment)">수정</b-button> -->
                   <!-- <b-button 
                     type="is-text" 
                     size="is-small" 
@@ -519,14 +521,50 @@ $Phone: "screen and (max-width : 640px)";
       }
 
       & > .my-book {
-        & i {
-          cursor: pointer;
-        }
+        // & i {
+        //   cursor: pointer;
+        // }
         & .selected-favorite {
           color: #fb366e;
         }
-        & .unselected-favorite {
+        // & .unselected-favorite {
+        //   color: #000;
+        // }
+        & .heart.icon {
           color: #000;
+          position: absolute;
+          margin-top: 6px;
+          margin-left: 5px;
+          width: 9px;
+          height: 9px;
+          border-left: solid 1px currentColor;
+          border-bottom: solid 1px currentColor;
+          -webkit-transform: rotate(-45deg);
+                  transform: rotate(-45deg);
+          ::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -1px;
+            width: 8px;
+            height: 5px;
+            border-radius: 5px 5px 0 0;
+            border-top: solid 1px currentColor;
+            border-left: solid 1px currentColor;
+            border-right: solid 1px currentColor;
+          }
+          ::after {
+            content: '';
+            position: absolute;
+            top: 0px;
+            left: 8px;
+            width: 5px;
+            height: 8px;
+            border-radius: 0 5px 5px 0;
+            border-top: solid 1px currentColor;
+            border-right: solid 1px currentColor;
+            border-bottom: solid 1px currentColor;
+          }
         }
         & span {
           color: #000;
