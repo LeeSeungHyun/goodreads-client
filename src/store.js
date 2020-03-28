@@ -93,6 +93,7 @@ export default new Vuex.Store({
     },
     checkUserInfo: async (context) => {
       let response = await API.checkUser();
+      console.log(response)
       context.commit('getUserInfo', response.data.user);
       return response.data.user;
     },
