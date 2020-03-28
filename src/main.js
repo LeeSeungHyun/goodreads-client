@@ -11,7 +11,7 @@ import 'buefy/dist/buefy.css';
 import "@/assets/scss/global.scss";
 // import '@fortawesome/fontawesome-free/css/all.css';
 // import '@fortawesome/fontawesome-free/js/all.js';
-
+Vue.config.devtools = true;
 Vue.config.productionTip = false
 Vue.use(Buefy)
 Vue.use(VueDebounce)
