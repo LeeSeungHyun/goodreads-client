@@ -76,7 +76,7 @@
     <main>
       <b-loading :is-full-page="isFullPage" :active.sync="isLoading" :can-cancel="true">
       </b-loading>
-      <div class="in-order-of-rate" v-if="isLoading === false">
+      <div class="in-order-of-rate" v-if="isLoading === false && isSearched === false">
         <div class="rate-title">
           평점 높은 순
         </div>
@@ -108,7 +108,7 @@
           </carousel>
         </div>
       </div>
-      <div class="in-order-of-rate" v-if="isLoading === false">
+      <div class="in-order-of-rate" v-if="isLoading === false && isSearched === false">
         <div class="rate-title">
           최신 글 
         </div>
@@ -127,21 +127,37 @@
                 <div v-line-clamp="1">
                   {{book.bookname}}
                 </div>
-                <!-- <b-rate 
-                  class="average-rate"
-                  :value="book.averageRate"
-                  icon-pack="fas"
-                  :show-score="true"
-                  :spaced="true"
-                  :disabled="true">
-                </b-rate> -->
+              </div>
+            </slide>
+          </carousel>
+        </div>
+      </div>
+       <div class="in-order-of-rate" v-if="isLoading === false && isSearched === true">
+        <div class="rate-title">
+          검색 결과
+        </div>
+        <div>
+          <carousel 
+            :navigationEnabled="true" 
+            paginationActiveColor="#7957d5" 
+            :minSwipeDistance="10"
+            :perPageCustom="[[320, 2], [420, 3], [576, 4], [768, 5], [992, 6],[1080, 7], [1280, 8], [1600, 10]]" 
+            :paginationSize="8"
+            :paginationPadding="10"
+          >
+            <slide v-for="(book, index) in searchedBooks" :key=index class="slider">
+              <img :src="book.bookimage" alt="" width="100%" style="border: 1px solid #eee" @click="getBookDetail(book)">
+              <div>
+                <div v-line-clamp="1">
+                  {{book.bookname}}
+                </div>
               </div>
             </slide>
           </carousel>
         </div>
       </div>
     </main>
-    <footer v-if="isLoading === false">
+    <footer v-if="isLoading === false" :class="[this.isSearched === true && 'searched-book']">
       <div>
         Copyright ⓒ 2020. All rights reserved
       </div>
@@ -206,6 +222,7 @@ export default {
     },
     searchText: function(searchText) {
       if(searchText === '') {
+        this.isSearched = false;
         this.$store.dispatch('getBookList').then((res) => {
           this.books.forEach((book) => {
             this.$store.commit('addAverageRate', { bookId: book._id, averageRate: this.getAverageOfRate(book._id) });
@@ -305,12 +322,19 @@ export default {
     searchBook() {
       let isSearch = false;
       this.books.forEach((book) => {
-        if(book.bookname.toLowerCase().indexOf(this.searchText.toLowerCase()) > -1) {
+        if(book.bookname.toLowerCase().indexOf(this.searchText.toLowerCase()) > -1 || 
+          book.author.toLowerCase().indexOf(this.searchText.toLowerCase()) > -1) {
           isSearch = true;
         }
       })
       if(isSearch) {
-        this.$store.commit('searchBookList', this.searchText);
+        this.isSearched = true;
+        // this.$store.commit('searchBookList', this.searchText);
+        this.searchedBooks = this.books.filter(book => {
+          return book.bookname.toLowerCase().indexOf(this.searchText.toLowerCase()) > -1 || 
+            book.author.toLowerCase().indexOf(this.searchText.toLowerCase()) > -1;
+        })
+        console.log(this.searchedBooks);
       } else {
         this.$buefy.dialog.alert('검색한 내용이 없습니다.');
       }
@@ -361,8 +385,10 @@ export default {
       book: {},
       config: '',
       searchText: '',
+      searchedBooks: [],
       selected: null,
       profileImage: null,
+      isSearched: false,
       isLoginModalActive: false,
       isUserProfileActive: false,
       isUserProfileEditActive: false,
@@ -630,6 +656,14 @@ footer {
     color: #fff;
     font-size: 0.9rem;
   }
+}
+
+.searched-book {
+  position: fixed;
+  left: 0;
+  bottom: 0; 
+  height: 50px; 
+  width: 100%; 
 }
 
 @supports (display: grid) {
