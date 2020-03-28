@@ -82,6 +82,7 @@ export default new Vuex.Store({
       })
     },
     getUserInfo: (state, payload) => {
+      console.log(payload)
       state.user = {...payload};
     }
   },
