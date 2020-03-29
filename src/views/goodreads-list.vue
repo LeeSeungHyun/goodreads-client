@@ -55,6 +55,7 @@
       
         <b-field class="search-text">
           <b-input style="position: relative; z-index: 1"
+            @keyup.enter.native="searchByEnter"
             v-model="searchText"
             icon-pack="fas"
             icon="search"
@@ -364,6 +365,9 @@ export default {
       } else {
         element.classList.remove("affix");
       }
+    },
+    searchByEnter() {
+      this.searchBook(this.searchText);
     },
     handleClick (event) {
       if (!event.target.matches('.logout-button') && 
