@@ -184,8 +184,14 @@ export default {
       })
 
       this.bookListFavorite = this.books.filter(book => {
+        let isTemp = false;
         for(let i = 0; i < book.favoriteList.length; i++) {
-          return book.favoriteList[i].userid === this.user._id;
+          if(book.favoriteList[i].userid === this.user._id) {
+            isTemp = true;
+          }
+        }
+        if(isTemp) {
+          return book;
         }
       })
     }
