@@ -35,14 +35,13 @@
 
           <div class="image-preview">
           <!-- <input type="file" ref="file" name="image" @change="onProfileImageChanged($event)" accept="image/*" /> -->
-            <img alt="" :src='config + user.profileimage'  width="80" height="80"/>
+            <img alt="" :src='config + user.profileimage'/>
           </div>
           <div class="profile-intro">
             <div class="profile-name">
               {{user.username}}
               <b-button class="profile-edit" size="is-small" @click="editUserProfile">Edit</b-button>
             </div>
-            <div class="profile-job">{{user.job}}</div>
             <div class="profile-email">{{user.email}}</div>
           </div>
         </div>
@@ -248,6 +247,7 @@ export default {
   mounted() {
     this.config = config ? 'https://book-fishing.herokuapp.com/' : 'http://localhost:3000/'
     this.$store.dispatch('checkUserInfo');
+    console.log(this.user)
    
     if(this.books.length === 0) {
       this.isLoading = true;
@@ -457,11 +457,12 @@ $Phone: "screen and (max-width : 768px)";
     top: 50px;
     right: 14px;
     width: 320px;
-    height: 140px;
+    height: 120px;
     display: flex;
 
     & > .image-preview {
-      width: 70px;
+      width: 50px;
+      height: 50px;
     }
 
     & > .profile-intro {
@@ -478,7 +479,7 @@ $Phone: "screen and (max-width : 768px)";
       }
 
       & > .profile-email {
-        margin-top: 2px;
+        margin-top: 4px;
         font-size: 0.9rem;
         color: #bbb; 
       }

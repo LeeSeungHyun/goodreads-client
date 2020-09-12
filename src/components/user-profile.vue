@@ -19,11 +19,11 @@
               <b-input v-model="userName" placeholder="이름을 입력해주세요."></b-input>
             </b-field>
           </div>
-          <div class="profile-job">
+          <!-- <div class="profile-job">
             <b-field>
               <b-input v-model="job" placeholder="직업을 입력해주세요."></b-input>
             </b-field>
-          </div>
+          </div> -->
           <div class="profile-email">
             <b-field>
               <b-input v-model="email" placeholder="이메일을 입력해주세요."></b-input>
@@ -57,7 +57,7 @@ export default {
     this.config = config ? 'https://book-fishing.herokuapp.com/' : 'http://localhost:3000/'
     this.userName = this.user.username;
     this.profileImage = this.user.profileimage;
-    this.job = this.user.job;
+    // this.job = this.user.job;
     this.email = this.user.email;
   },
   methods: {
@@ -81,7 +81,7 @@ export default {
       formData.append('_id', this.user._id);
       formData.append('username', this.userName);
       formData.append('profileimage', this.file);
-      formData.append('job', this.job);
+      // formData.append('job', this.job);
       formData.append('email', this.email);
     
       // let response = await API.updateUser(userObj);
@@ -89,12 +89,12 @@ export default {
 
       if(response.hasOwnProperty('image')) {
         this.user.username = this.userName;
-        this.user.job = this.job;
+        // this.user.job = this.job;
         this.user.profileimage = response.image;
         this.user.email = this.email;
       } else {
         this.user.username = this.userName;
-        this.user.job = this.job;
+        // this.user.job = this.job;
         this.user.email = this.email;
       }
 
@@ -124,7 +124,7 @@ export default {
       profileImage: '',
       profileFile: null,
       userName: '',
-      job: '',
+      // job: '',
       email: '',
       config: ''
     }
@@ -136,7 +136,6 @@ export default {
 $Phone: "screen and (max-width : 768px)";
 .modal-card {
   width: 400px;
-  height: 280px;
   margin: 0 auto;
   @media #{$Phone} {
     width: auto;

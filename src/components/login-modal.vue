@@ -124,7 +124,6 @@ $Phone: "screen and (max-width : 768px)";
   background-image: linear-gradient(#5B7BD5, #4864B1);
 }
 
-
 /* Google */
 .loginBtn--google {
   /*font-family: "Roboto", Roboto, arial, sans-serif;*/
