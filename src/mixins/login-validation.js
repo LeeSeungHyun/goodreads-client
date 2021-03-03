@@ -13,7 +13,7 @@ export default{
   methods: {
     async isUserAuthorized() {
       let response = await API.checkUser();
-      // console.log(response)
+      console.log(response)
       if (!response.data.hasOwnProperty('user')) {
         this.$router.replace(this.$route.query.redirect || '/list')
       } else {
