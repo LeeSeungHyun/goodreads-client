@@ -199,7 +199,6 @@ import API from '@/api/index.js';
 import LoginModal from '@/components/login-modal.vue';
 import BookDetail from '@/components/book-detail.vue';
 import UserProfile from '@/components/user-profile.vue';
-import LoginValidation from '@/mixins/login-validation.js';
 import commonMethods from '@/mixins/common-methods.js';
 import { Carousel, Slide } from 'vue-carousel';
 import { mapState } from 'vuex';
@@ -213,7 +212,6 @@ export default {
     UserProfile
   },
   mixins: [
-    LoginValidation,
     commonMethods
   ],
   watch: {

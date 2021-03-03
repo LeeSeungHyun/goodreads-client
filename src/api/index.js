@@ -33,7 +33,6 @@ export default{
   updateUser: async (user) => {
     try{
       let response = await axios.post(url + '/user/update', user);
-      console.log(response);
       return response.data || null;
     } catch(err) {
       console.log(err);
