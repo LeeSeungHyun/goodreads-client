@@ -1,11 +1,11 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import store from '@/store';
-import GoodreadsUserDetail from '@/views/goodreads-user-detail.vue';
-import GoodreadsList from '@/views/goodreads-list.vue';
-import GoodreadsRegister from '@/views/goodreads-register.vue';
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+// import store from '@/store';
+import GoodreadsUserDetail from '@/views/goodreads-user-detail.vue'
+import GoodreadsList from '@/views/goodreads-list.vue'
+import GoodreadsRegister from '@/views/goodreads-register.vue'
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
 // const requireAuth = () => (to, from, next) => {
 //   console.log(store.getter.userInfo)
@@ -38,6 +38,6 @@ export default new VueRouter({
       path: '/register',
       component: GoodreadsRegister,
       props: true
-    },
+    }
   ]
-});
+})

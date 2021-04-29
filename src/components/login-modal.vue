@@ -1,53 +1,73 @@
 <template>
-   <div class="modal-card">
-      <header class="modal-card-head">
-        <p class="modal-card-title">로그인</p>
-      </header>
-      <section class="modal-card-body">
-        <div class="modal-intro">
-            읽은 책을 공유해주세요. <br />
-            함께 나누면 즐거움이 두 배로 :)
-        </div>
-        <div class="social-login">
-          <button class="loginBtn loginBtn--facebook" @click="facebookLogin">
-            Login with Facebook
-          </button>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">
+        로그인
+      </p>
+    </header>
+    <section class="modal-card-body">
+      <div class="modal-intro">
+        읽은 책을 공유해주세요. <br>
+        함께 나누면 즐거움이 두 배로 :)
+      </div>
+      <div class="social-login">
+        <button
+          class="loginBtn loginBtn--facebook"
+          @click="facebookLogin"
+        >
+          Login with Facebook
+        </button>
 
-          <button class="loginBtn loginBtn--google" @click="googleLogin">
-            Login with Google
-          </button>
-        </div>
-      </section>
-      <b-loading :is-full-page="isFullPage" :active.sync="isLoading"></b-loading>
+        <button
+          class="loginBtn loginBtn--google"
+          @click="googleLogin"
+        >
+          Login with Google
+        </button>
+      </div>
+    </section>
+    <b-loading
+      :is-full-page="isFullPage"
+      :active.sync="isLoading"
+    />
   </div>
 </template>
 
 <script>
-import API from '@/api/index.js';
+// import API from '@/api/index.js';
 
-let config = process.env.NODE_ENV === 'production'
+// let config = process.env.NODE_ENV === 'production'
 
 export default {
   props: {
-    userInfo: Object,
-    email: String,
-    password: String
+    userInfo: {
+      type: Object,
+      default: () => {}
+    },
+    email: {
+      type: String,
+      default: ''
+    },
+    password: {
+      type: String,
+      default: ''
+    }
   },
-  mounted() {
+  mounted () {
     let config = process.env.NODE_ENV === 'production'
-    this.config = config ? 'https://book-fishing.herokuapp.com' : 'http://localhost:3000';
+    this.config = config ? 'https://book-fishing.herokuapp.com' : 'http://localhost:3000'
   },
   methods: {
-    async googleLogin() {
-      this.isLoading = true;
-      window.location.href =  this.config + '/auth/google';
+    async googleLogin () {
+      this.isLoading = true
+      window.location.href = this.config + '/auth/google'
     },
-    async facebookLogin() {
-      this.isLoading = true;
-      window.location.href = this.config + '/auth/facebook';
-    },
+    async facebookLogin () {
+      this.isLoading = true
+      window.location.href = this.config + '/auth/facebook'
+    }
   },
-  data() {
+  data () {
     return {
       isFullPage: true,
       isLoading: false,
@@ -66,7 +86,7 @@ $Phone: "screen and (max-width : 768px)";
     text-align: center;
     & > .modal-intro {
       font-size: 1.2rem;
-    } 
+    }
     & > .social-login {
       margin-top: 20px;
     }

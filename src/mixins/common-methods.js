@@ -1,22 +1,19 @@
-import API from '@/api/index.js';
-import { mapState } from 'vuex';
-
-export default{
+export default {
   methods: {
-    getAverageOfRate(bookId) {
-      let length = 0;
-      let sum = 0;
+    getAverageOfRate (bookId) {
+      let length = 0
+      let sum = 0
       this.comments.forEach((comment) => {
-        if(comment.bookid === bookId) {
+        if (comment.bookid === bookId) {
           sum += comment.rate
-          length++;
+          length++
         }
       })
-      if(length === 0) {
-        return 0;
+      if (length === 0) {
+        return 0
       } else {
-        let result = sum / length;
-        return parseFloat(result.toFixed(1));
+        let result = sum / length
+        return parseFloat(result.toFixed(1))
       }
     }
   }

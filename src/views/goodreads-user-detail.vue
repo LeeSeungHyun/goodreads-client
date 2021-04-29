@@ -2,7 +2,11 @@
   <div class="container">
     <div class="user-container">
       <div class="profile-image">
-        <img alt="" :src='config + user.profileimage' width="80" />
+        <img
+          alt=""
+          :src="config + user.profileimage"
+          width="80"
+        >
       </div>
       <div class="user-info">
         <div class="user-name">
@@ -26,28 +30,40 @@
             <!-- <div class="book-no-comments" :class="[this.bookListFavorite.length === 0 && 'comment-display']">
               찜한 책이 없습니다.
             </div> -->
-            <li v-for="(book, index) of bookListFavorite" :key=index>
+            <li
+              v-for="(book, index) of bookListFavorite"
+              :key="index"
+            >
               <div style="margin-bottom: 50px">
                 <div class="book-body">
                   <div class="book-image">
-                    <img :src="book.bookimage" alt="thumbnail" width="100">
-                    <b-rate 
+                    <img
+                      :src="book.bookimage"
+                      alt="thumbnail"
+                      width="100"
+                    >
+                    <b-rate
                       class="average-rate"
                       :value="book.averageRate"
                       icon-pack="fas"
                       :spaced="false"
                       :show-score="true"
-                      :disabled="true">
-                    </b-rate>
+                      :disabled="true"
+                    />
                   </div>
                   <div class="book-content">
-                    <div class="book-name" v-line-clamp="2">{{book.bookname}}</div>
+                    <div
+                      class="book-name"
+                      v-line-clamp="2"
+                    >
+                      {{ book.bookname }}
+                    </div>
                     <div class="book-etc-info">
-                      <span class="author">{{book.author}}</span>
-                      <span class="publisher">{{book.publisher}}</span>
+                      <span class="author">{{ book.author }}</span>
+                      <span class="publisher">{{ book.publisher }}</span>
                     </div>
                     <div class="book-message">
-                      {{book.message}}
+                      {{ book.message }}
                     </div>
                   </div>
                 </div>
@@ -63,28 +79,40 @@
             <!-- <div class="book-no-comments" :class="[this.bookListForUserDetail.length === 0 && 'comment-display']">
               등록한 책이 없습니다.
             </div> -->
-            <li v-for="(book, index) of bookListForUserDetail" :key=index>
+            <li
+              v-for="(book, index) of bookListForUserDetail"
+              :key="index"
+            >
               <div style="margin-bottom: 50px">
                 <div class="book-body">
                   <div class="book-image">
-                    <img :src="book.bookimage" alt="thumbnail" width="100">
-                    <b-rate 
+                    <img
+                      :src="book.bookimage"
+                      alt="thumbnail"
+                      width="100"
+                    >
+                    <b-rate
                       class="average-rate"
                       :value="book.averageRate"
                       icon-pack="fas"
                       :spaced="false"
                       :show-score="true"
-                      :disabled="true">
-                    </b-rate>
+                      :disabled="true"
+                    />
                   </div>
                   <div class="book-content">
-                    <div class="book-name" v-line-clamp="2">{{book.bookname}}</div>
+                    <div
+                      class="book-name"
+                      v-line-clamp="2"
+                    >
+                      {{ book.bookname }}
+                    </div>
                     <div class="book-etc-info">
-                      <span class="author">{{book.author}}</span>
-                      <span class="publisher">{{book.publisher}}</span>
+                      <span class="author">{{ book.author }}</span>
+                      <span class="publisher">{{ book.publisher }}</span>
                     </div>
                     <div class="book-message">
-                      {{book.message}}
+                      {{ book.message }}
                     </div>
                   </div>
                 </div>
@@ -97,28 +125,39 @@
             <span> 댓글 목록 <b-tag rounded> {{ commentListUserDetail.length }} </b-tag> </span>
           </template>
           <ul class="book-comment">
-            <div class="book-no-comments" :class="[this.commentListUserDetail.length === 0 && 'comment-display']">
+            <div
+              class="book-no-comments"
+              :class="[this.commentListUserDetail.length === 0 && 'comment-display']"
+            >
               등록한 댓글이 없습니다.
             </div>
-            <li v-for="(comment, index) of commentListUserDetail" :key=index class="li-comment">
-           
+            <li
+              v-for="(comment, index) of commentListUserDetail"
+              :key="index"
+              class="li-comment"
+            >
               <div class="li-comment-profile-image">
-                <img :src='config + comment.profileimage' alt="profile" width="22" height="22">
+                <img
+                  :src="config + comment.profileimage"
+                  alt="profile"
+                  width="22"
+                  height="22"
+                >
               </div>
               <div class="li-comment-username">
-                {{comment.username}}
+                {{ comment.username }}
               </div>
               <div class="li-comment-comment">
-                <b-rate 
+                <b-rate
                   class="comment-rate"
                   v-model="comment.rate"
                   icon-pack="fas"
                   :spaced="true"
-                  :disabled="true">
-                </b-rate>
-                <span>{{comment.createdtime | moment("YYYY-MM-DD HH:mm:ss")}}</span>
+                  :disabled="true"
+                />
+                <span>{{ comment.createdtime | moment("YYYY-MM-DD HH:mm:ss") }}</span>
                 <div>
-                  {{comment.comment}}
+                  {{ comment.comment }}
                 </div>
               </div>
             </li>
@@ -126,14 +165,16 @@
         </b-tab-item>
       </b-tabs>
     </section>
-    <b-button @click="backToBookList">뒤로가기</b-button>
+    <b-button @click="backToBookList">
+      뒤로가기
+    </b-button>
   </div>
 </template>
 
 <script>
-import LoginValidation from '@/mixins/login-validation.js';
-import commonMethods from '@/mixins/common-methods.js';
-import { mapState } from 'vuex';
+// import LoginValidation from '@/mixins/login-validation.js';
+import commonMethods from '@/mixins/common-methods.js'
+import { mapState } from 'vuex'
 
 let config = process.env.NODE_ENV === 'production'
 
@@ -143,60 +184,60 @@ export default {
       'user',
       'comments',
       'books'
-    ]),
+    ])
   },
   mixins: [
     // LoginValidation
     commonMethods
   ],
-  mounted() {
-    this.config = config ? 'https://book-fishing.herokuapp.com/' : 'http://localhost:3000/';
-    this.$store.dispatch('checkUserInfo');
-    if(Object.keys(this.user).length === 0) {
-      this.$store.dispatch('getBookList').then((res) => {
-        this.$store.dispatch('getCommentList').then((res) => {
+  mounted () {
+    this.config = config ? 'https://book-fishing.herokuapp.com/' : 'http://localhost:3000/'
+    this.$store.dispatch('checkUserInfo')
+    if (Object.keys(this.user).length === 0) {
+      this.$store.dispatch('getBookList').then(() => {
+        this.$store.dispatch('getCommentList').then(() => {
           this.books.forEach((book) => {
-            this.$store.commit('addAverageRate', { bookId: book._id, averageRate: this.getAverageOfRate(book._id) });
+            this.$store.commit('addAverageRate', { bookId: book._id, averageRate: this.getAverageOfRate(book._id) })
           })
-          this.$store.commit('sortOfAverateRate');
-          this.getSortOfBookInfo();
-        });
-      });
+          this.$store.commit('sortOfAverateRate')
+          this.getSortOfBookInfo()
+        })
+      })
     } else {
-      this.getSortOfBookInfo();
+      this.getSortOfBookInfo()
     }
   },
   methods: {
-    backToBookList() {
-      this.$router.push({ name: 'list' });
+    backToBookList () {
+      this.$router.push({ name: 'list' })
     },
-    getSortOfBookInfo() {
+    getSortOfBookInfo () {
       this.bookListForUserDetail = this.books.filter(book => {
-        return book.userid === this.user._id;
+        return book.userid === this.user._id
       }).sort((a, b) => {
-        return a.createdtime > b.createdtime ? -1 : a.createdtime < b.createdtime ? 1 : 0;
+        return a.createdtime > b.createdtime ? -1 : a.createdtime < b.createdtime ? 1 : 0
       })
 
       this.commentListUserDetail = this.comments.filter((comment) => {
-        return comment.userid === this.user._id;
+        return comment.userid === this.user._id
       }).sort((a, b) => {
-        return a.createdtime > b.createdtime ? -1 : a.createdtime < b.createdtime ? 1 : 0;
+        return a.createdtime > b.createdtime ? -1 : a.createdtime < b.createdtime ? 1 : 0
       })
 
       this.bookListFavorite = this.books.filter(book => {
-        let isTemp = false;
-        for(let i = 0; i < book.favoriteList.length; i++) {
-          if(book.favoriteList[i].userid === this.user._id) {
-            isTemp = true;
+        let isTemp = false
+        for (let i = 0; i < book.favoriteList.length; i++) {
+          if (book.favoriteList[i].userid === this.user._id) {
+            isTemp = true
           }
         }
-        if(isTemp) {
-          return book;
+        if (isTemp) {
+          return book
         }
       })
     }
   },
-  data() {
+  data () {
     return {
       config: '',
       profileImage: '',
@@ -241,7 +282,7 @@ export default {
       & > .user-email {
         margin-top: 2px;
         font-size: 0.9rem;
-        color: #bbb; 
+        color: #bbb;
       }
     }
   }
@@ -341,7 +382,7 @@ export default {
         margin-top: -6px;
 
         & > .comment-rate {
-          font-size: 0.6rem; 
+          font-size: 0.6rem;
           display: inline;
           position: relative;
           bottom: 4px;
@@ -354,7 +395,7 @@ export default {
           // padding-left: 8px;
           margin-left: 5px;
           // border-left: 1px solid rgba(0, 0, 0, 0.3);
-          color: #bbb; 
+          color: #bbb;
         }
       }
     }
@@ -364,7 +405,7 @@ export default {
 ::-webkit-scrollbar {
     width: 10px;
 }
- 
+
 ::-webkit-scrollbar-track {
     background-color: #ebebeb;
     -webkit-border-radius: 10px;
@@ -374,6 +415,6 @@ export default {
 ::-webkit-scrollbar-thumb {
     -webkit-border-radius: 10px;
     border-radius: 10px;
-    background: #6d6d6d; 
+    background: #6d6d6d;
 }
 </style>

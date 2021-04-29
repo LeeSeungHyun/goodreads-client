@@ -1,62 +1,95 @@
 <template>
   <ValidationObserver ref="observer">
-    <div class="form-container"> 
+    <div class="form-container">
       <div class="image-preview">
-        <div class="label-container" v-show="bookImage.length === 0">
+        <div
+          class="label-container"
+          v-show="bookImage.length === 0"
+        >
           <div>
-            <i class="fas fa-book"></i>
+            <i class="fas fa-book" />
           </div>
           <div>
             <label for="image-upload">
-              <img src="@/assets/img/book-logo.png" width="80" height="80" alt="logo">
+              <img
+                src="@/assets/img/book-logo.png"
+                width="80"
+                height="80"
+                alt="logo"
+              >
             </label>
           </div>
         </div>
         <!-- <input type="file" ref="file" name="image" id="image-upload" data-width="500" data-height="500" @change="onFileChanged($event)" accept="image/*" /> -->
-        <img alt="" v-if="bookImage != null" :src=bookImage  width="140" height="194"/>
+        <img
+          alt=""
+          v-if="bookImage != null"
+          :src="bookImage"
+          width="140"
+          height="194"
+        >
       </div>
       <div class="contents">
         <div class="contents-title">
           검색을 통해 책을 선택해주세요.
-          <b-button size="is-small" @click="searchBook">검색하기</b-button>
-        </div>   
+          <b-button
+            size="is-small"
+            @click="searchBook"
+          >
+            검색하기
+          </b-button>
+        </div>
         <div class="book-name">
           <!-- <ValidationProvider name="book name" rules="required">
             <div slot-scope="{ errors }"> -->
-              <b-field>
-                <b-input v-model="bookName" placeholder="책 이름을 입력해주세요."></b-input>
-              </b-field>
-              <!-- <span>{{ errors[0] }}</span>
+          <b-field>
+            <b-input
+              v-model="bookName"
+              placeholder="책 이름을 입력해주세요."
+            />
+          </b-field>
+          <!-- <span>{{ errors[0] }}</span>
             </div>
           </ValidationProvider> -->
         </div>
         <div class="book-author">
           <!-- <ValidationProvider name="author" rules="required">
             <div slot-scope="{ errors }"> -->
-              <b-field>
-                <b-input v-model="author" placeholder="저자 이름을 입력해주세요."></b-input>
-              </b-field>
-            <!--  <span>{{ errors[0] }}</span>
+          <b-field>
+            <b-input
+              v-model="author"
+              placeholder="저자 이름을 입력해주세요."
+            />
+          </b-field>
+          <!--  <span>{{ errors[0] }}</span>
             </div>
           </ValidationProvider> -->
         </div>
         <div class="book-publisher">
           <!-- <ValidationProvider name="publisher" rules="required">
             <div slot-scope="{ errors }"> -->
-              <b-field>
-                <b-input v-model="publisher" placeholder="출판사를 입력해주세요."></b-input>
-              </b-field>
-              <!-- <span>{{ errors[0] }}</span>
+          <b-field>
+            <b-input
+              v-model="publisher"
+              placeholder="출판사를 입력해주세요."
+            />
+          </b-field>
+          <!-- <span>{{ errors[0] }}</span>
             </div>
           </ValidationProvider> -->
         </div>
         <div class="book-message">
           <!-- <ValidationProvider name="message" rules="required">
             <div slot-scope="{ errors }"> -->
-              <b-field>
-                <b-input v-model="message" maxlength="150" type="textarea" placeholder="책에 대한 짧은 감상평 남겨주세요. (최대 150자)"></b-input>
-              </b-field>
-              <!-- <span style="position: relative; top: -18px">{{ errors[0] }}</span>
+          <b-field>
+            <b-input
+              v-model="message"
+              maxlength="150"
+              type="textarea"
+              placeholder="책에 대한 짧은 감상평 남겨주세요. (최대 150자)"
+            />
+          </b-field>
+          <!-- <span style="position: relative; top: -18px">{{ errors[0] }}</span>
             </div>
           </ValidationProvider> -->
           <!-- <b-field>
@@ -65,9 +98,9 @@
         </div>
         <!-- <div class="book-rates">
           <div>책을 평가해주세요.</div>
-          <b-rate 
-            icon-pack="fas" 
-            @change="selectRate" 
+          <b-rate
+            icon-pack="fas"
+            @change="selectRate"
             :show-text="true"
             :texts="texts"
             v-model="rate"
@@ -76,20 +109,35 @@
           </b-rate>
         </div> -->
         <div class="book-buttons">
-          <b-button type="is-primary" @click="registerBook" v-if="mode === 'create'">등록하기</b-button>
-          <b-button type="is-primary" @click="updateBook" v-if="mode === 'update'">수정하기</b-button>
-          <b-button @click="backToBookList">뒤로가기</b-button>
+          <b-button
+            type="is-primary"
+            @click="registerBook"
+            v-if="mode === 'create'"
+          >
+            등록하기
+          </b-button>
+          <b-button
+            type="is-primary"
+            @click="updateBook"
+            v-if="mode === 'update'"
+          >
+            수정하기
+          </b-button>
+          <b-button @click="backToBookList">
+            뒤로가기
+          </b-button>
         </div>
       </div>
-      <b-modal 
+      <b-modal
         :active.sync="isBookSearchModalActive"
         has-modal-card
         :width="400"
         trap-focus
         aria-role="dialog"
-        aria-modal>
+        aria-modal
+      >
         <book-search-modal
-          v-on:getBookInfo="getBookInfo"
+          @getBookInfo="getBookInfo"
         />
       </b-modal>
     </div>
@@ -97,46 +145,46 @@
 </template>
 
 <script>
-import API from '@/api/index.js';
-import BookSearchModal from '@/components/book-search-modal.vue';
-import LoginValidation from '@/mixins/login-validation.js';
-import commonMethods from '@/mixins/common-methods.js';
-import { ValidationObserver, ValidationProvider } from 'vee-validate';
-import { mapState } from 'vuex';
+import API from '@/api/index.js'
+import BookSearchModal from '@/components/book-search-modal.vue'
+import LoginValidation from '@/mixins/login-validation.js'
+import commonMethods from '@/mixins/common-methods.js'
+import { ValidationObserver } from 'vee-validate'
+import { mapState } from 'vuex'
 
 export default {
   components: {
     BookSearchModal,
-    ValidationObserver,
-    ValidationProvider
+    ValidationObserver
+    // ValidationProvider
   },
   mixins: [
     LoginValidation,
     commonMethods
   ],
-  mounted() {
-    let params = this.$route.params;
-    if(params.hasOwnProperty('book')) {
+  mounted () {
+    let params = this.$route.params
+    if (params.hasOwnProperty('book')) {
       this.bookImage = params.book.bookimage
       this.bookName = params.book.bookname
       this.author = params.book.author
       this.publisher = params.book.publisher
       this.message = params.book.message
-      
+
       this.mode = 'update'
     } else {
       this.mode = 'create'
     }
 
-    if(this.books.length === 0) {
-        this.$store.dispatch('getBookList').then((res) => {
-          this.$store.dispatch('getCommentList').then((res) => {
+    if (this.books.length === 0) {
+      this.$store.dispatch('getBookList').then(() => {
+        this.$store.dispatch('getCommentList').then(() => {
           this.books.forEach((book) => {
-            this.$store.commit('addAverageRate', { bookId: book._id, averageRate: this.getAverageOfRate(book._id) });
+            this.$store.commit('addAverageRate', { bookId: book._id, averageRate: this.getAverageOfRate(book._id) })
           })
-          this.$store.commit('sortOfAverateRate');
-        });
-      });
+          this.$store.commit('sortOfAverateRate')
+        })
+      })
     }
   },
   computed: {
@@ -144,7 +192,7 @@ export default {
       'user',
       'books',
       'comments'
-    ]),
+    ])
   },
   methods: {
     // onFileChanged(event) {
@@ -152,42 +200,42 @@ export default {
     //   let reader = new FileReader();
 
     //   this.file = file;
-  
+
     //   reader.onload = (e) => {
     //     this.bookImage= e.target['result'];
     //   };
     //   reader.readAsDataURL(file);
     // },
-    getBookInfo(book) {
-      this.bookImage = book.thumbnail;
-      this.bookName = book.title;
-      this.author = book.authors[0];
-      this.publisher = book.publisher;
+    getBookInfo (book) {
+      this.bookImage = book.thumbnail
+      this.bookName = book.title
+      this.author = book.authors[0]
+      this.publisher = book.publisher
 
-      this.isBookSearchModalActive = false;
+      this.isBookSearchModalActive = false
     },
-    selectRate() {
+    selectRate () {
       // console.log(this.$refs.bookRate)
     },
-    searchBook() {
-      this.isBookSearchModalActive = true;
+    searchBook () {
+      this.isBookSearchModalActive = true
     },
-    backToBookList() {
-      this.$router.push({ name: 'list' });
+    backToBookList () {
+      this.$router.push({ name: 'list' })
     },
-    resetForm() {
-      this.bookImage = '';
-      this.bookName = '';
-      this.author = '';
+    resetForm () {
+      this.bookImage = ''
+      this.bookName = ''
+      this.author = ''
       this.publisher = ''
-      this.message = '';
-      this.rate = null;
+      this.message = ''
+      this.rate = null
     },
-    async registerBook() {
+    async registerBook () {
       // const isValid = await this.$refs.observer.validate();
       // if (isValid) {
 
-      if(this.bookImage !== '' && this.bookName !== '' &&
+      if (this.bookImage !== '' && this.bookName !== '' &&
          this.author !== '' && this.publisher !== '' && this.message !== '') {
         let bookInfo = {
           userid: this.user.user._id,
@@ -200,31 +248,30 @@ export default {
           bookimage: this.bookImage
         }
 
-        let response = await API.registerBook(bookInfo);
+        let response = await API.registerBook(bookInfo)
 
-        if(response.message === 'success') {
-         
-          this.$store.dispatch('getBookList').then((res) => {
+        if (response.message === 'success') {
+          this.$store.dispatch('getBookList').then(() => {
             this.books.forEach((book) => {
-              this.$store.commit('addAverageRate', { bookId: book._id, averageRate: this.getAverageOfRate(book._id) });
+              this.$store.commit('addAverageRate', { bookId: book._id, averageRate: this.getAverageOfRate(book._id) })
             })
-            this.$store.commit('sortOfAverateRate');
+            this.$store.commit('sortOfAverateRate')
 
-            this.resetForm();
+            this.resetForm()
             this.$buefy.toast.open({
               duration: 3000,
               message: '등록 되었습니다.',
               position: 'is-bottom',
               type: 'is-success'
             })
-          });
+          })
         }
       } else {
-        this.$buefy.dialog.alert('모든 정보를 입력해주세요.');
+        this.$buefy.dialog.alert('모든 정보를 입력해주세요.')
       }
     },
-    async updateBook() {
-      if(this.bookImage !== '' && this.bookName !== '' &&
+    async updateBook () {
+      if (this.bookImage !== '' && this.bookName !== '' &&
       this.author !== '' && this.publisher !== '' && this.message !== '') {
         let bookInfo = {
           _id: this.$route.params.book._id,
@@ -238,26 +285,26 @@ export default {
           bookimage: this.bookImage
         }
 
-        let response = await API.updateBook(bookInfo);
+        let response = await API.updateBook(bookInfo)
 
-        if(response.nModified === 1) {
-          this.$store.dispatch('getBookList').then((res) => {
-            this.resetForm();
-            this.$router.push({ name: 'list', params: { book: bookInfo }})
+        if (response.nModified === 1) {
+          this.$store.dispatch('getBookList').then(() => {
+            this.resetForm()
+            this.$router.push({ name: 'list', params: { book: bookInfo } })
             this.$buefy.toast.open({
               duration: 3000,
               message: '수정 되었습니다.',
               position: 'is-bottom',
               type: 'is-success'
             })
-          });
+          })
         }
       } else {
-        this.$buefy.dialog.alert('모든 정보를 입력해주세요.');
+        this.$buefy.dialog.alert('모든 정보를 입력해주세요.')
       }
     }
   },
-  data() {
+  data () {
     return {
       bookImage: '',
       bookName: '',
@@ -366,7 +413,7 @@ $Phone: "screen and (max-width : 768px)";
       margin-top: 14px;
       & span {
         color: red;
-      } 
+      }
     }
 
     & > .book-buttons {
