@@ -224,7 +224,7 @@ export default {
     ])
   },
   mounted () {
-    this.config = config ? 'https://book-fishing.herokuapp.com/' : 'http://localhost:3000/'
+    this.config = config ? 'http://api.bookfishing.site/' : 'http://localhost:3000/'
     this.getCommentList()
     let temp = this.book.favoriteList.filter((favorite) => {
       return favorite.userid === this.user._id
