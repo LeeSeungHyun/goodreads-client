@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 let env = process.env.NODE_ENV === 'production'
-const url = env ? 'http://api.bookfishing.site' : 'http://localhost:3000'
+const url = env ? 'https://api.bookfishing.site' : 'http://localhost:3000'
 
 // const config = {
 //   appKey: 'KakaoAK e382e5fe0284648ec925142a6db4f021'

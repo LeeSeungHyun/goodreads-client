@@ -88,7 +88,7 @@ export default {
     ])
   },
   mounted () {
-    this.config = config ? 'http://api.bookfishing.site/' : 'http://localhost:3000/'
+    this.config = config ? 'https://api.bookfishing.site/' : 'http://localhost:3000/'
     this.userName = this.user.username
     this.profileImage = this.user.profileimage
     // this.job = this.user.job;

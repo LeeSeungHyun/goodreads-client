@@ -331,7 +331,7 @@ export default {
     window.addEventListener('click', this.handleClick)
   },
   mounted () {
-    this.config = config ? 'http://api.bookfishing.site/' : 'http://localhost:3000/'
+    this.config = config ? 'https://api.bookfishing.site/' : 'http://localhost:3000/'
     this.$store.dispatch('checkUserInfo')
     console.log(this.user)
 

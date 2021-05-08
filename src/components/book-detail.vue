@@ -224,7 +224,7 @@ export default {
     ])
   },
   mounted () {
-    this.config = config ? 'http://api.bookfishing.site/' : 'http://localhost:3000/'
+    this.config = config ? 'https://api.bookfishing.site/' : 'http://localhost:3000/'
     this.getCommentList()
     let temp = this.book.favoriteList.filter((favorite) => {
       return favorite.userid === this.user._id

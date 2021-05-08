@@ -191,7 +191,7 @@ export default {
     commonMethods
   ],
   mounted () {
-    this.config = config ? 'http://api.bookfishing.site/' : 'http://localhost:3000/'
+    this.config = config ? 'https://api.bookfishing.site/' : 'http://localhost:3000/'
     this.$store.dispatch('checkUserInfo')
     if (Object.keys(this.user).length === 0) {
       this.$store.dispatch('getBookList').then(() => {

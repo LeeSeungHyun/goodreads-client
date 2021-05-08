@@ -55,7 +55,7 @@ export default {
   },
   mounted () {
     let config = process.env.NODE_ENV === 'production'
-    this.config = config ? 'http://api.bookfishing.site' : 'http://localhost:3000'
+    this.config = config ? 'https://api.bookfishing.site' : 'http://localhost:3000'
   },
   methods: {
     async googleLogin () {
