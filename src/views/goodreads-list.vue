@@ -129,7 +129,7 @@
           <carousel
             :navigation-enabled="true"
             pagination-active-color="#7957d5"
-            :min-swipe-distance="10"
+            :min-swipe-distance="20"
             :per-page-custom="[[320, 2], [420, 3], [576, 4], [768, 5], [992, 6],[1080, 7], [1280, 8], [1600, 10]]"
             :pagination-size="8"
             :pagination-padding="10"
@@ -167,16 +167,16 @@
         class="in-order-of-rate"
         v-if="isLoading === false && isSearched === false"
       >
-        <div class="rate-title">
+        <!-- <div class="rate-title">
           최신 글
         </div>
         <div>
           <carousel
             :navigation-enabled="true"
             pagination-active-color="#7957d5"
-            :min-swipe-distance="10"
+            :min-swipe-distance="15"
             :per-page-custom="[[320, 2], [420, 3], [576, 4], [768, 5], [992, 6],[1080, 7], [1280, 8], [1600, 10]]"
-            :pagination-size="8"
+            :pagination-size="5"
             :pagination-padding="10"
           >
             <slide
@@ -198,7 +198,7 @@
               </div>
             </slide>
           </carousel>
-        </div>
+        </div> -->
       </div>
       <div
         class="in-order-of-rate"
@@ -333,7 +333,6 @@ export default {
   mounted () {
     this.config = config ? 'https://api.bookfishing.site/' : 'http://localhost:3000/'
     this.$store.dispatch('checkUserInfo')
-    console.log(this.user)
 
     if (this.books.length === 0) {
       this.isLoading = true

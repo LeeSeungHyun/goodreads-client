@@ -22,14 +22,14 @@
     </div>
     <section class="user-detail-container">
       <b-tabs type="is-boxed">
-        <b-tab-item>
+        <!-- <b-tab-item>
           <template slot="header">
             <span> 찜 목록 <b-tag rounded> {{ bookListFavorite.length }} </b-tag> </span>
           </template>
           <ul class="book-list">
-            <!-- <div class="book-no-comments" :class="[this.bookListFavorite.length === 0 && 'comment-display']">
+            <div class="book-no-comments" :class="[this.bookListFavorite.length === 0 && 'comment-display']">
               찜한 책이 없습니다.
-            </div> -->
+            </div>
             <li
               v-for="(book, index) of bookListFavorite"
               :key="index"
@@ -70,7 +70,7 @@
               </div>
             </li>
           </ul>
-        </b-tab-item>
+        </b-tab-item> -->
         <b-tab-item>
           <template slot="header">
             <span> 글 등록 목록 <b-tag rounded> {{ bookListForUserDetail.length }} </b-tag> </span>
