@@ -167,7 +167,7 @@
         class="in-order-of-rate"
         v-if="isLoading === false && isSearched === false"
       >
-        <!-- <div class="rate-title">
+        <div class="rate-title">
           최신 글
         </div>
         <div>
@@ -198,7 +198,7 @@
               </div>
             </slide>
           </carousel>
-        </div> -->
+        </div>
       </div>
       <div
         class="in-order-of-rate"
