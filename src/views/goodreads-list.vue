@@ -129,7 +129,7 @@
           <carousel
             :navigation-enabled="true"
             pagination-active-color="#7957d5"
-            :min-swipe-distance="20"
+            :min-swipe-distance="10"
             :per-page-custom="[[320, 2], [420, 3], [576, 4], [768, 5], [992, 6],[1080, 7], [1280, 8], [1600, 10]]"
             :pagination-size="8"
             :pagination-padding="10"
@@ -688,6 +688,11 @@ main {
     & .slider {
       cursor: pointer;
       padding: 12px;
+      margin: 2px 0;
+      transition: 0.5s;
+      &:hover {
+        box-shadow: 0 0 35px rgba(33,33,33,.2);
+      }
     }
     & .average-rate {
       font-size: 0.6rem;

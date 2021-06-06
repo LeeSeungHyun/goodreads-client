@@ -43,6 +43,8 @@ export default new Vuex.Store({
     sortOfAverateRate: (state) => {
       state.books = state.books.sort((a, b) => {
         return a.averageRate > b.averageRate ? -1 : a.averageRate < b.averageRate ? 1 : 0
+      }).filter((book) => {
+        return book.averageRate !== 0
       })
     },
     deleteBook: (state, payload) => {
