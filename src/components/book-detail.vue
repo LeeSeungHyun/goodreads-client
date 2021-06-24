@@ -121,15 +121,19 @@
               <div class="li-comment-username">
                 {{ comet.username }}
                 <span v-if="comment.userid === user._id">
-                  <!-- <b-button type="is-text" size="is-small" @click="updateCommentForm(comment)">수정</b-button> -->
-                  <!-- <b-button
+                  <b-button
+                    type="is-text"
+                    size="is-small"
+                    @click="updateCommentForm(comment)"
+                  >수정</b-button>
+                  <b-button
                     type="is-text"
                     size="is-small"
                     v-if="commentMode === 'update' && Object.keys(this.commentForUpdate).length > 0 && comment._id === this.commentForUpdate._id"
                     @click="updateCommentForm(comment)"
                   >
                     수정 취소
-                  </b-button> -->
+                  </b-button>
                   <b-button
                     type="is-text"
                     size="is-small"
