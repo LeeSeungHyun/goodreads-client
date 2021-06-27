@@ -141,14 +141,17 @@
             >
               <img
                 :src="bookData.bookimage"
-                alt=""
                 width="100%"
                 style="border: 1px solid #eee"
                 @click="getBookDetail(bookData)"
               >
-              <div>
+              <div class="slider-content">
                 <div v-line-clamp="1">
-                  {{ bookData.bookname }}
+                  <img
+                    :src="config + bookData.profileimage"
+                    alt="profile"
+                  >
+                  {{ bookData.username }}
                 </div>
                 <b-rate
                   class="average-rate"
@@ -170,173 +173,37 @@
         <div class="rate-title">
           최신 글
         </div>
-        <!-- <div>
-          <carousel
-            :navigation-enabled="true"
-            pagination-active-color="#7957d5"
-            :min-swipe-distance="15"
-            :per-page-custom="[[320, 2], [420, 3], [576, 4], [768, 5], [992, 6],[1080, 7], [1280, 8], [1600, 10]]"
-            :pagination-size="5"
-            :pagination-padding="10"
+        <ul class="cards">
+          <li
+            v-for="(bookData, i) in sortedByTimeBooks"
+            :key="i"
+            class="cards-item"
           >
-            <slide
-              v-for="(bookData, i) in sortedByTimeBooks"
-              :key="i"
-              class="slider"
+            <div
+              class="card"
+              @click="getBookDetail(bookData)"
             >
-              <img
-                :src="bookData.bookimage"
-                alt=""
-                width="100%"
-                style="border: 1px solid #eee"
-                @click="getBookDetail(bookData)"
-              >
-              <div>
-                <div v-line-clamp="1">
-                  {{ bookData.bookname }}
-                </div>
+              <div class="card-image">
+                <img
+                  :src="bookData.bookimage"
+                  alt=""
+                >
               </div>
-            </slide>
-          </carousel>
-        </div> -->
-        <div class="main">
-          <ul class="cards">
-            <li
-              v-for="(bookData, i) in sortedByTimeBooks"
-              :key="i"
-              class="cards_item"
-            >
-              <div class="card">
-                <div class="card_image">
+              <div class="card-content">
+                <div
+                  class="card-title"
+                  v-line-clamp="1"
+                >
                   <img
-                    :src="bookData.bookimage"
-                    alt=""
-                    width="100%"
+                    :src="config + bookData.profileimage"
+                    alt="profile"
                   >
-                </div>
-                <div class="card_content">
-                  <h2 class="card_title">
-                    Card Grid Layout
-                  </h2>
-                  <p class="card_text">
-                    Demo of pixel perfect pure CSS simple responsive card grid layout
-                  </p>
-                  <button class="btn card_btn">
-                    Read More
-                  </button>
+                  {{ bookData.username }}
                 </div>
               </div>
-            </li>
-            <!-- <li class="cards_item">
-              <div class="card">
-                <div class="card_image">
-                  <img src="https://picsum.photos/500/300/?image=10">
-                </div>
-                <div class="card_content">
-                  <h2 class="card_title">
-                    Card Grid Layout
-                  </h2>
-                  <p class="card_text">
-                    Demo of pixel perfect pure CSS simple responsive card grid layout
-                  </p>
-                  <button class="btn card_btn">
-                    Read More
-                  </button>
-                </div>
-              </div>
-            </li> -->
-            <!-- <li class="cards_item">
-              <div class="card">
-                <div class="card_image">
-                  <img src="https://picsum.photos/500/300/?image=5">
-                </div>
-                <div class="card_content">
-                  <h2 class="card_title">
-                    Card Grid Layout
-                  </h2>
-                  <p class="card_text">
-                    Demo of pixel perfect pure CSS simple responsive card grid layout
-                  </p>
-                  <button class="btn card_btn">
-                    Read More
-                  </button>
-                </div>
-              </div>
-            </li>
-            <li class="cards_item">
-              <div class="card">
-                <div class="card_image">
-                  <img src="https://picsum.photos/500/300/?image=11">
-                </div>
-                <div class="card_content">
-                  <h2 class="card_title">
-                    Card Grid Layout
-                  </h2>
-                  <p class="card_text">
-                    Demo of pixel perfect pure CSS simple responsive card grid layout
-                  </p>
-                  <button class="btn card_btn">
-                    Read More
-                  </button>
-                </div>
-              </div>
-            </li>
-            <li class="cards_item">
-              <div class="card">
-                <div class="card_image">
-                  <img src="https://picsum.photos/500/300/?image=14">
-                </div>
-                <div class="card_content">
-                  <h2 class="card_title">
-                    Card Grid Layout
-                  </h2>
-                  <p class="card_text">
-                    Demo of pixel perfect pure CSS simple responsive card grid layout
-                  </p>
-                  <button class="btn card_btn">
-                    Read More
-                  </button>
-                </div>
-              </div>
-            </li>
-            <li class="cards_item">
-              <div class="card">
-                <div class="card_image">
-                  <img src="https://picsum.photos/500/300/?image=17">
-                </div>
-                <div class="card_content">
-                  <h2 class="card_title">
-                    Card Grid Layout
-                  </h2>
-                  <p class="card_text">
-                    Demo of pixel perfect pure CSS simple responsive card grid layout
-                  </p>
-                  <button class="btn card_btn">
-                    Read More
-                  </button>
-                </div>
-              </div>
-            </li>
-            <li class="cards_item">
-              <div class="card">
-                <div class="card_image">
-                  <img src="https://picsum.photos/500/300/?image=2">
-                </div>
-                <div class="card_content">
-                  <h2 class="card_title">
-                    Card Grid Layout
-                  </h2>
-                  <p class="card_text">
-                    Demo of pixel perfect pure CSS simple responsive card grid layout
-                  </p>
-                  <button class="btn card_btn">
-                    Read More
-                  </button>
-                </div>
-              </div>
-            </li> -->
-          </ul>
-        </div>
+            </div>
+          </li>
+        </ul>
       </div>
       <div
         class="in-order-of-rate"
@@ -365,10 +232,8 @@
                 style="border: 1px solid #eee"
                 @click="getBookDetail(bookData)"
               >
-              <div>
-                <div v-line-clamp="1">
-                  {{ bookData.bookname }}
-                </div>
+              <div v-line-clamp="1">
+                {{ bookData.bookname }}
               </div>
             </slide>
           </carousel>
@@ -478,6 +343,7 @@ export default {
         this.$store.dispatch('getCommentList').then(() => {
           this.isLoading = false
           this.sortedByTimeBooks = [...this.books]
+          console.log(this.sortedByTimeBooks)
           this.books.forEach((book) => {
             this.$store.commit('addAverageRate', { bookId: book._id, averageRate: this.getAverageOfRate(book._id) })
           })
@@ -813,7 +679,7 @@ $Phone: "screen and (max-width : 768px)";
 main {
   width: 100%;
   margin: 0 auto;
-  padding: 40px 30px 0 30px;
+  padding: 40px 0 0 0;
   z-index: 1;
   text-align: left;
 
@@ -822,14 +688,14 @@ main {
     margin: 0 auto;
     margin-bottom: 60px;
     .main{
-    // max-width: 1200px;
-    margin: 0 auto;
+      margin: 0 auto;
+    }
   }
 
   h1 {
-      font-size: 24px;
-      font-weight: 400;
-      text-align: center;
+    font-size: 24px;
+    font-weight: 400;
+    text-align: center;
   }
 
   img {
@@ -864,70 +730,96 @@ main {
     padding: 0;
   }
 
-  .cards_item {
+  .cards-item {
     display: flex;
     padding: 1rem;
   }
 
-  @media (min-width: 40rem) {
-    .cards_item {
+  @media (min-width: 20rem) {
+    .cards-item {
+      width: 100%
+    }
+  }
+
+  @media (min-width: 32rem) {
+    .cards-item {
       width: 50%;
     }
   }
 
-  @media (min-width: 56rem) {
-    .cards_item {
+  @media (min-width: 40rem) {
+    .cards-item {
       width: 33.3333%;
     }
   }
 
+  @media (min-width: 56rem) {
+    .cards-item {
+      width: 25%;
+    }
+  }
+
+  @media (min-width: 72rem) {
+    .cards-item {
+      width: 20%;
+    }
+  }
+
   .card {
-    background-color: white;
+    background-color: #fff;
     border-radius: 0.25rem;
     box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25);
     display: flex;
+    width: 100%;
     flex-direction: column;
     overflow: hidden;
-  }
-
-  .card_content {
-    padding: 1rem;
-    background: linear-gradient(to bottom left, #EF8D9C 40%, #FFC39E 100%);
-  }
-
-  .card_title {
-    color: #ffffff;
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: capitalize;
-    margin: 0px;
-  }
-
-  .card_text {
-    color: #ffffff;
-    font-size: 0.875rem;
-    line-height: 1.5;
-    margin-bottom: 1.25rem;
-    font-weight: 400;
-  }
-  .made_by{
-    font-weight: 400;
-    font-size: 13px;
-    margin-top: 35px;
-    text-align: center;
-  }
-    & .rate-title {
-      font-size: 1.4rem;
-      padding: 12px;
+    transition: 0.5s;
+    cursor: pointer;
+    .card-image {
+      & > img {
+        width: 100%;
+      }
     }
-    & .slider {
-      cursor: pointer;
-      padding: 12px;
-      margin: 2px 0;
-      transition: 0.5s;
-      &:hover {
-        box-shadow: 0 0 35px rgba(33,33,33,.2);
+    .card-content {
+      padding: 0.8rem;
+      // background: linear-gradient(to bottom left, #EF8D9C 40%, #FFC39E 100%);
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      word-break: break-all;
+      text-overflow: ellipsis;
+      -webkit-line-clamp: 1;
+
+      & img {
+        width: 24px;
+        height: 24px;
+        border: 1px solid #ddd;
+        border-radius: 50%;
+        background-color: #fff;
+      }
+    }
+  }
+  & .rate-title {
+    font-size: 1.4rem;
+    padding: 12px;
+  }
+  & .slider {
+    cursor: pointer;
+    padding: 12px;
+    margin: 2px 0;
+    transition: 0.5s;
+    &:hover {
+      box-shadow: 0 0 35px rgba(33,33,33,.2);
+    }
+    & > .slider-content {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      & img {
+        width: 24px;
+        height: 24px;
+        border: 1px solid #ddd;
+        border-radius: 50%;
+        background-color: #fff;
       }
     }
     & .average-rate {
