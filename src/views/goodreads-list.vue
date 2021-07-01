@@ -130,7 +130,7 @@
             :navigation-enabled="true"
             pagination-active-color="#7957d5"
             :min-swipe-distance="10"
-            :per-page-custom="[[320, 2], [420, 3], [576, 4], [768, 5], [992, 6],[1080, 7], [1280, 8], [1600, 10]]"
+            :per-page-custom="[[320, 2], [420, 3], [576, 4], [768, 5], [992, 6], [1080, 7], [1200, 8]]"
             :pagination-size="8"
             :pagination-padding="10"
           >
@@ -217,7 +217,7 @@
             :navigation-enabled="true"
             pagination-active-color="#7957d5"
             :min-swipe-distance="10"
-            :per-page-custom="[[320, 2], [420, 3], [576, 4], [768, 5], [992, 6],[1080, 7], [1280, 8], [1600, 10]]"
+            :per-page-custom="[[320, 2], [420, 3], [576, 4], [768, 5], [992, 6],[1080, 7], [1200, 8]]"
             :pagination-size="8"
             :pagination-padding="10"
           >
@@ -735,31 +735,31 @@ main {
     padding: 1rem;
   }
 
-  @media (min-width: 20rem) {
+  @media screen and (max-width: 320px) {
     .cards-item {
       width: 100%
     }
   }
 
-  @media (min-width: 32rem) {
+  @media screen and (min-width: 320px) {
     .cards-item {
       width: 50%;
     }
   }
 
-  @media (min-width: 40rem) {
+  @media screen and (min-width: 768px) {
     .cards-item {
       width: 33.3333%;
     }
   }
 
-  @media (min-width: 56rem) {
+  @media screen and (min-width: 992px) {
     .cards-item {
       width: 25%;
     }
   }
 
-  @media (min-width: 72rem) {
+  @media screen and (min-width: 1200px) {
     .cards-item {
       width: 20%;
     }
